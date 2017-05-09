@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="SenstiveWordMapper">
+
+	<select id="getAllSenstiveWordPage" parameterType="page"
+		resultType="Map">
+		select
+		sw.id,sw.content,sw.create_time,
+		su.user_name,sw.type
+		from
+		SMS_SENSITIVE_WORD as sw inner join SMS_USER_INFO as su
+		on sw.create_id
+		= su.id
+		where 1=1
+		<if test="formData.content!=null and formData.content!=''">
+			and sw.content like CONCAT(CONCAT('%',
+			#{formData.content}),'%')
+		</if>
+	</select>
+	<select id="exportAllSenstiveWordPage" parameterType="page"
+		resultType="Map">
+		select
+		sw.id,sw.content,sw.create_time,
+		su.user_name,case sw.type when 1
+		then '系统敏感词' when 2 then '营销敏感词' else '行业敏感词' end as type
+		from
+		SMS_SENSITIVE_WORD as sw inner join SMS_USER_INFO as su
+		on sw.create_id
+		= su.id
+		where 1=1
+		<if test="formData.content!=null and formData.content!=''">
+			and sw.content like CONCAT(CONCAT('%',
+			#{formData.content}),'%')
+		</if>
+	</select>
+	<select id="getAllSenstiveWord" resultType="Map">
+		select
+		content
+		from
+		SMS_SENSITIVE_WORD
+	</select>
+
+	<select id="getSensitiveWordById" parameterType="form"
+		resultType="Map">
+		select
+		sw.id,sw.content,sw.create_time,sw.ismobile,sw.isunicom,sw.istelcom,sw.create_id,
+		su.user_name,sw.type
+		from SMS_SENSITIVE_WORD as sw inner join
+		SMS_USER_INFO as su
+		on sw.create_id
+		= su.id
+		and sw.id=#{id}
+	</select>
+
+
+	<insert id="saveSensitiveWord" parameterType="form">
+		insert into
+		SMS_SENSITIVE_WORD
+		(id,content,type,ismobile,isunicom,istelcom,create_id)
+		values(nextval('"sms_sensitive_word_id_seq"'),#{content},#{type},#{ismobile},#{isunicom},#{istelcom},#{createid})
+	</insert>
+
+	<update id="updateSensitiveWord" parameterType="form">
+		update
+		SMS_SENSITIVE_WORD set
+		content = #{content}
+		,type = #{type}
+		,ismobile =
+		#{ismobile}
+		,isunicom = #{isunicom}
+		,istelcom = #{istelcom}
+		where ID
+		=#{id}
+	</update>
+
+	<delete id="deleteSensitiveWord" parameterType="form">
+		delete from
+		SMS_SENSITIVE_WORD
+		where ID = #{id}
+	</delete>
+
+</mapper>

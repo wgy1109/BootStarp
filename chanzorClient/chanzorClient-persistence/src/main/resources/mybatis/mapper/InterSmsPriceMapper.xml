@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="InterSmsPriceMapper">
+	<select id="getSmsPriceP" parameterType="page" resultType="Map">
+		select id, country_cn, country_en, country_code, price, area_code, channel_id  from inter_sms_price where 1 = 1   
+		<if test="formData.country_cn !=null and formData.country_cn !='' ">
+			and country_cn like '%'||#{formData.country_cn}||'%'
+		</if>
+		<if test="formData.country_en !=null and formData.country_en !='' ">
+			and country_en like '%'||#{formData.country_en}||'%'
+		</if>
+		<if test="formData.country_code !=null and formData.country_code !='' ">
+			and country_code = #{formData.country_code}
+		</if>
+		order by country_en  
+	</select> 
+	<select id="getSmsPriceCount" parameterType="page" resultType="Map">
+		select count(id) count from inter_sms_price where 1 = 1 
+		<if test="formData.country_cn !=null and formData.country_cn !='' ">
+			and country_cn like '%'||#{formData.country_cn}||'%'
+		</if>
+		<if test="formData.country_en !=null and formData.country_en !='' ">
+			and country_en like '%'||#{formData.country_en}||'%'
+		</if>
+		<if test="formData.country_code !=null and formData.country_code !='' ">
+			and country_code = #{formData.country_code}
+		</if>
+	</select>
+</mapper>

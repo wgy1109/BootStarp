@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="SmsMasterplateClientMapper">
+	<select id="getAllSmsMasterplateClientByPage" parameterType="page"
+		resultType="Map">
+		(select s.id ,s."content" ,s.sp_id , i.sp_name ,
+		s.status ,
+		case s.TYPE
+		when 1 then '启用' when 2 then '禁用' else
+		'未通过' end "TYPE", s.title
+		from
+		sms_sp_template s, SMS_SP_INFO i
+		where s.SP_ID = i.ID and i.sp_service_type != 3 
+		<if test="formData.SYSTEMORSPINFO == '1' or formData.SYSTEMORSPINFO == 1 ">
+			and 1 = 2
+		</if>
+		<if test="formData.TITLE != null and formData.TITLE != '' ">
+			and s.TITLE like '%'||#{formData.TITLE}||'%'
+		</if>
+		<if test="formData.content != null and formData.content != '' ">
+			and s."content" like '%'||#{formData.content}||'%'
+		</if>
+		<if
+			test="formData.STATUS !=null and formData.STATUS != '' and  formData.STATUS!=-1">
+			and s.STATUS=${formData.STATUS}
+		</if>
+		<if
+			test="formData.SP_ID !=null and formData.SP_ID != '' and  formData.SP_ID!=-1">
+			and s.SP_ID=${formData.SP_ID}
+		</if>
+		and s.TYPE != 2
+		and i.STATUS = 1 
+		<if test="formData.subAccountAppIds == null">
+			and i.USER_ID=${formData.userId}
+		</if>
+		<if test="formData.subAccountAppIds != null">
+			and i.id in ${formData.subAccountAppIds}
+		</if>
+		order
+		by s.ID desc
+		) UNION ALL
+		(select 0 as id, "content", 0 as sp_id, '系统模板'
+		as sp_name, 0 as status , '启用'
+		as "TYPE" , title from sms_sys_template
+		where 1 = 1 and type=0
+		<if test=" formData.SYSTEMORSPINFO == '2' or formData.SYSTEMORSPINFO == 2 ">
+			and 1 = 2
+		</if>
+		<if test="formData.TITLE != null and formData.TITLE != '' ">
+			and title like '%'||#{formData.TITLE}||'%'
+		</if>
+		<if test="formData.content != null and formData.content != '' ">
+			and content like '%'||#{formData.content}||'%'
+		</if>
+		<if test="formData.STATUS != 0 ">
+			and 2 = 3
+		</if>
+		<if
+			test="formData.SP_ID !=null and formData.SP_ID != '' and  formData.SP_ID!=-1">
+			and 3 = 4
+		</if>
+		<if test="formData.exportMasterplate !=null and formData.exportMasterplate == 0 "> <!-- 模板导出，屏蔽系统模板-->
+			and 4 = 5
+		</if>
+		)
+	</select>
+	<select id="getSmsMasterplateBySessionSpInfo" parameterType="page"
+		resultType="Map">
+		(select s.id ,s."content" ,s.sp_id , i.sp_name ,
+		s.status ,
+		case s.TYPE
+		when 1 then '启用' when 2 then '禁用' else
+		'未通过' end "TYPE", s.title
+		from
+		sms_sp_template s, SMS_SP_INFO i
+		where s.SP_ID = i.ID and i.sp_service_type != 3 
+		<if test="formData.SYSTEMORSPINFO == '1' or formData.SYSTEMORSPINFO == 1 ">
+			and 1 = 2
+		</if>
+		<if test="formData.TITLE != null and formData.TITLE != '' ">
+			and s.TITLE like '%'||#{formData.TITLE}||'%'
+		</if>
+		<if test="formData.content != null and formData.content != '' ">
+			and s."content" like '%'||#{formData.content}||'%'
+		</if>
+		<if
+			test="formData.STATUS !=null and formData.STATUS != '' and  formData.STATUS!=-1">
+			and s.STATUS=${formData.STATUS}
+		</if>
+		<if
+			test="formData.SP_ID !=null and formData.SP_ID != '' and  formData.SP_ID!=-1">
+			and s.SP_ID=${formData.SP_ID}
+		</if>
+		and s.TYPE != 2
+		and i.STATUS = 1
+		<if test="formData.subAccountAppIds == null">
+			and i.USER_ID=${formData.userId}
+		</if>
+		<if test="formData.subAccountAppIds != null">
+			and i.id in ${formData.subAccountAppIds}
+		</if>
+		order
+		by s.ID desc
+		) UNION ALL
+		(select 0 as id, "content", 0 as sp_id, '系统模板'
+		as sp_name, 0 as status , '启用'
+		as "TYPE" , title from sms_sys_template
+		where 1 = 1 and type=0 
+		<if test=" formData.SYSTEMORSPINFO == '2' or formData.SYSTEMORSPINFO == 2 ">
+			and 1 = 2
+		</if>
+		<if test="formData.TITLE != null and formData.TITLE != '' ">
+			and title like '%'||#{formData.TITLE}||'%'
+		</if>
+		<if test="formData.content != null and formData.content != '' ">
+			and content like '%'||#{formData.content}||'%'
+		</if>
+		<if test="formData.STATUS != 0 ">
+			and 2 = 3
+		</if>
+		)
+	</select>
+	<insert id="saveSmsMasterplateClient" parameterType="form">
+		insert into
+		sms_sp_template (
+		CONTENT
+		,
+		SP_ID
+		,
+		STATUS
+		,
+		TYPE
+		,
+		TITLE
+		,
+		USER_ID
+		,
+		CREATE_TIME
+		,
+		UPDATE_TIME
+		) values(
+		#{content}
+		,
+		${spid}
+		,
+		${STATUS}
+		,
+		${TYPE}
+		,
+		#{title}
+		,
+		${userId}
+		,
+		to_timestamp(#{CREATE_TIME} ,'yyyy-MM-dd')
+		,
+		to_timestamp(#{UPDATE_TIME} ,'yyyy-MM-dd')
+		)
+	</insert>
+	<!-- 修改模板内容 -->
+	<update id="updateSmsMasterplateClient" parameterType="form">
+		update
+		sms_sp_template set CONTENT = #{content}, STATUS=${STATUS},
+		TYPE=${TYPE}, TITLE=#{title}, UPDATE_TIME =
+		to_timestamp(#{UPDATE_TIME} ,'yyyy-MM-dd') where id
+		=${id}
+	</update>
+	<!-- 修改模板状态 提交模板进入审核 -->
+	<update id="updateSmsMasterplateStatusClient" parameterType="form">
+		update sms_sp_template set STATUS = ${STATUS} where id =${id}
+	</update>
+	<delete id="deleteSmsMasterplateClient" parameterType="form">
+		delete
+		from sms_sp_template where id = ${id}
+	</delete>
+	<select id="getSmsMasterplateClientInfoById" parameterType="form"
+		resultType="Map">
+		select s.ID, i.SP_NAME, s.TITLE, s.CONTENT,s.voice_name,s.speed from
+		sms_sp_template s, SMS_SP_INFO i where s.SP_ID = i.ID and
+		s.ID = ${id}
+	</select>
+
+	<select id="getNumBySpidService" parameterType="java.lang.Integer"
+		resultType="Map">
+		select count(1) ALLNUM,(select count(1) from
+		sms_sp_template
+		where sp_id = #{0} and status in ('1','3'))
+		NOVALIDATENUM from
+		sms_sp_template where sp_id = #{0};
+	</select>
+
+	<select id="validateontrialMessage" parameterType="form"
+		resultType="Int">
+		select count(1) from sms_sp_template where <!-- TITLE = #{title} and --> CONTENT = #{content} and SP_ID = ${spid};
+	</select>
+	<select id="selPlateBySpId" parameterType="java.lang.Integer"
+		resultType="Map">
+		select * from sms_sp_template where status=0 and type=1 and
+		sp_id=#{0}
+	</select>
+
+	<select id="selSpSysMaspBySpId" parameterType="java.lang.Integer"
+		resultType="Map">
+		(select id, title, content from sms_sp_template where
+		status = 0 and type=1 and sp_id = #{0} )
+		union all (select 0 as id,
+		title, content from sms_sys_template where type=0 )
+	</select>
+
+	<!-- <select id="getMouldListToMasterplate" resultType="Map"> select 0 as 
+		id, title, content, 0 as sp_id, '系统模板' as sp_name, 0 as status , '启用' as 
+		"TYPE" from sms_sys_template ; </select> -->
+     <select id="getVoiceTemplateBySpId" parameterType="java.lang.Integer" resultType="map">
+    select * from sms_sp_template where status=0 and type=1 and sp_id=#{0}
+      </select>
+</mapper>

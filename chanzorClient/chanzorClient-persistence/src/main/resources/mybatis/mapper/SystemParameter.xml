@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SystemParameterMapper">
+	<resultMap type="SystemParameter" id="SystemParameterResultMap">
+		<id column="id" property="id" />
+		<result column="prm_name" property="prm_name" />
+		<result column="prm_type" property="prm_type" />
+		<result column="prm_value" property="prm_value" />
+		<result column="prm_desc" property="prm_desc" />
+	</resultMap>
+
+	<select id="findSystemParameterList"  resultMap="SystemParameterResultMap">
+		select * from
+		sms_system_param where prm_type=1 order by id
+		asc
+	</select>
+
+	<select id="findSystemParameterById" parameterType="integer"
+		resultMap="SystemParameterResultMap">
+		select * from
+		sms_system_param where id=#{0}
+	</select>
+	
+</mapper>

@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SpConfigMapper">
+
+	<resultMap type="SpInfo" id="spInfoAndSpcharge">
+		<id column="id" property="spid" />
+		<result column="sp_name" property="sp_name" />
+		<result column="feetype" property="name" />
+	</resultMap>
+
+	<resultMap type="SpInfo" id="spInfoAndChannel">
+		<id column="id" property="spid" />
+		<result column="sp_name" property="sp_name" />
+		<result column="mobile_prefix" property="mobile_prefix" />
+		<result column="mobile_suffix" property="mobile_suffix" />
+		<result column="mobile_num" property="mobile_num" />
+		<result column="unicom_prefix" property="unicom_prefix" />
+		<result column="unicom_suffix" property="unicom_suffix" />
+		<result column="unicom_num" property="unicom_num" />
+		<result column="telecom_prefix" property="telecom_prefix" />
+		<result column="telecom_suffix" property="telecom_suffix" />
+		<result column="telecom_num" property="telecom_num" />
+		<result column="sp_channelconfig" property="sp_channelconfig" />
+
+	</resultMap>
+
+	<resultMap type="ChannelInfo" id="channelResult">
+		<id column="id" property="id" />
+		<result column="channel_name" property="channel_name" />
+		<result column="is_support_unicom" property="is_support_unicom" />
+		<result column="is_support_mobile" property="is_support_mobile" />
+		<result column="is_support_telecom" property="is_support_telecom" />
+		<result column="mobile_prefix" property="mobile_prefix" />
+		<result column="unicom_prefix" property="unicom_prefix" />
+		<result column="telecom_prefix" property="telecom_prefix" />
+		<result column="is_mobile_extend" property="is_mobile_extend" />
+		<result column="is_unicom_extend" property="is_unicom_extend" />
+		<result column="is_telecom_extend" property="is_telecom_extend" />
+		<result column="ch_desc" property="desc" />
+
+	</resultMap>
+	<resultMap type="ChannelConfig" id="ChannelConfigResult">
+		<id column="id" property="id" />
+		<result column="opertor_type" property="opertor_type" />
+		<result column="channelid" property="channelId" />
+		<result column="sp_id" property="sp_id" />
+		<result column="createtime" property="createtime" />
+	</resultMap>
+
+
+	<select id="getChannelConfigInfo" parameterType="ChannelConfig"
+		resultMap="ChannelConfigResult">
+		select
+		cg.id,
+		cg.opertor_type,
+		cg.channelid,
+		cg.sp_id,
+		cg.createtime
+		from sms_chennel_config cg
+		where 1=1
+		<if test="sp_id!=null and sp_id>0">
+			and cg.sp_id = #{sp_id}
+		</if>
+		<if test="opertor_type!=null and opertor_type>0">
+			and cg.opertor_type = #{opertor_type}
+		</if>
+	</select>
+
+
+
+
+	<select id="getChannelInfoById" parameterType="int" resultMap="channelResult">
+		select sc.id,
+		sc.channel_name,
+		sc.is_support_unicom,
+		sc.is_support_mobile,
+		sc.is_support_telecom,
+		sc.mobile_prefix,
+		sc.unicom_prefix,
+		sc.telecom_prefix,
+		sc.is_mobile_extend,
+		sc.is_unicom_extend,
+		sc.is_telecom_extend,
+		sc.ch_desc
+		from sms_send_channel_info sc
+		where sc.status=1
+		and sc.id = #{channelId}
+
+	</select>
+
+
+
+	<select id="getChannelInfo" parameterType="ChannelInfo"
+		resultMap="channelResult">
+		select sc.id,
+		sc.channel_name,
+		sc.is_support_unicom,
+		sc.is_support_mobile,
+		sc.is_support_telecom,
+		sc.mobile_prefix,
+		sc.unicom_prefix,
+		sc.telecom_prefix,
+		sc.is_mobile_extend,
+		sc.is_unicom_extend,
+		sc.is_telecom_extend,
+		sc.ch_desc
+		from sms_send_channel_info sc
+		where sc.status=1
+		<if test="channel_name!=null">
+			and sc.channel_name = #{channel_name}
+		</if>
+		<if test="id!=null and id>0">
+			and sc.id = #{id}
+		</if>
+	</select>
+
+	<select id="listAllChannelInfo" parameterType="ChannelInfo"
+		resultMap="channelResult">
+		select sc.id,
+		sc.channel_name,
+		sc.is_support_unicom,
+		sc.is_support_mobile,
+		sc.is_support_telecom,
+		sc.mobile_prefix,
+		sc.unicom_prefix,
+		sc.telecom_prefix,
+		sc.is_mobile_extend,
+		sc.is_unicom_extend,
+		sc.is_telecom_extend,
+		sc.ch_desc
+		from sms_send_channel_info sc
+		where sc.status=1
+		<if test="is_support_unicom!=null and is_support_unicom>0">
+			and sc.is_support_unicom = #{is_support_unicom}
+		</if>
+		<if test="is_support_mobile!=null and is_support_mobile>0">
+			and sc.is_support_mobile = #{is_support_mobile}
+		</if>
+		<if test="is_support_telecom!=null and is_support_telecom>0">
+			and sc.is_support_telecom = #{is_support_telecom}
+		</if>
+	</select>
+
+
+
+
+	<select id="getSpBySuffix" parameterType="Map" resultType="java.lang.Integer">
+		select count(1) from SMS_SP_INFO s where 1=1
+		<if test="unicom_suffix!=null and unicom_suffix!=''">
+			and s.unicom_suffix = #{unicom_suffix}
+		</if>
+	</select>
+
+	<select id="getSpBySuffix2" parameterType="Map" resultType="int">
+		select count(1) from SMS_SP_INFO s where 1=1
+		<if test="unicom_suffix!=null and unicom_suffix!=''">
+			and s.unicom_suffix like CONCAT(#{unicom_suffix},'%')
+			and s.unicom_suffix != #{unicom_suffix}
+		</if>
+	</select>
+
+
+
+	<insert id="insertChannelConfig" parameterType="ChannelConfig">
+		insert into SMS_CHENNEL_CONFIG (id,opertor_type,channelid,sp_id)
+		values
+		(nextval('"sms_chennel_config_id_seq"'),#{opertor_type},#{channelId},#{sp_id})
+
+	</insert>
+
+
+	<delete id="deleteSpChannel" parameterType="int">
+		delete from
+		SMS_CHENNEL_CONFIG where sp_id=#{sp_id}
+	</delete>
+
+
+</mapper>

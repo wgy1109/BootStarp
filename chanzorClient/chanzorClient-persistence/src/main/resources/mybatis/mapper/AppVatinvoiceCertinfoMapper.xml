@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="AppVatinvoiceCertinfoMapper"><!-- 
+	<select id="getAllAppVatinvoiceCertinfoByPage" parameterType="page" resultType="Map">
+		select ID, USER_ID, IDENITFICATION_NUM, BANK_ACCENT, OPEN_ACCENT, COMPANY_PHONE,case CERTINFO_STATUS when 1 then '通过' when 2 then '驳回' else '申请中' end CERTINFO_STATUS from APP_VATINVOICE_CERTINFO where 1 =1 
+			<if test="formData.USER_ID != null and formData.USER_ID != '' ">
+				and  USER_ID  = #{formData.USER_ID}
+			</if>
+			<if test="formData.IDENITFICATION_NUM != null and formData.IDENITFICATION_NUM != '' ">
+				and  IDENITFICATION_NUM  like CONCAT(#{formData.IDENITFICATION_NUM},'%') 
+			</if>
+			<if test="formData.COMPANY_PHONE != null and formData.COMPANY_PHONE != '' ">
+				and  COMPANY_PHONE  = #{formData.COMPANY_PHONE}
+			</if>
+			<if test="formData.CERTINFO_STATUS != null and formData.CERTINFO_STATUS != '' ">
+				and  CERTINFO_STATUS  = #{formData.CERTINFO_STATUS}
+			</if>
+	</select>
+	
+	<insert id="saveAppVatinvoiceCertinfo" parameterType="form">
+		insert into APP_VATINVOICE_CERTINFO (
+					ID
+					,
+					USER_ID
+					,
+					IDENITFICATION_NUM
+					,
+					BANK_ACCENT
+					,
+					OPEN_ACCENT
+					,
+					REGISTERED_ADDRESS
+					,
+					COMPANY_PHONE
+					,
+					BANK_ACCENT_IMG
+					,
+					TAX_REGISTRATION_IMG
+					,
+					GENERAL_TAX_IMG
+					,
+					CERTINFO_CREATE_TIME
+					,
+					CERTINFO_NOTES
+					,
+					CERTINFO_STATUS
+		) values(
+					nextval('"app_vatinvoice_certinfo_ID_seq"'),
+					#{USER_ID}
+					,
+					#{IDENITFICATION_NUM}
+					,
+					#{BANK_ACCENT}
+					,
+					#{OPEN_ACCENT}
+					,
+					#{REGISTERED_ADDRESS}
+					,
+					#{COMPANY_PHONE}
+					,
+					#{BANK_ACCENT_IMG}
+					,
+					#{TAX_REGISTRATION_IMG}
+					,
+					#{GENERAL_TAX_IMG}
+					,
+					#{CERTINFO_CREATE_TIME}
+					,
+					#{CERTINFO_NOTES}
+					,
+					#{CERTINFO_STATUS}
+		)
+	</insert>
+	<update id="updateAppVatinvoiceCertinfo" parameterType="form">
+		update APP_VATINVOICE_CERTINFO set  
+							id = #{id}
+							,ID = #{ID}
+							,USER_ID = #{USER_ID}
+							,IDENITFICATION_NUM = #{IDENITFICATION_NUM}
+							,BANK_ACCENT = #{BANK_ACCENT}
+							,OPEN_ACCENT = #{OPEN_ACCENT}
+							,REGISTERED_ADDRESS = #{REGISTERED_ADDRESS}
+							,COMPANY_PHONE = #{COMPANY_PHONE}
+							,BANK_ACCENT_IMG = #{BANK_ACCENT_IMG}
+							,TAX_REGISTRATION_IMG = #{TAX_REGISTRATION_IMG}
+							,GENERAL_TAX_IMG = #{GENERAL_TAX_IMG}
+							,CERTINFO_CREATE_TIME = #{CERTINFO_CREATE_TIME}
+							,CERTINFO_NOTES = #{CERTINFO_NOTES}
+							,CERTINFO_STATUS = #{CERTINFO_STATUS}
+			  where id =#{ID}
+	</update>
+	<delete id="deleteAppVatinvoiceCertinfo" parameterType="form">
+		delete from APP_VATINVOICE_CERTINFO where id = #{id}
+	</delete>
+	<select id="getAppVatinvoiceCertinfoInfoById"  parameterType="form" resultType="Map">
+		select * from APP_VATINVOICE_CERTINFO where ID =  #{id}
+	</select>
+	
+	<update id="updateInvoiceStatus" parameterType="form">
+		update APP_VATINVOICE_CERTINFO set   CERTINFO_STATUS = #{status} where ID =#{authid}
+	</update> -->
+</mapper>

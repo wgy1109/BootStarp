@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="CouponMapper">
+
+	<select id="getAllCouponPage" parameterType="page" resultType="Map">
+		select
+		ac.id,ac.num,ac.sms_num,ac.type,ac.begin_time,ac.status,ac.create_time,ac.describe,ac.end_time,ac.user_id,ac.create_id,au.user_name
+		as app_user_name,su.user_name
+		from
+		(APP_COUPON as ac left join
+		APP_USER_INFO as au on ac.user_id=au.id)
+		left join SMS_USER_INFO as su
+		on ac.create_id=su.id
+		where 1 =1
+		<if test="formData.isclose != null and formData.isclose != '' ">
+			and ac.status = #{formData.isclose}
+		</if>
+		<if test="formData.type != null and formData.type != '' ">
+			and ac.type = #{formData.type}
+		</if>
+		order by ac.create_time desc
+	</select>
+
+	<select id="getCouponById" parameterType="form"
+		resultType="Map">
+		select
+		ac.id,ac.num,ac.sms_num,ac.type,ac.begin_time,ac.status,ac.create_time,ac.describe,ac.end_time,ac.user_id,ac.create_id,au.user_name
+		as app_user_name,su.user_name
+		from
+		(APP_COUPON as ac left join
+		APP_USER_INFO as au on ac.user_id=au.id)
+		left join SMS_USER_INFO as su
+		on ac.create_id=su.id
+		where ac.id = #{id}
+	</select>
+
+	<insert id="saveCoupon" parameterType="form">
+		insert into
+		APP_COUPON (id,num,sms_num,type,begin_time,status,end_time,user_id,create_id,describe)
+		values(nextval('"app_coupon_id_seq"'), #{num},#{sms_num},#{type},#{begintime},#{isclose},#{endtime},#{userid},#{createid},#{des})
+	</insert>
+	<update id="updateCoupon" parameterType="form">
+		update
+		APP_COUPON set
+		num = #{num}
+		,sms_num = #{sms_num}
+		,type = #{type}
+		,begin_time = #{begintime}
+		,status = #{isclose}
+		,end_time = #{endtime}
+		,user_id = #{userid}
+		,describe = #{des}
+		where id =#{id}
+	</update>
+	<delete id="deleteCoupon" parameterType="form">
+		delete from
+		APP_COUPON
+		where id = #{id}
+	</delete>
+</mapper>

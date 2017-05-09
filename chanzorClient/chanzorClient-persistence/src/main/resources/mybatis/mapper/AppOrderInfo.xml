@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AppOrderInfoMapper"><!-- 
+	<select id="getAmountUser" resultType="AppOrderInfo"
+		parameterType="java.lang.Integer">
+		select sum(amount) as amount from APP_ORDER_INFO where
+		status=1 and USERID=#{userid}
+	</select>
+
+
+	<select id="listPageApp" resultType="AppOrderInfo"
+		parameterType="AppOrderInfo">
+		select id, pay_type, order_time, amount, status, userid,
+		code from
+		APP_ORDER_INFO order by id desc
+	</select>
+
+	<sql id="base_column">
+		id, pay_type, order_time, amount, status, userId, code
+	</sql>
+	<select id="findOrderCodeBySeq" resultType="java.lang.String">
+		select
+		APP_ORDER_INFO_CODE.nextval from dual
+	</select>
+	<insert id="insert" parameterType="AppOrderInfo">
+		<selectKey resultType="java.lang.Integer" order="AFTER"
+			keyProperty="id">
+			select APP_ORDER_INFO_ID.nextval from dual
+		</selectKey>
+		insert into APP_ORDER_INFO(
+		<include refid="base_column" />
+		) values(#{pay_type}, #{pay_type}, now(), #{amount}, #{status},
+		#{userId}, #{code})
+	</insert>
+
+	<select id="findById" parameterType="java.lang.Integer"
+		resultType="AppOrderInfo">
+		select
+		<include refid="base_column" />
+		from APP_ORDER_INFO where id = #{id} order by id desc
+	</select>
+
+	优惠券使用开始
+	<select id="listPageCoupon" parameterType="Coupon" resultType="Coupon">
+		select id,NUM,SMS_SUM,ISCLOSE,'' createtime from APP_COUPON
+		where
+		isclose = 0 and USERID in (select SP_ID from APP_CONFIG_INFO where
+		USERID = (select USERID from APP_CONFIG_INFO where SP_ID =
+		#{userid,jdbcType=INTEGER}))
+		union
+		select
+		id,NUM,SMS_NUM,1,to_char(USETIME,'yyyy-mm-dd HH:mm:ss') from
+		APP_COUPON_USE where SP_ID in (select SP_ID from APP_CONFIG_INFO where
+		USERID = (select USERID from APP_CONFIG_INFO where SP_ID =
+		#{userid,jdbcType=INTEGER}))
+	</select>
+	<select id="getCouponByNum" parameterType="String" resultType="Map">
+		select * from APP_COUPON where NUM = #{num} and ENDTIME
+		>=date_format(NOW(),'%Y-%m-%d %H:%i') and BEGINTIME
+		&lt;=date_format(NOW(),'%Y-%m-%d %H:%i') order by id desc
+	</select>
+	<update id="updateInvalidByNum" parameterType="String">
+		update APP_COUPON
+		set ISCLOSE = 2 where num = #{num}
+	</update>
+	<update id="updateCouponByNum" parameterType="String">
+		update APP_COUPON
+		set ISCLOSE = 1 where num = #{num}
+	</update>
+	<select id="getCouponUseInfoByNumAndSpId" parameterType="Map"
+		resultType="Map">
+		select * from APP_COUPON_USE where SP_ID in (select
+		SP_ID from
+		APP_CONFIG_INFO where USERID = (
+		select USERID from
+		APP_CONFIG_INFO where SP_ID = #{sp_id} )) and NUM =
+		#{num} order by id
+		desc
+	</select>
+	<select id="selCouponUseId" resultType="int">
+		select
+		CHANZOR.APP_COUPON_USE_ID.nextval from dual
+	</select>
+	<insert id="insertCouponUse" parameterType="Map">
+		INSERT INTO
+		APP_COUPON_USE(ID, NUM, COUPON_ID, SMS_NUM, SP_ID,
+		USETIME)
+		VALUES(#{id}, #{num}, #{coupon_id}, #{sms_num}, #{sp_id}, NOW())
+	</insert> -->
+</mapper>

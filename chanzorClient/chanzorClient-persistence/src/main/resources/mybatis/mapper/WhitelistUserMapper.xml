@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="WhitelistUserMapper">
+
+	<select id="getAllWhitelistUserPage" parameterType="page"
+		resultType="Map">
+		select
+		wo.id,wo.mdn,wo.sp_id,au.account_name,wo.create_time,wo.descption
+		from
+		APP_WHITE_PHONE as wo inner join APP_USER_INFO as au on wo.sp_id=au.id
+		where 1 =1
+		<if test="formData.mdn != null and formData.mdn != '' ">
+			and mdn = #{formData.mdn}
+		</if>
+		order by wo.create_time desc
+	</select>
+	<select id="getAllWhitelistUser" resultType="Map">
+		wo.id,wo.mdn,wo.sp_id,au.account_name,wo.create_time,wo.descption
+		from
+		APP_WHITE_PHONE as wo inner join APP_USER_INFO as au on wo.sp_id=au.id
+	</select>
+
+	<select id="getWhitelistUserById" parameterType="form"
+		resultType="Map">
+		wo.id,wo.mdn,wo.sp_id,au.account_name,wo.create_time,wo.descption
+		from
+		APP_WHITE_PHONE as wo inner join APP_USER_INFO as au on wo.sp_id=au.id
+		where id = #{id}
+	</select>
+
+	<insert id="saveWhitelistUser" parameterType="form">
+		insert into
+		APP_WHITE_PHONE (mdn,sp_id,create_time,descption)
+		values(#{mdn},#{sp_id},#{create_time},#{descption})
+	</insert>
+	<update id="updateWhitelistUser" parameterType="form">
+		update
+		APP_WHITE_PHONE set
+		mdn = #{mdn}
+		,descption = #{descption}
+		,sp_id =
+		#{spid}
+		where id =#{id}
+	</update>
+	<delete id="deleteWhitelistUser" parameterType="form">
+		delete from
+		APP_WHITE_PHONE
+		where id = #{id}
+	</delete>
+</mapper>

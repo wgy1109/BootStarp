@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="AppFinanceInvoiceClientMapper">
+	<select id="getAllAppFinanceInvoiceClientByPage" parameterType="page" resultType="Map">
+		select ID, INVOICE_VALUE, INVOICE_STATUS, AUDIT_STATUS, COLLECT_ADDRESS, COLLECT_NAME, COLLECT_PHONE, INVOICE_CREATE_TIME, INVOICE_COURIER_NUM,INVOICE_NOTES,INVOICE_EXPRESS_TYPE 
+		from APP_FINANCE_INVOICE where 1 = 1 and USER_ID = ${formData.userId}
+		<if test="formData.INVOICE_STATUS !=null and formData.INVOICE_STATUS != '' ">
+			and INVOICE_STATUS = #{formData.INVOICE_STATUS}
+		</if>
+		order by ID desc 
+	</select>
+	
+	<insert id="saveAppFinanceInvoiceClient" parameterType="form">
+		insert into APP_FINANCE_INVOICE (
+					ID,USER_ID, INVOICE_VALUE, INVOICE_STATUS, AUDIT_STATUS, COLLECT_ADDRESS, COLLECT_NAME	, COLLECT_PHONE, INVOICE_CREATE_TIME 
+		) values(
+					nextval('"app_finance_invoice_id_seq"')
+					,
+					${userId}
+					,
+					${invoiceValue}
+					,
+					#{invoiceStatus}
+					,
+					#{AUDIT_STATUS}
+					,
+					#{COLLECT_ADDRESS}
+					,
+					#{COLLECT_NAME}
+					,
+					#{COLLECT_PHONE}
+					,
+					to_timestamp(#{INVOICE_CREATE_TIME},'yyyy-MM-dd HH24:mi:SS')
+		)
+	</insert>
+	<update id="updateAppFinanceInvoiceClient" parameterType="form">
+		update APP_FINANCE_INVOICE set  
+			ID = ${id}, ID = ${ID}, USER_ID = ${USER_ID}, INVOICE_VALUE = ${INVOICE_VALUE}, 
+			INVOICE_STATUS = #{INVOICE_STATUS}, AUDIT_STATUS = #{AUDIT_STATUS}, COLLECT_ADDRESS = #{COLLECT_ADDRESS}, 
+			COLLECT_NAME = #{COLLECT_NAME}, COLLECT_PHONE = #{COLLECT_PHONE}, INVOICE_CREATE_TIME = to_timestamp(#{INVOICE_CREATE_TIME},'yyyy-MM-dd HH24:mi:SS'), 
+			INVOICE_UPDATE_USER_ID = ${INVOICE_UPDATE_USER_ID}, INVOICE_UPDATE_TIME = to_timestamp(#{INVOICE_UPDATE_TIME},'yyyy-MM-dd HH24:mi:SS'), 
+			INVOICE_NOTES = #{INVOICE_NOTES}, INVOICE_COURIER_NUM = #{INVOICE_COURIER_NUM}
+			where ID =${ID}
+	</update>
+	<delete id="deleteAppFinanceInvoiceClient" parameterType="form">
+		delete from APP_FINANCE_INVOICE where ID = ${id}
+	</delete>
+	<update id="updateAuditStatus" parameterType="form">
+		update APP_FINANCE_INVOICE set AUDIT_STATUS = #{AUDIT_STATUS} where ID = ${id}
+	</update>
+	
+	<select id="getAppFinanceInvoiceClientInfoById"  parameterType="form" resultType="Map">
+		select * from APP_FINANCE_INVOICE where ID =  ${id}
+	</select>
+	
+	<select id="getCollectAddress"  parameterType="form" resultType="Map">
+		select ID, COLLECT_ADDRESS, COLLECT_NAME, COLLECT_PHONE from APP_FINANCE_INVOICE where USER_ID = ${userId} order by ID desc
+	</select>
+	
+	<select id="getFinanceInvoiceAllMoney"  parameterType="form" resultType="Map">
+		select sum(INVOICE_VALUE) "AllINVOICE" from APP_FINANCE_INVOICE where 
+		USER_ID = ${userId} 
+	</select>
+	
+		
+	<select id="getAppUserAuthenticationByUserId" parameterType="form" resultType="Int">
+		select COUNT(1) from APP_USER_AUTHENTICATION_INFO where 1 =1 and id = ${userId}  and  STATUS = 2
+	</select>
+	
+	<select id="getAppUserAuthenticationNameByUserId" parameterType="form" resultType="Map">
+		select COMPANY from APP_USER_AUTHENTICATION_INFO where 1 =1 and id = ${userId}  and  STATUS = 2
+	</select>
+	
+	<update id="updateUserinfoInvoicevalue" parameterType="map">
+		update app_user_info set open_invoice_value = open_invoice_value - ${reducemoney}*100  where id = ${authid};
+	</update>
+	
+	<update id="addUserinfoInvoicevalue" parameterType="map">
+		update app_user_info set open_invoice_value = open_invoice_value + ${invoice_value}*100  where id = ${user_id};
+	</update>
+	
+	<select id="getuserinfobyid" parameterType="form" resultType="Map">
+		select * from app_user_info where id = ${userId} 
+	</select>
+	
+</mapper>

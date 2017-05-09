@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="SmsSendChannelGroupMapper">
+	<select id="getAllSmsSendChannelGroupByPage" parameterType="page"
+		resultType="Map">
+		select sg.id ID, case sg.status when 1 then '上线' when 0 then '下线' else
+		'异常' end STATUS,sg.gname GNAME,sg.createtime CREATETIME,su.user_name
+		CREATEID from SMS_SEND_CHANNEL_GROUP sg, SMS_USER_INFO su
+		where su.id =
+		sg.createid
+		<if test="formData.GNAME != null and formData.GNAME != '' ">
+			and sg.gname like
+			CONCAT(CONCAT('%',#{formData.GNAME}),'%')
+		</if>
+		<if test="formData.STATUS != null and formData.STATUS != '' ">
+			and sg.status = #{formData.STATUS}
+		</if>
+	</select>
+	<select id="getAllSmsSendChannelGroup" resultType="Map">
+		select sg.id
+		,sg.gname ,sg.createtime from SMS_SEND_CHANNEL_GROUP sg
+		where
+		sg.status=1
+	</select>
+
+	<insert id="saveSmsSendChannelGroup" parameterType="form">
+		insert into
+		SMS_SEND_CHANNEL_GROUP (
+		ID
+		,
+		GNAME
+		,
+		STATUS
+		,
+		CREATETIME
+		,
+		CREATEID
+		) values(
+		nextval('"sms_send_channel_group_id_seq"')
+		,
+		#{GNAME}
+		,
+		#{STATUS}
+		,
+		#{CREATETIME}
+		,
+		#{CREATEID}
+		)
+	</insert>
+	<update id="updateSmsSendChannelGroup" parameterType="form">
+		update
+		SMS_SEND_CHANNEL_GROUP set
+		id = #{id}
+		,ID = #{ID}
+		,GNAME = #{GNAME}
+		,STATUS = #{STATUS}
+		,CREATETIME = #{CREATETIME}
+		,CREATEID = #{CREATEID}
+		where id =#{ID}
+	</update>
+	<delete id="deleteSmsSendChannelGroup" parameterType="form">
+		delete from
+		SMS_SEND_CHANNEL_GROUP where id = #{id}
+	</delete>
+	<select id="getSmsSendChannelGroupInfoById" parameterType="form"
+		resultType="Map">
+		select * from SMS_SEND_CHANNEL_GROUP where id = #{id}
+	</select>
+
+	<select id="getChannelGroupByGroupid" parameterType="form"
+		resultType="Map">
+		select sag.channelid, sag.prefix, sag.opertor_type from
+		SMSCHANNEL_AND_GROUP sag
+		<where>
+			<if test="id !=null and id>0 ">
+				sag.groupid = #{id}
+			</if>
+		</where>
+		order by sag.opertor_type
+	</select>
+
+	<select id="getSmsSendChannelGroupInfoBynameNoid" parameterType="form"
+		resultType="Map">
+		select * from SMS_SEND_CHANNEL_GROUP where gname = #{GNAME}
+		<if test="id !=null and id>0 ">
+			and id != #{id}
+		</if>
+	</select>
+
+	<update id="updateGroupStatus" parameterType="form">
+		update
+		SMS_SEND_CHANNEL_GROUP set STATUS = #{status} where id =#{authid}
+	</update>
+
+	<select id="getSmsSendChannelGroupNoOne" parameterType="form"
+		resultType="Map">
+		select ID
+		,GNAME from SMS_SEND_CHANNEL_GROUP
+		where status=1
+		<if test="id !=null and id>0 ">
+			and ID != #{id}
+		</if>
+	</select>
+
+
+</mapper>

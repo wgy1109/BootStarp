@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="SmsChannelAndGroupMapper">
+	<select id="getAllSmsChannelAndGroupByPage" parameterType="page"
+		resultType="Map">
+		select * from SMSCHANNEL_AND_GROUP where 1 =1
+		<if test="formData.ID != null and formData.ID != '' ">
+			and ID = #{formData.ID}
+		</if>
+		<if test="formData.GROUPID != null and formData.GROUPID != '' ">
+			and GROUPID = #{formData.GROUPID}
+		</if>
+		<if test="formData.OPERTOR_TYPE != null and formData.OPERTOR_TYPE != '' ">
+			and OPERTOR_TYPE = #{formData.OPERTOR_TYPE}
+		</if>
+		<if test="formData.CHANNELID != null and formData.CHANNELID != '' ">
+			and CHANNELID = #{formData.CHANNELID}
+		</if>
+		<if test="formData.PREFIX != null and formData.PREFIX != '' ">
+			and PREFIX = #{formData.PREFIX}
+		</if>
+	</select>
+
+	<insert id="saveSmsChannelAndGroup" parameterType="form">
+		insert into
+		SMSCHANNEL_AND_GROUP (
+		ID
+		,
+		GROUPID
+		,
+		OPERTOR_TYPE
+		,
+		CHANNELID
+		,
+		PREFIX
+		) values(
+		nextval('"sms_send_channel_group_id_seq"')
+		,
+		#{GROUPID}
+		,
+		#{OPERTOR_TYPE}
+		,
+		#{CHANNELID}
+		,
+		#{PREFIX}
+		)
+	</insert>
+	<update id="updateSmsChannelAndGroup" parameterType="form">
+		update
+		SMSCHANNEL_AND_GROUP set
+		id = #{id}
+		,ID = #{ID}
+		,GROUPID = #{GROUPID}
+		,OPERTOR_TYPE = #{OPERTOR_TYPE}
+		,CHANNELID = #{CHANNELID}
+		,PREFIX = #{PREFIX}
+		where id =#{ID}
+	</update>
+	<delete id="deleteSmsChannelAndGroup" parameterType="form">
+		delete from
+		SMSCHANNEL_AND_GROUP where id = #{id}
+	</delete>
+	<delete id="deleteSmsByGroupid" parameterType="form">
+		delete from
+		SMSCHANNEL_AND_GROUP where GROUPID = #{id}
+	</delete>
+	<select id="getSmsChannelAndGroupInfoById" parameterType="form"
+		resultType="Map">
+		select * from SMSCHANNEL_AND_GROUP where id = #{id}
+	</select>
+</mapper>

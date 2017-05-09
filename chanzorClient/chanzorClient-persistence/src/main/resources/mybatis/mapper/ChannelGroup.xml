@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ChannelGroupMapper">
+<!-- 
+	<resultMap type="ChannelGroup" id="ChannelGroupMap">
+		<id column="id" property="id"/>
+		<result column="gname" property="gname"/>
+		<result column="status" property="status"/>
+		<result column="user_name" property="username"/>
+		<result column="createtime" property="createtime"/>
+	</resultMap>
+	
+	<resultMap type="ChannelAndGroup" id="ChannelAndGroupMap">
+		<result column="channelid" property="channelid"/>
+		<result column="prefix" property="prefix"/>
+		<result column="opertor_type" property="opertor_type"/>
+	</resultMap>
+
+	<select id="listPageChannelGroup" parameterType="ChannelGroup"  resultMap="ChannelGroupMap">
+		select sg.id,sg.status,sg.gname,sg.createtime,su.user_name from appuser.sms_send_channel_group sg, appuser.sms_user_info su
+		<where>
+		  su.id = sg.createid
+		<if test="gname!=null and gname!=''">
+			and sg.gname like '%'||#{gname}||'%' 
+		</if>
+		<if test="status!=null and status!=''" >
+			and sg.status =#{status} 
+		</if>
+		</where>
+	</select>
+	
+		<select id="listAllChannelAndGroupByid" parameterType="ChannelGroup" resultMap="ChannelAndGroupMap">
+		select  sag.channelid,sag.prefix ,sag.opertor_type from SMSCHANNEL_AND_GROUP sag
+		<where>
+		<if test="id !=null and id>0 ">
+			 sag.groupid = #{id}
+		</if>
+		</where>
+		 order by sag.opertor_type 
+	  </select>
+	
+		<select id="listAllChannelGroup"   resultMap="ChannelGroupMap">
+	    select * from SMS_SEND_CHANNEL_GROUP s where s.status=1
+	  </select>
+	
+	
+	
+	<select id="getById" parameterType="int"  resultMap="ChannelGroupMap">
+		select ID, GNAME, STATUS, CREATETIME, CREATEID from sms_send_channel_group 
+       where id = #{id}
+	</select>
+	
+	<insert id="insertChannelGroup" parameterType="ChannelGroup" >
+		<selectKey resultType="int"  order="BEFORE"  keyProperty="id">
+      select sms_send_channel_group_id.nextval  from dual
+   </selectKey>
+		insert into sms_send_channel_group (id,gname,status,createtime,createid) values 
+		(#{id},#{gname},1,#{createtime},#{createid})
+	</insert>
+	
+	<update id="update" parameterType="ChannelGroup">
+		update sms_send_channel_group 
+		<trim prefix="SET" suffixOverrides=",">
+		<if test="gname!=null and gname !=''">
+		gname=#{gname},
+		</if>
+		<if test="status!=null and status !=''">
+		 status=#{status}
+		</if>
+		  </trim>
+		where id=#{id}
+	</update>
+	
+	<update id="delete" parameterType="int">
+		delete  sms_send_channel_group where id=#{id}
+	</update>
+	
+		<update id="updateSpChannelGroup" parameterType="SpInfo">
+		update  SMS_API_SETTING   set channelgroupid =#{channelgroupid} where sp_id=#{spid}
+	</update>
+	
+	
+		
+ <insert  id="insertChannelAdnGroup"  parameterType="ArrayList">  
+     <selectKey resultType="int" order="BEFORE" keyProperty="id">
+			select smschannel_and_group_id.nextval from dual
+	</selectKey>
+    insert into smschannel_and_group (ID,GROUPID,OPERTOR_TYPE,CHANNELID,PREFIX)
+     select smschannel_and_group_id.nextval,A.* from(
+    <foreach collection="list" item="channelgroup"  index="index"  separator="UNION" >  
+        SELECT #{channelgroup.groupid},#{channelgroup.opertor_type},#{channelgroup.channelid},#{channelgroup.prefix} FROM DUAL
+    </foreach>  
+      ) A
+</insert>
+
+	<delete id="deleteChannelAdnGroup" parameterType="int">
+		delete  smschannel_and_group where groupid=#{id}
+	</delete>
+	 -->
+</mapper>

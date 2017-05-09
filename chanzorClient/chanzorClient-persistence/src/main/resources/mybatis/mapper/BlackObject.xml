@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BlackObjectMapper">
+<!-- 
+	<resultMap type="BlackObject" id="blackObjectResultMap">
+		<id column="id" property="id" />
+		<id column="mdn" property="mdn" />
+		<id column="spid" property="sp_id" />
+		<result column="createtime" property="createtime" />
+		<result column="descption" property="descption" />
+	</resultMap>
+	
+	<resultMap type="BlackObject" id="exportWordResultMap">
+		<id column="id" property="id" />
+		<id column="mdn" property="mdn" />
+		<id column="spid" property="sp_id" />
+		<result column="createtime" property="createtime" />
+		<result column="descption" property="descption" />
+	</resultMap>
+	
+	
+	<select id="exportWord" parameterType="BlackObject"
+		resultType="Map">
+		select ot.id,ot.mdn,ot.spid,nvl(ot.descption,' ')descption ,to_char(ot.createtime,'YYYY-MM-DD HH24:MI:SS') createtime  from sms_black_object ot where 1=1
+		<if test="mdn!=null and mdn!=''">
+			and ot.mdn like '%'||#{mdn}||'%'
+		</if>
+	</select>
+	
+	<select id="listPageBlackObject" parameterType="BlackObject"
+		resultMap="blackObjectResultMap">
+		select ot.id,ot.mdn,ot.spid,ot.createtime,ot.descption  from sms_black_object ot where 1=1
+		<if test="mdn!=null and mdn!=''">
+			and ot.mdn like '%'||#{mdn}||'%'
+		</if>
+        order by ot.id desc
+	</select>
+	
+	
+	
+	
+	<select id="getBlackObjectById" parameterType="int"
+		resultMap="blackObjectResultMap">
+			select ot.id,ot.mdn,ot.spid,ot.createtime,ot.descption  from sms_black_object ot where 
+		 ot.id=#{id}
+	</select>
+	<select id="getBlackObjectCountByName" parameterType="BlackObject"
+		resultType="int">
+		select count(1) from SMS_BLACK_OBJECT sw
+		where
+		sw.mdn=#{mdn}
+		<if test="sp_id!=null and sp_id!=''">
+			and sw.spid =#{sp_id}
+		</if>
+	</select>
+	<update id="updateBlackObjectById" parameterType="BlackObject">
+		update
+		sms_black_object set
+		spid=#{sp_id},
+		descption=#{descption}
+		where
+		id=#{id}
+	</update>
+
+
+	<insert id="insertBlackObject" parameterType="BlackObject">
+		insert into SMS_BLACK_OBJECT
+		(MDN,SPID,DESCPTION) values
+		(#{mdn,jdbcType=VARCHAR},#{sp_id},#{descption,jdbcType=VARCHAR})
+	</insert>
+
+ <insert  id="addBlackMdnBatch"  parameterType="ArrayList">  
+     <selectKey resultType="int" order="BEFORE" keyProperty="id">
+			select sms_black_object_id.nextval from dual
+	</selectKey>
+    insert into sms_black_object (ID,MDN,SPID,DESCPTION)
+     select sms_black_object_id.nextval,A.* from(
+    <foreach collection="list" item="black"  index="index"  separator="UNION"  >  
+        SELECT #{black.mdn},#{black.sp_id},#{black.descption,jdbcType=VARCHAR} FROM DUAL
+    </foreach>  
+      ) A
+</insert>  
+
+
+	<delete id="deleteBlackObjectById" parameterType="int">
+		delete from
+		sms_black_object where id=#{id}
+	</delete> -->
+</mapper>

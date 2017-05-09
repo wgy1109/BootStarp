@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="InterSmsSendTaskClientMapper">
+	<select id="getAllSmsSendTaskClientP" parameterType="page"
+		resultType="Map">
+		SELECT p.id, p.user_sp_id, p.user_sp_name, p.company,
+		p.message_content, p.phone_count, p.charge_count,
+		case when p.status
+		BETWEEN 100 and 199 then '待审核'
+		when p.status BETWEEN 200 and 299 then
+		'驳回'
+		when p.status BETWEEN 300 and 399 then '通过' else '' end status ,
+		case p.submit_type when '1' then 'HTTP' when '2' then 'CMPP' when '3'
+		then
+		'SMPP' else '' end submitType ,
+		p.submit_time, p.send_time,
+		p.error_count , p.status_description
+		from inter_sms_package p
+		where 1 =1 
+		<if test="formData.subAccountAppIds == null">
+			and p.company_id = ${formData.userid}
+		</if>
+		<if test="formData.subAccountAppIds != null">
+			and p.user_sp_id in ${formData.subAccountAppIds}
+		</if>
+		<if test="formData.queryStartTime !=null and formData.queryStartTime !=''">
+			and p.id &gt;= #{formData.queryStartTime}
+		</if>
+		<if test="formData.queryEndTime !=null and formData.queryEndTime !=''">
+			and p.id &lt; #{formData.queryEndTime}
+		</if>
+		<if test="formData.packageid !=null and formData.packageid !='' ">
+			and p.id = #{formData.packageid}
+		</if>
+		<if test="formData.status == 1 ">
+			and p.status BETWEEN 100 and 199
+		</if>
+		<if test="formData.status == 2 ">
+			and p.status BETWEEN 200 and 299
+		</if>
+		<if test="formData.status == 3 ">
+			and p.status BETWEEN 300 and 399
+		</if>
+		<if test="formData.spId != null and formData.spId!='' ">
+			and p.user_sp_id=#{formData.spId}
+		</if>
+		<if test="formData.spName !=null and formData.spName !=''">
+			and p.user_sp_name = #{formData.spName} 
+		</if>
+		order by p.submit_time desc limit ${length} offset ${start}
+
+	</select>
+
+	<select id="getAllSmsSendTaskClientCount" parameterType="page"
+		resultType="Map">
+		SELECT count(p.id) count from inter_sms_package p
+		where 1 = 1
+		<if test="formData.subAccountAppIds == null">
+			and p.company_id = ${formData.userid}
+		</if>
+		<if test="formData.subAccountAppIds != null">
+			and p.user_sp_id in ${formData.subAccountAppIds}
+		</if>
+		<if test="formData.queryStartTime !=null and formData.queryStartTime !=''">
+			and p.id &gt;= #{formData.queryStartTime}
+		</if>
+		<if test="formData.queryEndTime !=null and formData.queryEndTime !=''">
+			and p.id &lt; #{formData.queryEndTime}
+		</if>
+		<if test="formData.packageid !=null and formData.packageid !='' ">
+			and p.id = #{formData.packageid}
+		</if>
+		<if test="formData.status == 1 ">
+			and p.status BETWEEN 100 and 199
+		</if>
+		<if test="formData.status == 2 ">
+			and p.status BETWEEN 200 and 299
+		</if>
+		<if test="formData.status == 3 ">
+			and p.status BETWEEN 300 and 399
+		</if>
+		<if test="formData.spId != null and formData.spId!='' ">
+			and p.user_sp_id=#{formData.spId}
+		</if>
+		<if test="formData.spName !=null and formData.spName !=''">
+			and p.user_sp_name = #{formData.spName} 
+		</if>
+	</select>
+
+	<select id="getSendStatisticsByPage" parameterType="page"
+		resultType="Map">
+		${formData.sql}
+	</select>
+	<select id="getAllSenstiveWord" resultType="Map">
+		select
+		content
+		from
+		SMS_SENSITIVE_WORD
+	</select>
+
+	<select id="getSmsMtListClientP" parameterType="page"
+		resultType="Map">
+		select s.id, s.mobile, s.send_channel_id, case s.status when 200
+		then
+		'提交成功' else '提交失败' end status , s.status as result,
+		s.dr_time, case
+		s.dr_result when 1 then '成功' when 0 then '' when -1 then '失败'
+		else ''
+		end dr_result,
+		s.dr_reason , s.send_time , s.package_id ,
+		p.user_sp_name, p.submit_time , p.message_content
+		from inter_sms_mt s ,
+		inter_sms_package p where s.package_id = p.id 
+		<if test="formData.subAccountAppIds == null">
+			and p.company_id = ${formData.userid}
+		</if>
+		<if test="formData.subAccountAppIds != null">
+			and p.user_sp_id in ${formData.subAccountAppIds}
+		</if>
+		<if test="formData.queryStartTime !=null and formData.queryStartTime !=''">
+			and s.id
+			&gt;= #{formData.queryStartTime}
+		</if>
+		<if test="formData.queryEndTime !=null and formData.queryEndTime !=''">
+			and s.id
+			&lt;#{formData.queryEndTime}
+		</if>
+		<if test="formData.mobile !=null and formData.mobile !='' ">
+			and s.mobile like #{formData.mobile}||'%'
+		</if>
+		<if test="formData.content !=null and formData.content !='' ">
+			and p.message_content like '%'||#{formData.content}||'%'
+		</if>
+		<if test="formData.drresult !=null and formData.drresult !='' ">
+			and s.dr_result = ${formData.drresult}
+		</if>
+		<if test="formData.spId != null and formData.spId!='' ">
+			and p.user_sp_id=#{formData.spId}
+		</if>
+		order by s.send_time desc limit ${length} offset ${start}
+	</select>
+	<select id="getSmsMtListClientCount" parameterType="page"
+		resultType="Map">
+		select count(s.id) count
+		from inter_sms_mt s , inter_sms_package p
+		where s.package_id = p.id 
+		<if test="formData.subAccountAppIds == null">
+			and p.company_id = ${formData.userid}
+		</if>
+		<if test="formData.subAccountAppIds != null">
+			and p.user_sp_id in ${formData.subAccountAppIds}
+		</if>
+		<if test="formData.queryStartTime !=null and formData.queryStartTime !=''">
+			and s.id
+			&gt;= #{formData.queryStartTime}
+		</if>
+		<if test="formData.queryEndTime !=null and formData.queryEndTime !=''">
+			and s.id
+			&lt;#{formData.queryEndTime}
+		</if>
+		<if test="formData.mobile !=null and formData.mobile !='' ">
+			and s.mobile like #{formData.mobile}||'%'
+		</if>
+		<if test="formData.content !=null and formData.content !='' ">
+			and p.message_content like '%'||#{formData.content}||'%'
+		</if>
+		<if test="formData.drresult !=null and formData.drresult !='' ">
+			and s.dr_result = ${formData.drresult}
+		</if>
+		<if test="formData.spId != null and formData.spId!='' ">
+			and p.user_sp_id=#{formData.spId}
+		</if>
+	</select>
+</mapper>

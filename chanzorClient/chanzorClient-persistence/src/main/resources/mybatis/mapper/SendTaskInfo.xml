@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SendTaskInfoMapper">
+
+	<resultMap type="SendTaskInfo" id="sendTaskInfoMap">
+		<id column="id" property="id" />
+		<result column="sp_id" property="sp_id" />
+		<result column="content" property="content" />
+		<result column="createtime" property="createtime" />
+
+		<result column="total" property="total" />
+		<result column="allnumber" property="allnumber" />
+		<result column="unicomnumber" property="unicomnumber" />
+		<result column="mobilenumber" property="mobilenumber" />
+		<result column="telecomnumer" property="telecomnumer" />
+
+		<result column="succ" property="succ" />
+		<result column="fail" property="fail" />
+		<result column="arrive_succ" property="arrive_succ" />
+		<result column="arrive_fail" property="arrive_fail" />
+		<result column="task_type" property="task_type" />
+		<result column="status" property="status" />
+
+		<result column="endtime" property="endtime" />
+		<result column="send_type" property="send_type" />
+		<result column="descption" property="descption" />
+		<result column="dynamicdata" property="dynamicdata" />
+		<result column="extno" property="extno" />
+	</resultMap>
+
+
+	<select id="listPageSendTaskInfo" parameterType="SendTaskInfo"
+		resultMap="sendTaskInfoMap">
+
+		select id, sp_id, content, createtime, total, allnumber, unicomnumber,
+		mobilenumber, telecomnumer, succ, fail,
+		arrive_succ, arrive_fail,
+		task_type, status, endtime, send_type, descption,
+		dynamicdata, extno
+		from appuser.sms_send_task
+		where 1=1
+		<if test="id!=null and id!=''">
+			and id = #{id}
+		</if>
+
+		<if test="sp_id!=null and sp_id!=''">
+			and sp_id = #{sp_id}
+		</if>
+
+		<if test="quereyStartTime!=null and quereyStartTime!=''">
+			and createtime
+			&gt;=to_timestamp(#{quereyStartTime},'yyyy-mm-dd')
+		</if>
+		<if test="queryEndTime!=null and queryEndTime!=''">
+			and createtime
+			&lt;=to_timestamp(#{queryEndTime},'yyyy-mm-dd')
+		</if>
+		order by id desc
+	</select>
+
+	<select id="listSendTaskInfo" parameterType="SendTaskInfo"
+		resultMap="sendTaskInfoMap">
+
+		select id, sp_id, content, createtime, total, allnumber, unicomnumber,
+		mobilenumber, telecomnumer, succ, fail,
+		arrive_succ, arrive_fail,
+		task_type, status, endtime, send_type, descption,
+		dynamicdata, extno
+		from appuser.sms_send_task
+		where 1=1
+		<if test="id!=null and id!=''">
+			and id = #{id}
+		</if>
+
+		<if test="sp_id!=null and sp_id!=''">
+			and sp_id = #{sp_id}
+		</if>
+
+		<if test="quereyStartTime!=null and quereyStartTime!=''">
+			and createtime
+			&gt;=to_timestamp(#{quereyStartTime},'yyyy-mm-dd')
+		</if>
+		<if test="queryEndTime!=null and queryEndTime!=''">
+			and createtime
+			&lt;=to_timestamp(#{queryEndTime},'yyyy-mm-dd')
+		</if>
+		order by id desc
+	</select>
+
+	<select id="getAllNumber" parameterType="SendTaskInfo"
+		resultType="int">
+
+		select sum(allnumber) from appuser.sms_send_task
+		where 1=1
+		<if test="id!=null and id!=''">
+			and id = #{id}
+		</if>
+
+		<if test="sp_id!=null and sp_id!=''">
+			and sp_id = #{sp_id}
+		</if>
+
+		<if test="quereyStartTime!=null and quereyStartTime!=''">
+			and createtime
+			&gt;=to_timestamp(#{quereyStartTime},'yyyy-mm-dd')
+		</if>
+		<if test="queryEndTime!=null and queryEndTime!=''">
+			and createtime
+			&lt;=to_timestamp(#{queryEndTime},'yyyy-mm-dd')
+		</if>
+	</select>
+
+	<select id="getTotal" parameterType="SendTaskInfo" resultType="int">
+
+		select sum(total) from appuser.sms_send_task
+		where 1=1
+		<if test="id!=null and id!=''">
+			and id = #{id}
+		</if>
+
+		<if test="sp_id!=null and sp_id!=''">
+			and sp_id = #{sp_id}
+		</if>
+
+		<if test="quereyStartTime!=null and quereyStartTime!=''">
+			and createtime
+			&gt;=to_timestamp(#{quereyStartTime},'yyyy-mm-dd')
+		</if>
+		<if test="queryEndTime!=null and queryEndTime!=''">
+			and createtime
+			&lt;=to_timestamp(#{queryEndTime},'yyyy-mm-dd')
+		</if>
+	</select>
+
+	<select id="getSucc" parameterType="SendTaskInfo" resultType="int">
+
+		select sum(succ) from appuser.sms_send_task
+		where 1=1
+		<if test="id!=null and id!=''">
+			and id = #{id}
+		</if>
+
+		<if test="sp_id!=null and sp_id!=''">
+			and sp_id = #{sp_id}
+		</if>
+
+		<if test="quereyStartTime!=null and quereyStartTime!=''">
+			and createtime
+			&gt;=to_timestamp(#{quereyStartTime},'yyyy-mm-dd')
+		</if>
+		<if test="queryEndTime!=null and queryEndTime!=''">
+			and createtime
+			&lt;=to_timestamp(#{queryEndTime},'yyyy-mm-dd')
+		</if>
+	</select>
+
+	<select id="getFail" parameterType="SendTaskInfo" resultType="int">
+
+		select sum(fail) from appuser.sms_send_task
+		where 1=1
+		<if test="id!=null and id!=''">
+			and id = #{id}
+		</if>
+
+		<if test="sp_id!=null and sp_id!=''">
+			and sp_id = #{sp_id}
+		</if>
+
+		<if test="quereyStartTime!=null and quereyStartTime!=''">
+			and createtime
+			&gt;=to_timestamp(#{quereyStartTime},'yyyy-mm-dd')
+		</if>
+		<if test="queryEndTime!=null and queryEndTime!=''">
+			and createtime
+			&lt;=to_timestamp(#{queryEndTime},'yyyy-mm-dd')
+		</if>
+	</select>
+
+
+	<select id="getAllCount" parameterType="SendTaskInfo"
+		resultType="int">
+
+		select count(id) from appuser.sms_send_task
+		where 1=1
+		<if test="id!=null and id!=''">
+			and id = #{id}
+		</if>
+
+		<if test="sp_id!=null and sp_id!=''">
+			and sp_id = #{sp_id}
+		</if>
+
+		<if test="quereyStartTime!=null and quereyStartTime!=''">
+			and createtime
+			&gt;=to_timestamp(#{quereyStartTime},'yyyy-mm-dd')
+		</if>
+		<if test="queryEndTime!=null and queryEndTime!=''">
+			and createtime
+			&lt;=to_timestamp(#{queryEndTime},'yyyy-mm-dd')
+		</if>
+	</select>
+
+
+	<select id="getList" parameterType="SendTaskInfo" resultMap="sendTaskInfoMap">
+
+		select id, sp_id, content, createtime, total, allnumber, unicomnumber,
+		mobilenumber, telecomnumer, succ, fail,
+		arrive_succ, arrive_fail,
+		task_type, status, endtime, send_type, descption,
+		dynamicdata, extno,
+		mdn, status1, stat_desc from
+		( select a.*, rownum rn from (select
+		DISTINCT(st.id) stid, st.*,ss.mdn
+		as mdn,aa.status as
+		status1,aa.stat_desc as stat_desc from
+		appuser.sms_send_task st left
+		join appuser.sms_submit ss on
+		st.SP_ID=ss.SP_ID left join
+		appuser.sms_arrive aa on
+		st.SP_ID=aa.SP_ID) a ) where rn between
+		#{start} and #{end}
+
+		<if test="id!=null and id!=''">
+			and id = #{id}
+		</if>
+
+		<if test="sp_id!=null and sp_id!=''">
+			and sp_id = #{sp_id}
+		</if>
+
+		<if test="quereyStartTime!=null and quereyStartTime!=''">
+			and createtime
+			&gt;=to_timestamp(#{quereyStartTime},'yyyy-mm-dd')
+		</if>
+		<if test="queryEndTime!=null and queryEndTime!=''">
+			and createtime
+			&lt;=to_timestamp(#{queryEndTime},'yyyy-mm-dd')
+		</if>
+		order by id desc
+	</select>
+	<select id="getTaskInfoByYesterDay" parameterType="map"
+		resultType="java.lang.Integer">
+		select sum(submit_count) as num from ${tableName} s where
+		s.submit_date &lt; CURRENT_DATE and s.submit_date &gt; ( CURRENT_DATE
+		- integer '1' ) and s.user_sp_id = ${spId}
+	</select>
+	<select id="getTaskInfoByMonth" parameterType="map"
+		resultType="java.lang.Integer">
+		select sum(charge_count) AS NUM from sms_package where
+		to_char(submit_time,'yyyy-MM') = #{currTime} and user_sp_id = #{spId}
+	</select>
+
+	<select id="getTaskInfoByYesterDay0" parameterType="map"
+		resultType="java.lang.Integer">
+		select sum(submit_count) as num from ${tableName} s where
+		s.submit_date &lt;=
+		CURRENT_DATE and s.submit_date &gt;= ( CURRENT_DATE
+		- integer '1' ) and
+		s.user_sp_id = ${spId}
+	</select>
+	<select id="getTaskInfoByMonth0" parameterType="map"
+		resultType="java.lang.Integer">
+		select (sum(charge_count) + sum(error_count)) AS NUM from
+		sms_package where to_char(submit_time,'yyyy-MM') =#{currTime} and
+		status != 201 and user_sp_id = ${spId}
+	</select>
+</mapper>

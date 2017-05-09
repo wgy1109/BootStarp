@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="MenuInfoMapper"><!-- 
+	<select id="getmenuList" parameterType="form" resultType="Map">
+		select * from SMS_USER_MENU where  status=1 order by id asc 
+	</select>
+
+	<select id="getMList" parameterType="form" resultType="Map">
+		select * from SMS_USER_MENU where parent_id > 0 and status=1
+	</select>
+	获取用户权限URL modify by lipeng start
+	<select id="getAuthMenu" resultType="Map">
+		select ID,MENU_URL from SMS_USER_MENU  where STATUS = 1  and MENU_URL  &lt;&gt; '' and MENU_URL is not null 
+	</select>
+	<select id="getRoleRightsByRoleid" resultType="String" parameterType="String">
+		select RIGHTS from SMS_USER_ROLE where id = #{roleid}
+	</select>
+	<select id="getUserRightsByUserId" resultType="String" parameterType="String">
+		  select user_rights from SMS_USER_INFO where id = #{userid}
+	</select> -->
+	<!-- 获取用户权限URL modify by lipeng end -->
+</mapper>

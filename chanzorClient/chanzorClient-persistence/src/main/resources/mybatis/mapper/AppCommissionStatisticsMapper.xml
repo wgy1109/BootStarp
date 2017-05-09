@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="AppCommissionStatisticsMapper">
+	<insert id="saveAccountChargerecodeMapper" parameterType="form">
+		insert into app_sales_commission_statistics 
+		(sp_manager_id, company_name, company_account, sp_id, sp_name, sp_recharge_money, sp_recharge_unitprice, commission_money, recharge_date, sp_recharge_num, remark
+		<if test="is_begin_recharge != null and is_begin_recharge != '' ">
+			, is_begin_recharge 
+		</if>
+		) 
+		values 
+		(${sp_manager_id}, #{company_name}, #{company_account}, ${sp_id}, #{sp_name}, ${sp_recharge_money}, ${sp_recharge_unitprice}, ${commission_money}, now(), ${sp_recharge_num}, #{remark}
+		<if test="is_begin_recharge != null and is_begin_recharge != '' ">
+			, ${is_begin_recharge}
+		</if>
+		)  
+	</insert>
+</mapper>

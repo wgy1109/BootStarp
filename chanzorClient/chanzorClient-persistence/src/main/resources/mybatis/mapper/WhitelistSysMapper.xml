@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="WhitelistSysMapper">
+
+	<select id="getAllWhitelistSysPage" parameterType="page" resultType="Map">
+		select
+		id,mdn,create_time,descption 
+		from SMS_WHITE_PHONE
+		where 1 =1
+		<if test="formData.id != null and formData.id != '' ">
+			and id = #{formData.id}
+		</if>
+		<if test="formData.mdn != null and formData.mdn != '' ">
+			and mdn = #{formData.mdn}
+		</if>
+		order by create_time desc
+	</select>
+	<select id="getAllWhitelistSys" resultType="Map">
+		select
+		id,mdn,create_time,descption 
+		from SMS_WHITE_PHONE
+	</select>
+	
+	<select id="getWhitelistSysById" parameterType="form" resultType="Map">
+		select
+		id,mdn,create_time,descption 
+		from SMS_WHITE_PHONE
+		where id = #{id}
+	</select>
+
+	<insert id="saveWhitelistSys" parameterType="form">
+		insert into SMS_WHITE_PHONE (mdn,create_time,descption)
+		values(#{mdn},#{create_time},#{descption})
+	</insert>
+	<update id="updateWhitelistSys" parameterType="form">
+		update SMS_WHITE_PHONE set
+		mdn = #{mdn}
+		,descption = #{descption}
+		where id =#{id}
+	</update>
+	<delete id="deleteWhitelistSys" parameterType="form">
+		delete from SMS_WHITE_PHONE
+		where id = #{id}
+	</delete>
+</mapper>

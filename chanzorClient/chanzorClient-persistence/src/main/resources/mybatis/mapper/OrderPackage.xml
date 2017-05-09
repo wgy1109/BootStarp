@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="OrderPackageMapper">
+
+	<resultMap type="OrderPackage" id="orderPackageMap">
+		<id column="id" property="id" />
+		<result column="package_num" property="package_num" />
+		<result column="package_amount" property="package_amount" />
+		<result column="package_name" property="package_name" />
+		<result column="packag_desc" property="package_desc" />
+		<result column="packaga_type" property="package_type" />
+	</resultMap>
+
+	<select id="listPageOrderPackage" parameterType="OrderPackage"
+		resultMap="orderPackageMap">
+		select
+		id,package_num,package_amount,package_name,package_type,packag_desc
+		from SMS_CHARGE_PACKGE
+		<if test="package_type!=null and package_type!='' and package_type!=0">
+			where package_type =#{package_type}
+		</if>
+
+		order by id asc
+	</select>
+
+
+	<select id="listAllOrderPackage" resultMap="orderPackageMap"
+		parameterType="OrderPackage">
+		select
+		id,package_num,package_amount,package_name,package_type,packag_desc
+		from SMS_CHARGE_PACKGE
+		<if test="package_type!=null and package_type!=''">
+			where package_type =#{package_type}
+		</if>
+	</select>
+
+	<select id="getOrderPackageById" parameterType="int" resultMap="orderPackageMap">
+		select
+		id,package_num,package_amount,package_name,package_type,packag_desc
+		from SMS_CHARGE_PACKGE
+		where id = #{id}
+	</select>
+
+	<insert id="addOrderPackage" parameterType="OrderPackage">
+		<selectKey resultType="int" order="BEFORE" keyProperty="id">
+			select sms_charge_packge_id.nextval from dual
+		</selectKey>
+		insert into sms_charge_packge
+		(id,package_num,package_amount,package_name,package_type,packag_desc)
+		values
+		(nextval('"sms_charge_packge_id_seq"',#{package_num},#{package_amount,jdbcType=INTEGER},#{package_name,jdbcType=VARCHAR},#{package_type,jdbcType=INTEGER},#{package_desc})
+	</insert>
+
+	<update id="updateOrderPackage" parameterType="OrderPackage">
+		update
+		sms_charge_packge set 
+		package_num=#{package_num},
+		package_amount=#{package_amount},
+		package_name=#{package_name},
+		package_type=#{package_type},
+		packag_desc=#{package_desc}
+		where id=#{id}
+	</update>
+
+	<update id="deleteOrderPackage" parameterType="int">
+		delete
+		sms_charge_packge where id=#{id}
+	</update>
+
+
+
+</mapper>

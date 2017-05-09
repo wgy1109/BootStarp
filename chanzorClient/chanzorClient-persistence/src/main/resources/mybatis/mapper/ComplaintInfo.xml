@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ComplaintInfoMapper">
+<!-- 
+	<resultMap type="ComplaintInfo" id="ComplaintInfoResultMap">
+		<id column="id" property="id" />
+		<result column="spid" property="spid" />
+		<result column="mdn" property="mdn" />
+		<result column="content" property="content" />
+		<result column="complaint_time" property="complaint_time" />
+		<result column="createtime" property="createtime" />
+		<result column="callmdn" property="callmdn" />
+	</resultMap>
+
+	<select id="listComplaintsPage" parameterType="page"
+		resultMap="ComplaintInfoResultMap">
+		select c.id ,c.spid, c.mdn, c.content, c.complain_time, c.createtime,
+		c.callmdn
+		from SMS_CHENNEL_COMPLAIN c
+		where 1 = 1
+
+		<if test="formData.spid != null and formData.spid != ''">
+			and c.spid = #{formData.spid}
+		</if>
+
+		<if test="formData.mdn != null and formData.mdn != ''">
+			and c.mdn = #{formData.mdn}
+		</if>
+
+		<if test="formData.callmdn != null and formData.callmdn != ''">
+			and c.callmdn like '%'||#{formData.callmdn}||'%'
+		</if>
+
+		<if
+			test="formData.complain_begin_time != null and formData.complain_begin_time != ''">
+			and c.complain_time
+			&gt;=str_to_date(date_format(#{formData.complain_begin_time},'%Y-%m-%d'),'%Y-%m-%d')
+		</if>
+
+		<if
+			test="formData.complain_end_time != null and formData.complain_end_time != ''">
+			and c.complain_time
+			&lt;=str_to_date(date_format(#{formData.complain_end_time},'%Y-%m-%d'),'%Y-%m-%d')
+		</if>
+           order by complain_time desc
+	</select>
+
+	<update id="updateComplaint" parameterType="ComplaintInfo">
+		update
+		SMS_CHENNEL_COMPLAIN set
+		spid=#{spid},
+		mdn=#{mdn},
+		content=#{content},
+		callmdn=#{callmdn},
+		complain_time=date_format(#{complain_time},'%Y-%m-%d') 
+		where
+		id=#{id}
+	</update>
+	<select id="getComplaintsById" parameterType="ComplaintInfo"
+		resultMap="ComplaintInfoResultMap">
+		select c.id ,c.spid, c.mdn, c.content, c.complain_time,
+		c.createtime, c.callmdn
+		from SMS_CHENNEL_COMPLAIN c
+		where c.id = #{id}
+	</select>
+
+	<insert id="insertComplaint" parameterType="ComplaintInfo">
+		insert into
+		SMS_CHENNEL_COMPLAIN
+		(id,spid,mdn,content,complain_time,callmdn)
+		values
+		(nextval('"sms_chennel_complain_ID_seq"'),#{spid},#{mdn},#{content,jdbcType=VARCHAR},#{complain_time,jdbcType=VARCHAR},#{callmdn,jdbcType=VARCHAR})
+	</insert>
+
+	<delete id="deleteComplaintById" parameterType="int">
+		delete from
+		SMS_CHENNEL_COMPLAIN where id = #{id}
+	</delete>
+ -->
+</mapper>

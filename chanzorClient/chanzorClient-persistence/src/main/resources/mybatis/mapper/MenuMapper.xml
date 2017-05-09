@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MenuMapper">
+<!-- 
+	<resultMap type="MenuInfo" id="menuResultMap">
+		<id column="id" property="menu_id"/>
+		<result column="menu_name" property="menuName"/>
+		<result column="menu_url" property="menu_url"/>
+		<result column="parent_id" property="parentid"/>
+	</resultMap>
+
+	<select id="ParentMenulistPage" parameterType="page"  resultMap="menuResultMap">
+		select * from SMS_USER_MENU where parent_id =0 and status=1
+	</select>
+		<select id="showParentMenu" parameterType="page"  resultMap="menuResultMap">
+		select * from SMS_USER_MENU where parent_id =0 and status=1
+	</select>
+		 	<if test="menuName!=null and menuName!=''">
+			and menu_name like  '%'||#{menuName}||'%' 
+		</if>
+		 order by id asc
+	
+	<select id="listAllParentMenu" resultMap="menuResultMap">
+		select * from SMS_USER_MENU where parent_id =0 and status=1 order by id asc 
+	</select>
+	
+	<select id="listSubMenuByParentId" parameterType="java.lang.String" resultMap="menuResultMap">
+		select * from SMS_USER_MENU where parent_id=#{menu_id} and status=1
+	</select>
+	
+	<select id="findSubMenuByParentId" parameterType="java.lang.Integer" resultMap="menuResultMap">
+		select * from SMS_USER_MENU where parent_id=#{menu_id} and status=1
+	</select>
+	<select id="getMenuById" parameterType="form"  resultType="map">
+		select * from SMS_USER_MENU where id=#{menu_id} 
+	</select>
+	<select id="getMenuInfoById" parameterType="java.lang.Integer"  resultMap="menuResultMap">
+		select * from SMS_USER_MENU where id=#{menu_id} 
+	</select>
+	<select id="listAllSubMenu" resultMap="menuResultMap">
+		select * from SMS_USER_MENU where parent_id >0 and status=1
+	</select>
+	
+	<insert id="insertMenu" parameterType="MenuInfo" >
+		insert into SMS_USER_MENU (id,menu_name,menu_url,parent_id) values (nextval('"sms_user_menu_ID_seq"'), #{menuName},#{menu_url,jdbcType=VARCHAR},#{parentid})
+	</insert>
+	
+	<update id="updateMenu" parameterType="MenuInfo">
+		update SMS_USER_MENU set 
+		menu_name=#{menuName},
+		menu_url=#{menu_url},
+		parent_id=#{parentid} 
+		where id=#{menu_id}
+	</update>
+	
+	<update id="deleteMenuById" parameterType="int">
+		update  SMS_USER_MENU set status=2 where id=#{menu_id} or parent_id=#{menu_id}
+	</update> -->
+</mapper>

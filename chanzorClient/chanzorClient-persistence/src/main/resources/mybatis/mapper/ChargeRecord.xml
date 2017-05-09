@@ -1,0 +1,476 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ChargeRecordMapper">
+
+	<resultMap type="ChargeRecord" id="ChargeRecordMap">
+		<id column="id" property="id" />
+		<result column="charge_time" property="charge_time" />
+		<result column="sp_id" property="sp_id" />
+		<result column="charge_num" property="chargenum" />
+		<result column="chargeopeartor" property="chargeopeartor" />
+		<result column="productid" property="productid" />
+		<result column="amount" property="amount" />
+		<result column="price" property="price" />
+		<result column="descption" property="descption" />
+		<result column="type" property="type" />
+		<result column="sp_name" property="sp_name" />
+		<result column="charge_type" property="charge_type" />
+		<result column="alipay_type" property="alipayType" />
+		<result column="salePrice" property="salePrice" />
+		<result column="spServiceType" property="spServiceType" />
+		<result column="is_default" property="is_default" />
+
+	</resultMap>
+	<resultMap type="SpInfo" id="spInfoAndSpcharge">
+		<result column="spid" property="spid" />
+		<result column="sp_name" property="sp_name" />
+		<result column="user_id" property="user_id" />
+		<result column="fee_type" property="feetype" />
+		<result column="effect_month" property="effect_month" />
+		<result column="sale_price" property="saleprice" />
+		<result column="max_num" property="max_num" />
+		<result column="use_num" property="use_num" />
+		<result column="leftover_num" property="leftover_num" />
+	</resultMap>
+
+	<select id="ChargeRecordListP" parameterType="page" resultMap="ChargeRecordMap">
+		select SMS_CHARGE_RECORD.*,sp.SP_NAME as
+		sp_name,sp.sp_service_type as
+		spServiceType,sp.is_default,t.sale_price as salePrice from
+		SMS_CHARGE_RECORD_USER SMS_CHARGE_RECORD 
+		inner
+		join SMS_SP_INFO sp on SMS_CHARGE_RECORD.sp_id
+		=sp.id inner join
+		sms_sp_setting t on SMS_CHARGE_RECORD.sp_id=t.sp_id
+		<where>
+			<if test="listData!=null ">
+				and SMS_CHARGE_RECORD.sp_id in
+				<foreach collection="listData" index="index" item="spidList"
+					open="(" separator="," close=")">
+					#{listData[${index}]}
+				</foreach>
+			</if>
+			<if test="formData.sp_id!=null and formData.sp_id!=''">
+				and SMS_CHARGE_RECORD.sp_id = ${formData.sp_id}
+			</if>
+			<if test="formData.chargeId!=null and formData.chargeId!=''">
+				and cast(SMS_CHARGE_RECORD.id as varchar) like
+				'%'||${formData.chargeId}||'%'
+			</if>
+			<if
+				test="formData.alipayType!=null and formData.alipayType!='' and formData.alipayType!=-1">
+				and alipay_type = ${formData.alipayType}
+			</if>
+			<if
+				test="formData.charge_type!=null and formData.charge_type!='' and formData.charge_type!=0">
+				and charge_type = ${formData.charge_type}
+			</if>
+
+			<if test="formData.quereyStartTime!=null and formData.quereyStartTime!=''">
+				and charge_time
+				&gt;= #{formData.quereyStartTime}::date
+			</if>
+			<if test="formData.queryEndTime!=null and formData.queryEndTime!=''">
+				and charge_time
+				&lt;= #{formData.queryEndTime}::date
+			</if>
+		</where>
+		and (type = 1 or type=7)
+		order by charge_time desc limit ${length}
+		offset
+		${start}
+	</select>
+	<select id="ChargeRecordListCount" parameterType="page"
+		resultType="Map">
+		select count(*) count from
+		SMS_CHARGE_RECORD_USER SMS_CHARGE_RECORD 
+		inner join SMS_SP_INFO sp
+		on SMS_CHARGE_RECORD.sp_id
+		=sp.id
+		<where>
+			<if test="listData!=null ">
+				and sp_id in
+				<foreach collection="listData" index="index" item="spidList"
+					open="(" separator="," close=")">
+					#{listData[${index}]}
+				</foreach>
+			</if>
+			<if test="formData.sp_id!=null and formData.sp_id!=''">
+				and sp_id = ${formData.sp_id}
+			</if>
+			<if test="formData.chargeId!=null and formData.chargeId!=''">
+				and cast(SMS_CHARGE_RECORD.id as varchar) like
+				'%'||${formData.chargeId}||'%'
+			</if>
+			<if
+				test="formData.alipayType!=null and formData.alipayType!='' and formData.alipayType!=-1">
+				and alipay_type = ${formData.alipayType}
+			</if>
+			<if
+				test="formData.charge_type!=null and formData.charge_type!='' and formData.charge_type!=0">
+				and charge_type = ${formData.charge_type}
+			</if>
+
+			<if test="formData.quereyStartTime!=null and formData.quereyStartTime!=''">
+				and charge_time
+				&gt;= #{formData.quereyStartTime}::date
+			</if>
+			<if test="formData.queryEndTime!=null and formData.queryEndTime!=''">
+				and charge_time
+				&lt;= #{formData.queryEndTime}::date
+			</if>
+		</where>
+		and (TYPE = 1 or TYpe=7)
+	</select>
+
+	<!-- <select id="findConmsumerlistPage" parameterType="page" resultType="Map"> 
+		select sd.id, sd.charge_time, sd.sp_id, sd.charge_num, sd.chargeopeartor, 
+		sd.amount, sd.type, sd.price, sd.descption, sp.sp_name, sp.platform from 
+		SMS_CHARGE_RECORD sd, SMS_SP_INFO sp where sp.id = sd.sp_id <if test="formData.platform!=null 
+		and formData.platform!=0"> and sp.platform = #{formData.platform} </if> <if 
+		test="formData.sp_id!=null and formData.sp_id!=0"> and sp.id like CONCAT('%',#{formData.sp_id},'%') 
+		</if> <if test="formData.startTime!=null and formData.startTime!=''"> and 
+		date_format(sd.charge_time ,"%Y-%m-%d")&gt;=#{formData.startTime} </if> <if 
+		test="formData.endTime!=null and formData.endTime!=''"> and date_format(sd.charge_time 
+		,"%Y-%m-%d")&lt;=#{formData.endTime} </if> <if test="formData.type!=null 
+		and formData.type!=0"> and sd.type =#{formData.type} </if> <if test="formData.sp_name!=null 
+		and formData.sp_name!=''"> and sp.sp_name like CONCAT(CONCAT('%', #{formData.sp_name}),'%') 
+		</if> order by sd.charge_time desc </select> -->
+
+	<select id="selCountRecordByUserId" parameterType="java.util.List"
+		resultType="java.lang.Integer">
+		select count(*) from SMS_CHARGE_RECORD where type=3 and charge_type=1
+		and sp_id in
+		<foreach collection="list" item="item" open="(" separator=","
+			close=")">
+			#{item}
+		</foreach>
+	</select>
+	<!-- <select id="listChargeRecord" parameterType="ChargeRecord" resultMap="ChargeRecordMap"> 
+		select id, charge_time, sp_id, charge_num, chargeopeartor, productid, amount, 
+		price, descption, type from appuser.sms_charge_record <where> <if test="sp_id!=null 
+		and sp_id!=''"> and sp_id = #{sp_id} </if> <if test="quereyStartTime!=null 
+		and quereyStartTime!=''"> and charge_time &gt;=to_date(#{quereyStartTime},'yyyy-mm-dd') 
+		</if> <if test="queryEndTime!=null and queryEndTime!=''"> and charge_time 
+		&lt;=to_date(#{queryEndTime},'yyyy-mm-dd') </if> </where> order by charge_time 
+		</select> -->
+
+
+	<!-- <select id="getAllCount" parameterType="ChargeRecord" resultType="int"> 
+		select count(id) from appuser.sms_charge_record <where> <if test="sp_id!=null 
+		and sp_id!=''"> and sp_id = #{sp_id} </if> <if test="quereyStartTime!=null 
+		and quereyStartTime!=''"> and charge_time &gt;=to_date(#{quereyStartTime},'yyyy-mm-dd') 
+		</if> <if test="queryEndTime!=null and queryEndTime!=''"> and charge_time 
+		&lt;=to_date(#{queryEndTime},'yyyy-mm-dd') </if> </where> </select> -->
+
+	<resultMap type="ChargeRecord" id="selectChargeRecord">
+		<id column="id" property="id" />
+		<result column="charge_time" property="create_time" />
+		<result column="descption" property="descption" />
+		<result column="chargeopeartor" property="chargeopeartor" />
+		<result column="charge_num" property="chargenum" />
+		<result column="status" property="type" />
+	</resultMap>
+
+	<!-- <select id="getlistPage" parameterType="ChargeRecord" resultMap="selectChargeRecord"> 
+		select ID,CHARGE_TIME,charge_num,CHARGEOPEARTOR,DESCPTION,1 status from appuser.sms_charge_record 
+		where 1=1 and sp_id = #{sp_id} <if test="quereyStartTime!=null and quereyStartTime!=''"> 
+		and charge_time &gt;=to_date(#{quereyStartTime},'yyyy-mm-dd') </if> <if test="queryEndTime!=null 
+		and queryEndTime!=''"> and charge_time &lt;=to_date(#{queryEndTime},'yyyy-mm-dd') 
+		</if> union all select id,ORDER_TIME,NUM,'支付宝',DES,STATUS from chanzor.APP_ALIPAY_ORDER 
+		where SP_ID = #{sp_id} order by charge_time desc </select> -->
+
+	<select id="getSMSPriceBySPID" parameterType="int" resultType="double">
+		select SALEPRICE from appuser.SMS_SP_SETTING where SP_ID = #{spid}
+	</select>
+	<update id="updateSpCharge" parameterType="SpCharge">
+		update
+		sms_sp_account
+		set LEFTOVER_NUM = LEFTOVER_NUM +
+		${leftover_num},
+		max_num=max_num+${leftover_num}
+		where SP_ID =
+		${sp_id}
+	</update>
+	<update id="updateAllSpCharge" parameterType="SpCharge">
+		update
+		sms_sp_account
+		set LEFTOVER_NUM =${leftover_num},
+		max_num=max_num+${leftover_num}
+		where SP_ID =
+		${sp_id}
+	</update>
+	<update id="updateSpChargeByLeftOver" parameterType="SpCharge">
+		update
+		sms_sp_account
+		set LEFTOVER_NUM =#{leftover_num,jdbcType=INTEGER}
+		where
+		SP_ID =
+		#{sp_id,jdbcType=INTEGER}
+	</update>
+	<insert id="insertChargeRecord" parameterType="ChargeRecord" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO
+		${tablename} (ID, SP_ID, charge_num,
+		charge_opeartor,
+		product_id,
+		amount,
+		alipay_type,
+		balance,
+		price, descption, type,charge_type)
+		VALUES(nextval('"sms_charge_record_id_seq"'),
+		#{sp_id,jdbcType=INTEGER},
+		#{chargenum,jdbcType=INTEGER},
+		#{chargeopeartor,jdbcType=VARCHAR},
+		#{productid},
+		#{amount,jdbcType=INTEGER},
+		#{alipayType,jdbcType=INTEGER},
+		${balance},
+		#{price,jdbcType=INTEGER},
+		#{descption,jdbcType=VARCHAR},#{type,jdbcType=INTEGER},#{charge_type,jdbcType=INTEGER})
+	</insert>
+	<insert id="insertUserChargeRecord" parameterType="ChargeRecord">
+		INSERT INTO
+		sms_charge_record_user (ID, SP_ID, charge_num,
+		charge_opeartor,
+		product_id,
+		amount,
+		alipay_type,
+		balance,
+		price, descption,
+		type,charge_type)
+		VALUES(#{id,jdbcType=INTEGER},
+		#{sp_id,jdbcType=INTEGER},
+		#{chargenum,jdbcType=INTEGER},
+		#{chargeopeartor,jdbcType=VARCHAR},
+		#{productid},
+		#{amount,jdbcType=INTEGER},
+		#{alipayType,jdbcType=INTEGER},
+		${balance},
+		#{price,jdbcType=INTEGER},
+		#{descption,jdbcType=VARCHAR},#{type,jdbcType=INTEGER},#{charge_type,jdbcType=INTEGER})
+	</insert>
+	<select id="selAlipayOrderId" resultType="int">
+		select
+		CHANZOR.APP_ALIPAY_ORDER_ID.nextval from dual
+	</select>
+	<insert id="saveAlipayOrder" parameterType="Map">
+		INSERT INTO
+		CHANZOR.APP_ALIPAY_ORDER(ID, USER_ID, ORDER_NUM, AMOUNT, PRICE, NUM,
+		STATUS, ALI_BODY, SP_ID, DES)
+		VALUES(#{id,jdbcType=INTEGER},
+		#{user_id,jdbcType=INTEGER},
+		#{order_num,jdbcType=VARCHAR},
+		#{amount,jdbcType=DOUBLE}, #{price,jdbcType=DOUBLE},
+		#{num,jdbcType=INTEGER}, 0, #{ali_body,jdbcType=VARCHAR},
+		#{sp_id,jdbcType=INTEGER}, #{des,jdbcType=VARCHAR})
+	</insert>
+	<update id="updateAlipayOrder" parameterType="String">
+		update
+		CHANZOR.APP_ALIPAY_ORDER set STATUS = 1 where ORDER_NUM = #{ordernum}
+	</update>
+	<select id="getAlipayOrderByOrderNum" parameterType="String"
+		resultType="Map">
+		select *from CHANZOR.APP_ALIPAY_ORDER where ORDER_NUM =
+		#{ordernum} order by id desc
+	</select>
+	<select id="getAlipayOrderById" parameterType="int" resultType="Map">
+		select *from CHANZOR.APP_ALIPAY_ORDER where id = #{id} order by id
+		desc
+	</select>
+	<update id="updateSPChargeByAliOrder" parameterType="String">
+		update
+		appuser.sms_sp_account set LEFTOVER_NUM = LEFTOVER_NUM + (select NUM
+		from APP_ALIPAY_ORDER where ORDER_NUM = #{ordernum})
+		where SP_ID =
+		(select SP_ID from APP_ALIPAY_ORDER where ORDER_NUM =
+		#{ordernum})
+	</update>
+	<select id="getPriceBySpId" parameterType="java.lang.Integer"
+		resultType="double">
+
+		select saleprice from SMS_SP_SETTING where sp_id=#{spId}
+
+	</select>
+	<select id="spChargeByUserListPage" parameterType="page"
+		resultMap="spInfoAndSpcharge">
+		select sp.spid,
+		sp.sp_name,
+		sp.fee_type,
+		sp.platform,
+		a.max_num,
+		a.use_num,
+		a.leftover_num,
+		a.id,
+		a.effect_month,
+		s.saleprice
+		from ( select
+		id
+		spid,user_id,sp_name,fee_type,platform from SMS_SP_INFO where
+		status!=2
+		<if test="formData.spid!=null and formData.spid!=0">
+			and id=#{formData.spid}
+		</if>
+		<if test="formData.sp_name!=null and formData.sp_name!=''">
+			and sp_name like CONCAT('%',#{formData.sp_name},'%')
+		</if>
+		<if test="formData.sp_saler!=null and formData.sp_saler!=''">
+			and sp_saler = #{formData.sp_saler}
+		</if>
+		<if test="formData.sp_type!=null and sp_type!='' and formData.sp_type!=0">
+			and sp_type= #{formData.sp_type}
+		</if>
+		<if
+			test="formData.platform!=null and formData.platform!='' and formData.platform >0">
+			and platform =#{formData.platform}
+		</if>
+		) sp inner join (select sc.sp_id,
+		sc.max_num,
+		sc.use_num,
+		sc.leftover_num,
+		sc.id,
+		sc.effect_month
+		from sms_sp_account sc
+		<if test="formData.effect_month!=null and formData.effect_month!='' ">
+			where sc.effect_month =#{formData.effect_month}
+		</if>
+		<if test="formData.effect_month==null || formData.effect_month=='' ">
+			where sc.effect_month =date_format( curdate(),'%Y-%m')
+		</if>
+		) a
+		on a.sp_id = sp.spid
+		inner join (select sp_id,saleprice from
+		SMS_SP_SETTING)
+		s on sp.sp_id=s.sp_id
+		<if test="formData.userId==null || formData.userId=='' ">
+			where sp.user_id=#{formData.userId}
+		</if>
+		order by
+		sp.spid desc
+	</select>
+	<select id="spChargeByUserId" parameterType="java.lang.Integer"
+		resultMap="spInfoAndSpcharge">
+		select sp.spid,
+		sp.sp_name,
+		sp.fee_type,
+		sp.platform,
+		a.max_num,
+		a.use_num,
+		a.leftover_num,
+		a.effect_month,
+		sp.sp_service_type,
+		s.sale_price
+		from (
+		select
+		id
+		spid,user_id,sp_name,fee_type,platform,sp_service_type from
+		SMS_SP_INFO where
+		status!=2
+		) sp inner join (select sc.sp_id,
+		sc.max_num,
+		sc.use_num,
+		sc.leftover_num,
+		sc.effect_month
+		from
+		sms_sp_account sc
+		) a
+		on
+		a.sp_id =
+		sp.spid
+		inner join (select
+		sp_id,sale_price from
+		SMS_SP_SETTING )
+		s on
+		sp.spid=s.sp_id
+		where
+		sp.spid=#{spId}
+		order by
+		sp.spid desc
+	</select>
+	<select id="findConponsNum" parameterType="java.lang.String"
+		resultType="java.lang.Integer">
+
+		select SMS_NUM from APP_COUPON where NUM=#{0}
+	</select>
+
+	<select id="getSumAmountByUserId" parameterType="form"
+		resultType="Map">
+		select sum(AMOUNT) "ALLAMOUNT" from SMS_CHARGE_RECORD where
+		type=1 and SP_ID in (
+		select ID from SMS_SP_INFO
+		where
+		USER_ID
+		=${userId}
+		and (sp_service_type=1 or sp_service_type=3)
+		)
+		and
+		alipay_type!=0
+	</select>
+	<select id="getSumInterAmountByUserId" parameterType="form"
+		resultType="Map">
+		select sum(charge_num)/100 "ALLAMOUNT" from
+		SMS_CHARGE_RECORD
+		where
+		charge_type = 1 and SP_ID in (
+		select ID from
+		SMS_SP_INFO where
+		USER_ID
+		= ${userId} and sp_service_type=2
+		)
+	</select>
+	<select id="selChargeLeftOverNumBySpId" parameterType="java.lang.Integer"
+		resultType="java.lang.Integer">
+
+		select leftover_num from sms_sp_account where sp_id=#{0}
+	</select>
+
+	<select id="selChargeInfoByProId" parameterType="java.lang.String"
+		resultType="map">
+
+		select * from SMS_CHARGE_RECORD where charge_time> now()-
+		INTERVAL '2 d' and product_id=#{0}
+	</select>
+	<select id="sleCharegeInfoByChargeId" parameterType="java.lang.Integer"
+		resultType="map">
+		select * from sms_charge_record WHERE ID=#{0}
+	</select>
+	<select id="findAlipayTypeByProductId" parameterType="java.lang.String"
+		resultType="map">
+		select r.alipay_type,r.charge_num as payNum,a.leftover_num
+		as leftOverNum from sms_charge_record r
+		inner join sms_sp_account a
+		on
+		r.sp_id=a.sp_id where product_id=#{0}
+	</select>
+	<update id="updTypeByProductId" parameterType="map">
+		update
+		sms_charge_record set alipay_type=${alipayType} where charge_time>
+		now()- INTERVAL '2 d' and
+		product_id=#{productId} and alipay_type=0
+	</update>
+	<update id="updTypeByProductIdInUserCharge" parameterType="map">
+		update
+		sms_charge_record_user set alipay_type=${alipayType} where
+		charge_time>
+		now()- INTERVAL '2 d' and
+		product_id=#{productId} and
+		alipay_type=0
+	</update>
+	<update id="updateBalanceInChargeRecord" parameterType="map">
+		update
+		sms_charge_record set balance=balance+${chargeNum} ,
+		charge_account_bank='支付宝', charge_arrival_time=now() where
+		charge_time>
+		now()- INTERVAL '2 d' and
+		product_id=#{productId}
+	</update>
+
+	<update id="updateSpchargerecharge" parameterType="map">
+	update
+	sms_charge_record set is_begin_recharge = 1 where id = ${id}
+	</update>
+	<update id="updateUserSpchargerecharge" parameterType="map">
+		update
+		sms_charge_record_user set is_begin_recharge = 1 where id = ${id}
+	</update>
+</mapper>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="AddressMapper">
+	<select id="getAllAddressList" parameterType="form" resultType="Map">
+		select id,user_id,collect_address,collect_name,collect_phone,collect_tel,default_mark from app_user_address  where user_id=#{userId} order by update_time desc
+	</select>
+	
+	<select id="getAddressById" parameterType="form" resultType="Map">
+		select id,user_id,collect_address,collect_name,collect_phone,collect_tel,default_mark from app_user_address  where id=#{id}
+	</select>
+	
+	<insert id="saveAddress" parameterType="form">
+		insert into app_user_address(
+					ID,
+					USER_ID
+					,
+					collect_address
+					,
+					collect_name
+					,
+					collect_phone
+					,
+					collect_tel
+					,
+					default_mark
+					,
+					create_time
+					,
+					create_id
+					,
+					update_time
+					,
+					update_id
+		) values(
+		nextval('"app_user_address_id_seq"'),
+					#{userId}
+					,
+					#{collect_address}
+					,
+					#{collect_name}
+					,
+					#{collect_phone}
+					,
+					#{collect_tel}
+					,
+					#{default_mark}
+					,
+					#{create_time}
+					,
+					#{create_id}
+					,
+					#{update_time}
+					,
+					#{update_id}
+		)
+	</insert>
+		             
+	<update id="updateAddress" parameterType="form">
+		update app_user_address set  
+		                    collect_address = #{collect_address},
+		                    collect_name = #{collect_name},
+		                    collect_phone = #{collect_phone},
+		                    collect_tel = #{collect_tel},
+		                    update_time = #{update_time},
+		                    update_id = #{update_id} 
+			  where ID =#{id}
+	</update>
+	<update id="updateDefaultAddress" parameterType="form">
+		update app_user_address set default_mark=1 				
+			  where ID =#{id}
+	</update>
+	<update id="updateOtherNoDefault" parameterType="form">
+		update app_user_address set default_mark=0 				
+			  where ID !=#{id} and user_id=#{userId}
+	</update>
+	<delete id="delAddress" parameterType="form">
+		delete from app_user_address where id = #{id}
+	</delete>
+	
+</mapper>

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="operateLogMapper"><!-- 
+	<select id="getAlloperateLogByPage" parameterType="page"
+		resultType="Map">
+		select o.ID , USERNAME, ot.OPERATE_TYPE OPEARTE_TYPE, OPEARTE_RESULT,
+		OPEARTE_CONTENT, CREATETIME, IP, SP_ID from SMS_OPERATE_LOG o ,
+		SMS_OPERATE_TYPE ot where ot.id = o.OPEARTE_TYPE
+		<if test="formData.ID != null and formData.ID != '' ">
+			and ID = #{formData.ID}
+		</if>
+		<if test="formData.SP_ID != null and formData.SP_ID != '' ">
+			and SP_ID = #{formData.SP_ID}
+		</if>
+		<if test="formData.USERNAME != null and formData.USERNAME != '' ">
+			and USERNAME like '%${formData.USERNAME}%'
+		</if>
+		<if test="formData.OPEARTE_TYPE != null and formData.OPEARTE_TYPE != '' ">
+			and ot.OPERATE_TYPE like '%${formData.OPEARTE_TYPE}%'
+		</if>
+		<if
+			test="formData.OPEARTE_RESULT != null and formData.OPEARTE_RESULT != '' ">
+			and OPEARTE_RESULT = #{formData.OPEARTE_RESULT}
+		</if>
+		<if
+			test="formData.OPEARTE_CONTENT != null and formData.OPEARTE_CONTENT != '' ">
+			and OPEARTE_CONTENT like '%${formData.OPEARTE_CONTENT}%'
+		</if>
+		<if test="formData.BEGINTIME != null and formData.BEGINTIME != '' ">
+			and CREATETIME &gt;= #{formData.BEGINTIME}
+		</if>
+		<if test="formData.ENDTIME != null and formData.ENDTIME != '' ">
+			and CREATETIME &lt;= #{formData.ENDTIME}
+		</if>
+		<if test="formData.IP != null and formData.IP != '' ">
+			and IP = #{formData.IP}
+		</if>
+		order by o.ID desc
+	</select>
+
+	<insert id="saveoperateLog" parameterType="form">
+		insert into
+		SMS_OPERATE_LOG (
+		ID
+		,
+		SP_ID
+		,
+		USERNAME
+		,
+		OPEARTE_TYPE
+		,
+		OPEARTE_RESULT
+		,
+		OPEARTE_CONTENT
+		,
+		CREATETIME
+		,
+		IP
+		) values(
+		nextval('"sms_operate_log_ID_seq"')
+		,
+		#{SP_ID}
+		,
+		#{USERNAME}
+		,
+		#{OPEARTE_TYPE}
+		,
+		#{OPEARTE_RESULT}
+		,
+		#{OPEARTE_CONTENT}
+		,
+		#{CREATETIME}
+		,
+		#{IP}
+		)
+	</insert>
+	<update id="updateoperateLog" parameterType="form">
+		update
+		SMS_OPERATE_LOG set
+		id = #{id}
+		,ID = #{ID}
+		,SP_ID = #{SP_ID}
+		,USERNAME = #{USERNAME}
+		,OPEARTE_TYPE = #{OPEARTE_TYPE}
+		,OPEARTE_RESULT = #{OPEARTE_RESULT}
+		,OPEARTE_CONTENT = #{OPEARTE_CONTENT}
+		,CREATETIME = #{CREATETIME}
+		,IP = #{IP}
+		where id =#{ID}
+	</update>
+	<delete id="deleteoperateLog" parameterType="form">
+		delete from
+		SMS_OPERATE_LOG where id = #{id}
+	</delete>
+	<select id="getoperateLogInfoById" parameterType="form"
+		resultType="Map">
+		select * from SMS_OPERATE_LOG where id = #{id}
+	</select>
+
+	<delete id="delLogByTime" parameterType="form">
+		delete from
+		SMS_OPERATE_LOG where CREATETIME &lt;= #{deltime}
+	</delete>
+
+	<select id="getOpearType" resultType="Map">
+		select id, operate_type from SMS_OPERATE_TYPE order by operate_type
+	</select> -->
+</mapper>

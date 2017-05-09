@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="ReplyRecordMapper">
+
+	<select id="getAllReplyRecordPage" parameterType="page"
+		resultType="Map">
+		select rd.id,
+		rd.sp_id,
+		rd.callmdn,
+		rd.mobile,
+		rd.content,
+		rd.reply_time,
+		rd.createtime,
+		rd.status
+		from SMS_REPLY_RECORD as rd
+		<where>
+			<if test="formData.sp_id!=null and formData.sp_id>0">
+				rd.sp_id=#{formData.sp_id}
+			</if>
+
+			<if test="formData.mobile!=null and formData.mobile!=''">
+				and rd.mobile=#{formData.mobile}
+			</if>
+
+			<if test="formData.content!=null and formData.content!=''">
+				and rd.content like CONCAT(CONCAT('%', #{formData.content}),'%')
+			</if>
+
+			<if test="formData.begintime!=null and formData.begintime!=''">
+				and rd.createtime&gt;=#{formData.begintime}
+			</if>
+
+			<if test="formData.endtime!=null and formData.endtime!=''">
+				and rd.createtime&lt;=adddate(#{formData.endtime}, interval 1 day)
+			</if>
+		</where>
+		order by rd.createtime desc
+	</select>
+</mapper>

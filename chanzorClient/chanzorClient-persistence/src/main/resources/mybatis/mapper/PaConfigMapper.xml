@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="PaConfigMapper">
+	<select id="getAllPaConfigByPage" parameterType="page" resultType="Map">
+		select P_ID, PA_NAME, PA_DEC, case STATUS when 1 then '上线' when 0 then '下线' else '异常' end STATUS, COSTPRICE from PA_CONFIG where 1 =1 
+			<if test="formData.PA_NAME != null and formData.PA_NAME != '' ">
+				and  PA_NAME  like CONCAT(CONCAT('%',#{formData.PA_NAME}),'%')
+			</if>
+			<if test="formData.STATUS != null and formData.STATUS != '' ">
+				and  STATUS  = #{formData.STATUS}
+			</if>
+	</select>
+	
+	<insert id="savePaConfig" parameterType="form">
+		insert into PA_CONFIG (
+					P_ID
+					,
+					PA_NAME
+					,
+					PA_DEC
+					,
+					STATUS
+					,
+					COSTPRICE
+		) values(
+					#{P_ID}
+					,
+					#{PA_NAME}
+					,
+					#{PA_DEC}
+					,
+					#{STATUS}
+					,
+					#{COSTPRICE}
+		)
+	</insert>
+	<update id="updatePaConfig" parameterType="form">
+		update PA_CONFIG set  
+							PA_NAME = #{PA_NAME}
+							,PA_DEC = #{PA_DEC}
+							,COSTPRICE = #{COSTPRICE}
+			  where P_ID =#{id}
+	</update>
+	<delete id="deletePaConfig" parameterType="form">
+		delete from PA_CONFIG where id = #{id}
+	</delete>
+	<select id="getPaConfigInfoById"  parameterType="form" resultType="Map">
+		select P_ID ID, PA_NAME, PA_DEC, STATUS, COSTPRICE from PA_CONFIG where P_ID =  #{id}
+	</select>
+	
+	<update id="updateStatus" parameterType="form">
+		update PA_CONFIG set  STATUS = #{status}  where P_ID =#{authid}
+	</update>
+</mapper>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="TextVoiceMapper">
+
+	<select id="getTextVoicelistPage" parameterType="page" 	resultType="Map">
+		select a.* from sms_sp_template a,sms_sp_info b where 1=1
+		<if test="formData.subAccountAppIds == null">
+			and a.user_id = ${formData.userId}
+		</if>
+		<if test="formData.subAccountAppIds != null">
+			and b.id in ${formData.subAccountAppIds}
+		</if>
+		and a.sp_id=b.id and b.sp_service_type = 3 
+		<if test="formData.TITLE != null and formData.TITLE != '' ">
+			and a.title like '%'||#{formData.TITLE}||'%'
+		</if>
+		<if test="formData.STATUS != null and formData.STATUS != '' ">
+			and a.status = #{formData.STATUS}
+		</if>
+		<if test="formData.SPID != null and formData.SPID != '' ">
+			and a.sp_id = #{formData.SPID}
+		</if>
+		order by a.create_time desc 
+	</select>
+
+	<select id="getTextVoiceById" parameterType="form" resultType="Map">
+		select * from sms_sp_template where id=${id}
+	</select>
+
+    <delete id="deleteTextVoice" parameterType="form">
+		delete from sms_sp_template where id = ${id}
+	</delete>
+	
+	<insert id="saveTextVoice" parameterType="form">
+		insert into sms_sp_template
+		(content,sp_id,status,type,title,user_id,create_time,update_time,voice_name,speed,pitch,volume)
+		values(#{content},#{sp_id},#{status},#{type},#{title},#{user_id},#{create_time},#{update_time},#{voice_name},#{speed},#{pitch},#{volume})
+	</insert>
+	
+	<update id="updateTextVoice" parameterType="form">
+		update sms_sp_template
+	    <set>
+	       <if test="content != null and content != '' ">
+				content = #{content},
+		   </if>
+		   <if test="sp_id != null and sp_id != '' ">
+				sp_id = #{sp_id},
+		   </if>
+		   <if test="status != null and status != '' ">
+				status = #{status},
+		   </if>
+	       <if test="title != null and title != '' ">
+				title = #{title},
+		   </if>
+		   <if test="update_time != nulls">
+				update_time = #{update_time},
+		   </if>
+		   <if test="voice_name != null and voice_name != '' ">
+				voice_name = #{voice_name},
+		   </if>
+		   <if test="speed != null and speed != '' ">
+				speed = #{speed},
+		   </if>
+		   <if test="pitch != null and pitch != '' ">
+				pitch = #{pitch},
+		   </if>
+		   <if test="volume != null and volume != '' ">
+				volume = #{volume},
+		   </if>
+	    </set>
+	    where id = ${id}
+	</update>
+	
+	
+	<update id="commitTextVoice" parameterType="form">
+		update sms_sp_template 
+	    set status = 1  
+	    where id = ${id}
+	</update>
+	
+</mapper>

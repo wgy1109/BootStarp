@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="LoginMapper">
+	<!-- 登陆 -->
+	<select id="login" parameterType="form" resultType="Map">
+		select * from
+		APP_USER_INFO where PASSWORD = #{password}
+		<!-- <if test="ismobile == 1 ">
+			and MOBILE = #{username}
+		</if>
+		<if test="ismobile == 0 ">
+			
+		</if> -->
+		and account_name = #{username}
+		and del_mark=0
+	</select>
+	<!-- 获取用户应用 -->
+	<select id="getAppsByUserId" resultType="Map" parameterType="int">
+		select ID,SP_NAME,STATUS,SIGNATURE,SP_DESC,SP_WEBSITE,SP_TYPE from
+		SMS_SP_INFO where USER_ID = #{ID}
+	</select>
+	<select id="getAppsIdByUserId" resultType="Map" parameterType="int">
+		select ID from SMS_SP_INFO where USER_ID = #{ID}
+	</select>
+
+	<select id="getAppsBySubAccountId" resultType="Map"
+		parameterType="int">
+		select
+		a.ID,a.SP_NAME,a.STATUS,a.SIGNATURE,a.SP_DESC,a.SP_WEBSITE,a.SP_TYPE
+		from
+		SMS_SP_INFO a,app_user_sub_sp b where a.ID=b.sp_id and
+		b.sub_account_id=#{ID}
+	</select>
+	<select id="getAppsIdBySubAccountId" resultType="string"
+		parameterType="int">
+		select sp_id from app_user_sub_sp where sub_account_id =
+		#{ID}
+	</select>
+
+	<select id="getPermissionsBySubAccountId" resultType="string"
+		parameterType="int">
+		select menu_code from app_user_sub_menu where
+		sub_account_id = #{ID}
+	</select>
+
+	<!-- 更新登陆ip -->
+	<update id="updateLoginIP" parameterType="form">
+		update APP_USER_INFO
+		set LAST_LOGIN_IP = #{ip} where ID = #{ID}
+	</update>
+
+	<update id="reset" parameterType="form">
+		update APP_USER_INFO set
+		PASSWORD = #{password} where mobile = #{mobile}
+	</update>
+
+	<select id="getnumByMobile" parameterType="form" resultType="Map">
+		select * from APP_USER_INFO where mobile = #{mobile}
+	</select>
+
+	<insert id="saveappBusinessManager" parameterType="form">
+		insert into
+		APP_USER_INFO (
+		account_name,
+		PASSWORD
+		,
+		MOBILE
+		,
+		STATUS
+		,
+		CREATETIME
+		,
+		LAST_LOGIN_IP
+		<if test="appManagerId!=null and appManagerId!=''">
+			,
+			app_manager_id
+		</if>
+		) values(
+		#{mobile},
+		#{PASSWORD}
+		,
+		#{mobile}
+		,
+		#{STATUS}
+		,
+		#{CREATETIME}
+		,
+		#{LAST_LOGIN_IP}
+		<if test="appManagerId!=null and appManagerId!=''">
+			,
+			${appManagerId}
+		</if>
+		)
+	</insert>
+
+	<select id="numSmsUserinfoMapper" parameterType="form"
+		resultType="Map">
+		select count(id) from SMS_USER_INFO where ID=${identif} and
+		status =1 and BUSSINESSTYPE = '2';
+	</select>
+
+	<update id="saveBusinessMessageMapper" parameterType="form">
+		update
+		APP_USER_INFO set SALE_MANAGER_ID = ${identif} where account_name =
+		#{mobile}
+	</update>
+
+	<select id="getipList" resultType="Map">
+		select * from app_login_ip
+	</select>
+
+</mapper>

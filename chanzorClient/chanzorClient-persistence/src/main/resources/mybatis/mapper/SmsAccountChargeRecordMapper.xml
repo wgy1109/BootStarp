@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="SmsAccountChargeRecordMapper">
+	<resultMap id="BaseResultMap" type="SmsAccountChargeRecord">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="charge_num" property="chargeNum" jdbcType="INTEGER" />
+		<result column="charge_type" property="chargeType" jdbcType="SMALLINT" />
+		<result column="charge_sp_id" property="chargeSpId" jdbcType="INTEGER" />
+		<result column="charge_date" property="chargeDate" jdbcType="TIMESTAMP" />
+		<result column="charge_user" property="chargeUser" jdbcType="SMALLINT" />
+		<result column="sp_name" property="spName" jdbcType="VARCHAR" />
+		<result column="charge_status" property="chargeStatus"
+			jdbcType="SMALLINT" />
+		<result column="order_num" property="orderNum" jdbcType="VARCHAR" />
+		<result column="account_balance" property="accountBalance"
+			jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, charge_num, charge_type, charge_sp_id, charge_date,
+		charge_user,charge_status,order_num,account_balance
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from sms_account_charge_record
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<select id="getAccountChargelistPage" parameterType="page"
+		resultMap="BaseResultMap">
+		select a.*,s.sp_name
+		from sms_account_charge_record a left
+		join
+		sms_sp_info s on
+		a.charge_sp_id=s.id where
+		charge_user=${formData.userId}
+		<if
+			test="formData.chargeType!=null and formData.chargeType!='' and formData.chargeType!=0">
+			and charge_type=${formData.chargeType}
+		</if>
+		order by charge_date desc
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		sms_account_charge_record
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="SmsAccountChargeRecord">
+		insert into
+		sms_account_charge_record (id,charge_num, charge_type,
+		charge_sp_id,
+		charge_date, charge_user,charge_status,order_num,account_balance
+		)
+		values
+		(nextval('"sms_account_charge_seq"'),
+		#{chargeNum,jdbcType=INTEGER} * 100 ,
+		#{chargeType,jdbcType=SMALLINT},
+		#{chargeSpId,jdbcType=INTEGER},
+		#{chargeDate,jdbcType=TIMESTAMP},
+		#{chargeUser,jdbcType=SMALLINT},#{chargeStatus,jdbcType=SMALLINT},#{orderNum,jdbcType=VARCHAR},#{accountBalance,jdbcType=INTEGER}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="SmsAccountChargeRecord">
+		insert into sms_account_charge_record
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="chargeNum != null">
+				charge_num,
+			</if>
+			<if test="chargeType != null">
+				charge_type,
+			</if>
+			<if test="chargeSpId != null">
+				charge_sp_id,
+			</if>
+			<if test="chargeDate != null">
+				charge_date,
+			</if>
+			<if test="chargeUser != null">
+				charge_user,
+			</if>
+			<if test="chargeStatus != null">
+				charge_status,
+			</if>
+			<if test="orderNum != null">
+				orderNum,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="chargeNum != null">
+				#{chargeNum,jdbcType=INTEGER},
+			</if>
+			<if test="chargeType != null">
+				#{chargeType,jdbcType=SMALLINT},
+			</if>
+			<if test="chargeSpId != null">
+				#{chargeSpId,jdbcType=INTEGER},
+			</if>
+			<if test="chargeDate != null">
+				#{chargeDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="chargeUser != null">
+				#{chargeUser,jdbcType=SMALLINT},
+			</if>
+			<if test="chargeStatus != null">
+				#{chargeStatus,jdbcType=SMALLINT},
+			</if>
+			<if test="orderNum != null">
+				#{orderNum,jdbcType=SMALLINT},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="SmsAccountChargeRecord">
+		update sms_account_charge_record
+		<set>
+			<if test="chargeNum != null">
+				charge_num = #{chargeNum,jdbcType=INTEGER},
+			</if>
+			<if test="chargeType != null">
+				charge_type = #{chargeType,jdbcType=SMALLINT},
+			</if>
+			<if test="chargeSpId != null">
+				charge_sp_id = #{chargeSpId,jdbcType=INTEGER},
+			</if>
+			<if test="chargeDate != null">
+				charge_date = #{chargeDate,jdbcType=DATE},
+			</if>
+			<if test="chargeUser != null">
+				charge_user = #{chargeUser,jdbcType=SMALLINT},
+			</if>
+			<if test="chargeStatus != null">
+				charge_status = #{chargeStatus,jdbcType=SMALLINT},
+			</if>
+			<if test="isbeginrecharge != null">
+				is_begin_recharge = #{isbeginrecharge,jdbcType=INTEGER},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="SmsAccountChargeRecord">
+		update
+		sms_account_charge_record
+		set charge_num =
+		#{chargeNum,jdbcType=INTEGER},
+		charge_type =
+		#{chargeType,jdbcType=SMALLINT},
+		charge_sp_id =
+		#{chargeSpId,jdbcType=INTEGER},
+		charge_date =
+		#{chargeDate,jdbcType=DATE},
+		charge_user =
+		#{chargeUser,jdbcType=SMALLINT},
+		charge_status =
+		#{chargeStatus,jdbcType=SMALLINT}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<select id="findAccountBalance" parameterType="java.lang.Integer"
+		resultType="java.lang.Integer">
+
+		select app_leftover_num from sms_account_ref_user where
+		app_user_id=#{0}
+	</select>
+
+	<update id="subtractAccountBalance" parameterType="map">
+		update
+		sms_account_ref_user
+		set app_leftover_num = app_leftover_num -
+		${total}
+		where app_user_id =
+		${userId}
+	</update>
+	<update id="addAccountBalance" parameterType="map">
+		update
+		sms_account_ref_user
+		set app_leftover_num = app_leftover_num +
+		${total}
+		where app_user_id =
+		${userId}
+	</update>
+	<select id="selectByOrderNum" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select * from sms_account_charge_record where order_num=#{0}
+	</select>
+	<update id="updChargeStatus" parameterType="SmsAccountChargeRecord">
+		update
+		sms_account_charge_record set charge_status=${chargeStatus} where
+		charge_date>
+		now()- INTERVAL '2 d' and
+		order_num=#{orderNum} and
+		charge_status=0
+	</update>
+	<select id="selAccountRefUserMap" resultType="java.lang.Integer"
+		parameterType="java.lang.Integer">
+		select count(*) from sms_account_ref_user where
+		app_user_id=#{0}
+	</select>
+	<insert id="insAccountRefUser" parameterType="java.lang.Integer">
+		insert into
+		sms_account_ref_user
+		values(nextval('"sms_account_charge_seq"'),#{0},0)
+	</insert>
+	<select id="updAaccountBalance" parameterType="SmsAccountChargeRecord">
+
+		update sms_account_charge_record set account_balance=${accountBalance}, charge_account_bank='支付宝', charge_arrival_time=now() where
+		id=#{id}
+
+	</select>
+	
+	<update id="updateUserinfoIsRecharge" parameterType="map">
+		update app_user_info set is_recharge = 1 where id = ${userid};
+	</update>
+	
+	<update id="updateIsbeginrecharge" parameterType="SmsAccountChargeRecord">
+		update sms_account_charge_record set is_begin_recharge = #{isbeginrecharge,jdbcType=INTEGER} where id = ${id};
+	</update>
+	
+	<update id="updateUserinfoInvoicevalue" parameterType="map">
+		update app_user_info set open_invoice_value = open_invoice_value + ${addmoney} where id = ${userid};
+	</update>
+	
+	<select id="getUserinfoByid" resultType="map" parameterType="java.lang.Integer">
+		select a.*, au.company  from (
+		select * from APP_USER_INFO where id = #{0})
+	 	a left join app_user_authentication_info au on a.id=au.id 
+	</select>
+	
+</mapper>

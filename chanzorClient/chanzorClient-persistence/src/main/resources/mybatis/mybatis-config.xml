@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD SQL Map Config 3.0//EN"  
+	"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+	<typeAliases>
+		<!-- 页面传输数据 -->
+		<typeAlias type="com.chanzor.util.FormData" alias="form" />
+		<!-- 分页 -->
+		<typeAlias type="com.chanzor.entity.PageInfo" alias="page" />
+		<typeAlias type="com.chanzor.entity.MenuInfo" alias="MenuInfo" />
+		<typeAlias type="com.chanzor.entity.RoleInfo" alias="RoleInfo" />
+		<typeAlias type="com.chanzor.entity.SpInfo" alias="SpInfo" />
+		<typeAlias type="com.chanzor.entity.ChargeRecord" alias="ChargeRecord" />
+		<typeAlias type="com.chanzor.entity.SpCharge" alias="SpCharge" />
+		<typeAlias type="com.chanzor.entity.SpOrderPackage" alias="SpOrderPackage" />
+		<typeAlias type="com.chanzor.entity.ProviceInfo" alias="ProviceInfo" />
+		<typeAlias type="com.chanzor.entity.UserInfo" alias="UserInfo" />
+		<typeAlias type="com.chanzor.entity.ChannelGroup" alias="ChannelGroup" />
+		<typeAlias type="com.chanzor.entity.ChannelAndGroup" alias="ChannelAndGroup" />
+		<typeAlias type="com.chanzor.entity.ChannelConfig" alias="ChannelConfig" />
+		<typeAlias type="com.chanzor.entity.ChannelInfo" alias="ChannelInfo" />
+		<typeAlias type="com.chanzor.entity.OrderPackage" alias="OrderPackage" />
+		<typeAlias type="com.chanzor.entity.ApplcationInfo" alias="ApplcationInfo" />
+		<typeAlias type="com.chanzor.entity.ComplaintInfo" alias="ComplaintInfo" />
+		<typeAlias type="com.chanzor.entity.BlackObject" alias="BlackObject" />
+		<typeAlias type="com.chanzor.entity.AgreementForm" alias="AgreementForm" />
+		<typeAlias type="com.chanzor.entity.AppOrderInfo" alias="AppOrderInfo" />
+		<typeAlias type="com.chanzor.entity.Coupon" alias="Coupon" />
+		<typeAlias type="com.chanzor.entity.SendTaskInfo" alias="SendTaskInfo" />
+		<typeAlias type="com.chanzor.entity.SystemParameter" alias="SystemParameter" />
+		<typeAlias type="com.chanzor.entity.MessagePackage" alias="MessagePackage" />
+		<typeAlias type="com.chanzor.entity.AppBalanceReminder"
+			alias="AppBalanceReminder" />
+		<typeAlias type="com.chanzor.entity.SmsAccountChargeRecord"
+			alias="SmsAccountChargeRecord" />
+
+	</typeAliases>
+	<plugins>
+		<plugin interceptor="com.chanzor.persistence.plugin.MyBatisPagePlugin">
+			<property name="dialect" value="portgresql" />
+			<property name="pageSqlId" value=".*Page.*" />
+		</plugin>
+	</plugins>
+	<mappers>
+		<mapper resource="mybatis/mapper/LoginMapper.xml" />
+		<mapper resource="mybatis/mapper/AppFinanceInvoiceClientMapper.xml" />
+		<!-- <mapper resource="mybatis/mapper/AppFinanceInvoiceMapper.xml" /> -->
+		<mapper resource="mybatis/mapper/ApplicationInfo.xml" />
+		<mapper resource="mybatis/mapper/AppOrderInfo.xml" />
+		<mapper resource="mybatis/mapper/AppUserAuthenticationMapper.xml" />
+		<mapper resource="mybatis/mapper/AppUserInfoMapper.xml" />
+		<mapper resource="mybatis/mapper/AppVatinvoiceCertinfoClientMapper.xml" />
+		<!-- <mapper resource="mybatis/mapper/AppVatinvoiceCertinfoMapper.xml" 
+			/> -->
+		<mapper resource="mybatis/mapper/BlacklistMapper.xml" />
+		<mapper resource="mybatis/mapper/BlackObject.xml" />
+		<mapper resource="mybatis/mapper/ChannelGroup.xml" />
+		<mapper resource="mybatis/mapper/ChargeRecord.xml" />
+		<mapper resource="mybatis/mapper/ComplaintInfo.xml" />
+		<mapper resource="mybatis/mapper/CouponMapper.xml" />
+		<mapper resource="mybatis/mapper/InsideLetterMapper.xml" />
+		<!-- <mapper resource="mybatis/mapper/MenuInfo.xml" /> <mapper resource="mybatis/mapper/MenuMapper.xml" 
+			/> <mapper resource="mybatis/mapper/MouldMapper.xml" /> <mapper resource="mybatis/mapper/NoticeC.xml" 
+			/> <mapper resource="mybatis/mapper/OperateLogMapper.xml" /> -->
+		<mapper resource="mybatis/mapper/OrderPackage.xml" />
+		<mapper resource="mybatis/mapper/PaConfigMapper.xml" />
+		<mapper resource="mybatis/mapper/ReplyRecordMapper.xml" />
+		<mapper resource="mybatis/mapper/RoleInfo.xml" />
+		<mapper resource="mybatis/mapper/SendTaskInfo.xml" />
+		<mapper resource="mybatis/mapper/SensitiveWordMapper.xml" />
+		<mapper resource="mybatis/mapper/SmsChannelAndGroupMapper.xml" />
+		<mapper resource="mybatis/mapper/SmsMasterplateClientMapper.xml" />
+		<mapper resource="mybatis/mapper/SmsMasterplateMapper.xml" />
+		<mapper resource="mybatis/mapper/SmsReplyRecodeClientMapper.xml" />
+		<mapper resource="mybatis/mapper/SmsSendChannelGroupMapper.xml" />
+		<mapper resource="mybatis/mapper/SmsSendChannelInfoMapper.xml" />
+		<mapper resource="mybatis/mapper/SmsSendTaskClientMapper.xml" />
+		<mapper resource="mybatis/mapper/SpConfig.xml" />
+		<mapper resource="mybatis/mapper/SpInfoMapper.xml" />
+		<mapper resource="mybatis/mapper/tCodeMapper.xml" />
+		<mapper resource="mybatis/mapper/TestappMapper.xml" />
+		<mapper resource="mybatis/mapper/UserInfo.xml" />
+		<mapper resource="mybatis/mapper/UserMapper.xml" />
+		<mapper resource="mybatis/mapper/WhitelistMapper.xml" />
+		<mapper resource="mybatis/mapper/WhitelistSysMapper.xml" />
+		<mapper resource="mybatis/mapper/WhitelistUserMapper.xml" />
+		<mapper resource="mybatis/mapper/SpConsumerDetailMapper.xml" />
+		<mapper resource="mybatis/mapper/SystemParameter.xml" />
+		<mapper resource="mybatis/mapper/InterSmsSendTaskClientMapper.xml" />
+		<mapper resource="mybatis/mapper/InterSmsPriceMapper.xml" />
+		<mapper resource="mybatis/mapper/MessagePackageMapper.xml" />
+		<mapper resource="mybatis/mapper/Address.xml" />
+		<mapper resource="mybatis/mapper/AppBalanceReminderMapper.xml" />
+		<mapper resource="mybatis/mapper/VoiceMapper.xml" />
+		<mapper resource="mybatis/mapper/TextVoiceMapper.xml" />
+		<mapper resource="mybatis/mapper/VoiceSmsSendTaskClientMapper.xml" />
+		<mapper resource="mybatis/mapper/SmsAccountChargeRecordMapper.xml" />
+		<mapper resource="mybatis/mapper/AppCommissionStatisticsMapper.xml" />
+	</mappers>
+</configuration>

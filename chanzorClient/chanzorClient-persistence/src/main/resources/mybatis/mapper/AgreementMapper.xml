@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AgreementMapper">
+
+	<resultMap type="AgreementForm" id="AgreementResultMap">
+		<id column="ID" property="id" />
+		<result column="USERID" property="userid" />
+		<result column="WORKBEGINTIME" property="workbegintime" />
+		<result column="WORKENDTIME" property="workendtime" />
+		<result column="EXPRESSNUMBER" property="expressnumber" />
+		<result column="TYPE" property="type" />
+		<result column="REMARK" property="remark" />
+		<result column="SIGNUSERADDRESS" property="signuseraddress" />
+		<result column="SIGNUSERNAME" property="signusername" />
+		<result column="SIGNUSERPHONE" property="signuserphone" />
+	</resultMap>
+
+	<select id="listAppPage" parameterType="page" resultMap="AgreementResultMap">
+		SELECT ID,USERID,
+		to_char(WORKBEGINTIME, 'yyyy-MM-dd') WORKBEGINTIME,to_char(WORKENDTIME, 'yyyy-MM-dd') WORKENDTIME,
+		EXPRESSNUMBER,TYPE,REMARK,SIGNUSERADDRESS,SIGNUSERNAME,SIGNUSERPHONE
+		FROM app_upload_filemessage
+		WHERE 1 = 1;
+		<if test="formData.userid != null and formData.userid !='' "> and USERID =#{formData.userid}</if>
+		<if test="formData.workbegintime != null and formData.workbegintime !='' "> and WORKBEGINTIME
+			&gt;=to_timestamp(#{formData.workbegintime},'yyyy-MM-dd')</if>
+		<if
+			test="formData.workbegintime1 != null and formData.workbegintime1 !='' "> and WORKBEGINTIME
+			&lt;=to_timestamp(#{formData.workbegintime1},'yyyy-MM-dd')</if>
+		<if test="formData.workendtime != null and formData.workendtime !='' "> and WORKENDTIME
+			&gt;=to_timestamp(#{formData.workendtime},'yyyy-MM-dd')
+		</if>
+		<if test="formData.workendtime1 != null and formData.workendtime1 !='' "> and WORKENDTIME
+			&lt;=to_timestamp(#{formData.workendtime1},'yyyy-MM-dd')</if>
+		<if test="formData.expressnumber != null and formData.expressnumber !='' "> and EXPRESSNUMBER =#{formData.expressnumber}</if>
+		<if test="formData.type != null and formData.type !='' ">
+			<choose>
+				<when test="formData.type==1"> and TYPE =#{formData.type}</when>
+				<otherwise> and (TYPE =#{formData.type} or TYPE ='' or TYPE is null)
+				</otherwise>
+			</choose>
+		</if>
+		<if test="formData.remark != null and formData.remark !='' "> and REMARK =#{formData.remark}</if>
+		<if
+			test="formData.signuseraddress != null and formData.signuseraddress !='' "> and SIGNUSERADDRESS =#{formData.signuseraddress}</if>
+		<if test="formData.signusername != null and formData.signusername !='' "> and SIGNUSERNAME =#{formData.signusername}</if>
+		<if test="formData.signuserphone != null and formData.signuserphone !='' "> and SIGNUSERPHONE =#{formData.signuserphone}</if>
+	</select>
+
+	<select id="getAgreementInfo" parameterType="java.lang.Integer"
+		resultMap="AgreementResultMap">
+		SELECT ID,USERID,to_char(WORKBEGINTIME,'yyyy-MM-dd')
+		WORKBEGINTIME,to_char(WORKENDTIME,'yyyy-MM-dd')
+		WORKENDTIME,EXPRESSNUMBER,TYPE,REMARK,SIGNUSERADDRESS,SIGNUSERNAME,SIGNUSERPHONE
+		FROM
+		app_upload_filemessage where ID =#{id}
+	</select>
+
+	<delete id="deleteAgreementInfo" parameterType="java.lang.Integer">
+		delete from
+              app_upload_filemessage where ID = #{id}
+	</delete>
+
+	<insert id="insertAgreementInfo" parameterType="AgreementForm">
+		insert into app_upload_filemessage (
+		ID
+		,USERID
+		,WORKBEGINTIME
+		,WORKENDTIME
+		,EXPRESSNUMBER
+		,TYPE
+		,REMARK
+		,SIGNUSERADDRESS
+		,SIGNUSERNAME
+		,SIGNUSERPHONE
+		) values(
+		nextval('"app_upload_filemessage_id_seq"')
+		,#{userid}
+		,#{workbegintime}
+		,#{workendtime}
+		,#{expressnumber}
+		,#{type}
+		,#{remark}
+		,#{signuseraddress}
+		,#{signusername}
+		,#{signuserphone}
+		)
+	</insert>
+
+	<update id="updateAgreementInfo" parameterType="AgreementForm">
+		update app_upload_filemessage set ID = #{id}
+		<if test="userid != null and userid != '' ">, USERID=#{userid}</if>
+		<if test="workbegintime != null and workbegintime != '' ">, WORKBEGINTIME=to_timestamp(#{workbegintime},'yyyy-MM-dd') </if>
+		<if test="workendtime != null and workendtime != '' ">, WORKENDTIME=to_timestamp(#{workendtime},'yyyy-MM-dd')</if>
+		<if test="expressnumber != null and expressnumber != '' ">, EXPRESSNUMBER=#{expressnumber}</if>
+		<if test="type != null and type != '' ">, TYPE=#{type}</if>
+		<if test="remark != null and remark != '' ">, REMARK=#{remark}</if>
+		<if test="signuseraddress != null and signuseraddress != '' ">, SIGNUSERADDRESS=#{signuseraddress}</if>
+		<if test="signusername != null and signusername != '' ">, SIGNUSERNAME=#{signusername}</if>
+		<if test="signuserphone != null and signuserphone != '' ">, SIGNUSERPHONE=#{signuserphone}</if>
+		where ID = #{id}
+	</update>
+
+</mapper>

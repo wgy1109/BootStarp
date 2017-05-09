@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="SmsSendChannelInfoMapper">
+	<select id="getAllSmsSendChannelInfoByPage" parameterType="page"
+		resultType="Map">
+		select * from SMS_SEND_CHANNEL_INFO where 1 =1
+		<if test="formData.ID != null and formData.ID != '' ">
+			and ID = #{formData.ID}
+		</if>
+		<if test="formData.CHANNEL_NAME != null and formData.CHANNEL_NAME != '' ">
+			and CHANNEL_NAME = #{formData.CHANNEL_NAME}
+		</if>
+		<if test="formData.STATUS != null and formData.STATUS != '' ">
+			and STATUS = #{formData.STATUS}
+		</if>
+		<if test="formData.PM_ID != null and formData.PM_ID != '' ">
+			and PM_ID = #{formData.PM_ID}
+		</if>
+		<if
+			test="formData.IS_SUPPORT_UNICOM != null and formData.IS_SUPPORT_UNICOM != '' ">
+			and IS_SUPPORT_UNICOM = #{formData.IS_SUPPORT_UNICOM}
+		</if>
+		<if
+			test="formData.IS_SUPPORT_MOBILE != null and formData.IS_SUPPORT_MOBILE != '' ">
+			and IS_SUPPORT_MOBILE = #{formData.IS_SUPPORT_MOBILE}
+		</if>
+		<if
+			test="formData.IS_SUPPORT_TELECOM != null and formData.IS_SUPPORT_TELECOM != '' ">
+			and IS_SUPPORT_TELECOM = #{formData.IS_SUPPORT_TELECOM}
+		</if>
+		<if test="formData.MOBILE_PREFIX != null and formData.MOBILE_PREFIX != '' ">
+			and MOBILE_PREFIX = #{formData.MOBILE_PREFIX}
+		</if>
+		<if test="formData.UNICOM_PREFIX != null and formData.UNICOM_PREFIX != '' ">
+			and UNICOM_PREFIX = #{formData.UNICOM_PREFIX}
+		</if>
+		<if
+			test="formData.TELECOM_PREFIX != null and formData.TELECOM_PREFIX != '' ">
+			and TELECOM_PREFIX = #{formData.TELECOM_PREFIX}
+		</if>
+		<if
+			test="formData.IS_MOBILE_EXTEND != null and formData.IS_MOBILE_EXTEND != '' ">
+			and IS_MOBILE_EXTEND = #{formData.IS_MOBILE_EXTEND}
+		</if>
+		<if
+			test="formData.IS_UNICOM_EXTEND != null and formData.IS_UNICOM_EXTEND != '' ">
+			and IS_UNICOM_EXTEND = #{formData.IS_UNICOM_EXTEND}
+		</if>
+		<if
+			test="formData.IS_TELECOM_EXTEND != null and formData.IS_TELECOM_EXTEND != '' ">
+			and IS_TELECOM_EXTEND = #{formData.IS_TELECOM_EXTEND}
+		</if>
+		<if test="formData.CH_DESC != null and formData.CH_DESC != '' ">
+			and CH_DESC = #{formData.CH_DESC}
+		</if>
+	</select>
+
+	<insert id="saveSmsSendChannelInfo" parameterType="form">
+		insert into
+		SMS_SEND_CHANNEL_INFO (
+		ID
+		,
+		CHANNEL_NAME
+		,
+		STATUS
+		,
+		PM_ID
+		,
+		IS_SUPPORT_UNICOM
+		,
+		IS_SUPPORT_MOBILE
+		,
+		IS_SUPPORT_TELECOM
+		,
+		MOBILE_PREFIX
+		,
+		UNICOM_PREFIX
+		,
+		TELECOM_PREFIX
+		,
+		IS_MOBILE_EXTEND
+		,
+		IS_UNICOM_EXTEND
+		,
+		IS_TELECOM_EXTEND
+		,
+		CH_DESC
+		) values(
+		nextval('"sms_send_channel_info_id_seq"')
+		,
+		#{CHANNEL_NAME}
+		,
+		#{STATUS}
+		,
+		#{PM_ID}
+		,
+		#{IS_SUPPORT_UNICOM}
+		,
+		#{IS_SUPPORT_MOBILE}
+		,
+		#{IS_SUPPORT_TELECOM}
+		,
+		#{MOBILE_PREFIX}
+		,
+		#{UNICOM_PREFIX}
+		,
+		#{TELECOM_PREFIX}
+		,
+		#{IS_MOBILE_EXTEND}
+		,
+		#{IS_UNICOM_EXTEND}
+		,
+		#{IS_TELECOM_EXTEND}
+		,
+		#{CH_DESC}
+		)
+	</insert>
+	<update id="updateSmsSendChannelInfo" parameterType="form">
+		update
+		SMS_SEND_CHANNEL_INFO set
+		id = #{id}
+		,ID = #{ID}
+		,CHANNEL_NAME =
+		#{CHANNEL_NAME}
+		,STATUS = #{STATUS}
+		,PM_ID = #{PM_ID}
+		,IS_SUPPORT_UNICOM
+		= #{IS_SUPPORT_UNICOM}
+		,IS_SUPPORT_MOBILE = #{IS_SUPPORT_MOBILE}
+		,IS_SUPPORT_TELECOM = #{IS_SUPPORT_TELECOM}
+		,MOBILE_PREFIX =
+		#{MOBILE_PREFIX}
+		,UNICOM_PREFIX = #{UNICOM_PREFIX}
+		,TELECOM_PREFIX =
+		#{TELECOM_PREFIX}
+		,IS_MOBILE_EXTEND = #{IS_MOBILE_EXTEND}
+		,IS_UNICOM_EXTEND = #{IS_UNICOM_EXTEND}
+		,IS_TELECOM_EXTEND =
+		#{IS_TELECOM_EXTEND}
+		,CH_DESC = #{CH_DESC}
+		where id =#{ID}
+	</update>
+	<delete id="deleteSmsSendChannelInfo" parameterType="form">
+		delete from
+		SMS_SEND_CHANNEL_INFO where id = #{id}
+	</delete>
+	<select id="getSmsSendChannelInfoInfoById" parameterType="form"
+		resultType="Map">
+		select * from SMS_SEND_CHANNEL_INFO where id = #{id}
+	</select>
+
+	<select id="listAllChannelInfo" parameterType="form" resultType="Map">
+		select sc.id,
+		sc.channel_name,
+		sc.is_support_unicom,
+		sc.is_support_mobile,
+		sc.is_support_telecom,
+		sc.mobile_prefix,
+		sc.unicom_prefix,
+		sc.telecom_prefix,
+		sc.is_mobile_extend,
+		sc.is_unicom_extend,
+		sc.is_telecom_extend,
+		sc.ch_desc
+		from
+		SMS_SEND_CHANNEL_INFO sc
+		where sc.status=1
+		<if test="is_support_unicom!=null and is_support_unicom>0">
+			and sc.is_support_unicom = #{is_support_unicom}
+		</if>
+		<if test="is_support_mobile!=null and is_support_mobile>0">
+			and sc.is_support_mobile = #{is_support_mobile}
+		</if>
+		<if test="is_support_telecom!=null and is_support_telecom>0">
+			and sc.is_support_telecom = #{is_support_telecom}
+		</if>
+	</select>
+
+</mapper>

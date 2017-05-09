@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="WhitelistMapper">
+
+	<select id="getAllWhitelistPage" parameterType="page"
+		resultType="Map">
+		select
+		wo.id,wo.mdn,wo.sp_id,wo.create_time,wo.descption,wo.user_id,si.sp_name
+		from APP_WHITE_PHONE as wo left join SMS_SP_INFO as si on
+		wo.sp_id=si.id
+		where 1 =1
+		<if test="formData.mdn != null and formData.mdn != '' ">
+			and wo.mdn like '%'||#{formData.mdn}||'%'
+		</if>
+		<if test="formData.subAccountAppIds == null">
+			and wo.user_id = ${formData.userid}
+		</if>
+		<if test="formData.subAccountAppIds != null">
+			and wo.sp_id in ${formData.subAccountAppIds}
+		</if>
+		<if test="formData.spid != null and formData.spid != '' ">
+			and wo.sp_id = ${formData.spid}
+		</if>
+		<if test="formData.queryStartTime != null and formData.queryStartTime != '' ">
+			and to_char(wo.create_time,'YYYY-MM-DD') &gt;= #{formData.queryStartTime}
+		</if>
+		<if test="formData.queryEndTime != null and formData.queryEndTime != '' ">
+			and to_char(wo.create_time,'YYYY-MM-DD') &lt;= #{formData.queryEndTime}
+		</if>
+		and si.status = 1
+		order by wo.create_time desc
+	</select>
+	<select id="getAllWhitelist" parameterType="form" resultType="Map">
+		select
+		id,mdn,sp_id,create_time,descption,user_id
+		from APP_WHITE_PHONE
+		where 1 =1
+		<if test="spid != null and spid != '' ">
+			and sp_id = ${spid}
+		</if>
+		<if test="userid != null and userid != '' ">
+			and user_id = ${userid}
+		</if>
+		order by create_time desc
+
+	</select>
+	<select id="getAllWhitePhoneList" parameterType="form"
+		resultType="java.lang.String">
+		select mdn
+		from APP_WHITE_PHONE
+		where 1 =1
+		<if test="spid != null and spid != '' ">
+			and sp_id = ${spid}
+		</if>
+		<if test="userid != null and userid != '' ">
+			and user_id = ${userid}
+		</if>
+	</select>
+
+	<select id="getWhitelistCount" parameterType="form" resultType="java.lang.Integer">
+		select
+		count(*)
+		from APP_WHITE_PHONE
+		where 1 =1
+		<if test="spid != null and spid != '' ">
+			and sp_id = ${spid}
+		</if>
+	</select>
+
+	<select id="getWhitelistById" parameterType="form" resultType="Map">
+		select
+		wo.id,wo.mdn,wo.sp_id,wo.create_time,wo.descption
+		from
+		APP_WHITE_PHONE as wo
+		where id = ${id}
+	</select>
+	<select id="getWhitelistByMdn" parameterType="form" resultType="Map">
+		select
+		*
+		from APP_WHITE_PHONE
+		where sp_id = ${spid} and mdn = #{mdn}
+	</select>
+
+	<insert id="saveWhitelist" parameterType="form">
+		insert into
+		APP_WHITE_PHONE (mdn,sp_id,create_time,descption,user_id)
+		values(#{mdn},${spid},#{createtime},#{descption},${userid})
+	</insert>
+	<update id="updateWhitelist" parameterType="form">
+		update
+		APP_WHITE_PHONE set
+		mdn = #{mdn}
+		,descption = #{descption}
+		,sp_id =
+		${spid}
+		,user_id = ${userid}
+		where id =${id}
+	</update>
+	<delete id="deleteWhitelist" parameterType="form">
+		delete from
+		APP_WHITE_PHONE
+		where id = ${id}
+	</delete>
+</mapper>

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="BlacklistMapper">
+
+	<select id="getAllBlacklistPage" parameterType="page"
+		resultType="Map">
+		select
+		sb.id,sb.mdn,sb.target_id,sb.create_time,sb.descption,sb.type,si.sp_name
+		from sms_black_phone as sb, SMS_SP_INFO as si
+		where sb.target_id=si.id
+		and
+		type='3'
+		<if test="formData.mdn != null and formData.mdn != '' ">
+			and sb.mdn like '%'||#{formData.mdn}||'%'
+		</if>
+		<if test="formData.subAccountAppIds == null">
+			and si.user_id = ${formData.userid}
+		</if>
+		<if test="formData.subAccountAppIds != null">
+			and sb.target_id in ${formData.subAccountAppIds}
+		</if>
+		<if test="formData.spid != null and formData.spid != '' ">
+			and sb.target_id = ${formData.spid}
+		</if>
+		<if test="formData.queryStartTime != null and formData.queryStartTime != '' ">
+			and to_char(sb.create_time,'YYYY-MM-DD') &gt;= #{formData.queryStartTime}
+		</if>
+		<if test="formData.queryEndTime != null and formData.queryEndTime != '' ">
+			and  to_char(sb.create_time,'YYYY-MM-DD')&lt;= #{formData.queryEndTime}
+		</if>
+		and si.status = 1
+		order by sb.create_time desc
+	</select>
+
+	<select id="getBlacklistById" parameterType="form" resultType="Map">
+		select
+		id,mdn,target_id,create_time,descption,type
+		from sms_black_phone
+		where
+		id = ${id}
+	</select>
+	<select id="getBlacklistByMdn" parameterType="form" resultType="Map">
+		select
+		*
+		from sms_black_phone
+		where mdn = #{mdn} and target_id=${spid}
+		<if test="id!=null and id!=''">
+			and id != ${id}
+		</if>
+	</select>
+
+	<select id="getAppList" parameterType="form" resultType="Map">
+		select
+		sp.id,sp.sp_name,sp.ip,
+		sc.leftover_num from SMS_SP_INFO sp inner
+		join
+		SMS_SP_SETTING sa on
+		sp.ID=sa.SP_ID
+		inner join sms_sp_account sc on
+		sp.Id=sc.sp_id
+		where
+		sp.status=1 and sp_through_status != 4 and
+		 (sp_service_type=1 or sp_service_type=3)
+		<if test="spId!=null and spId!=''">
+			and sp.id = ${spId}
+		</if>
+		<if test="subAccountAppIds==null">
+			and user_id=${userId}
+		</if>
+		<if test="subAccountAppIds!=null">
+			and sp.ID in ${subAccountAppIds}
+		</if>
+	</select>
+
+	<insert id="saveBlacklist" parameterType="form"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into
+		sms_black_phone
+		(id,mdn,target_id,create_time,descption,type)
+		values(nextval('"sms_black_phone_id_seq"'),
+		#{mdn},${spid},#{createtime},#{descption},${type})
+	</insert>
+	<update id="updateBlacklist" parameterType="form">
+		update
+		sms_black_phone set
+		mdn = #{mdn}
+		,descption = #{descption}
+		,target_id =
+		${spid}
+		where id =${id}
+	</update>
+	<delete id="deleteBlacklist" parameterType="form">
+		delete from
+		sms_black_phone
+		where id = ${id}
+	</delete>
+	
+	<select id="getSmsBlackListClientP" parameterType="page" resultType="Map">
+		select
+		sb.id,sb.mdn,sb.target_id,sb.create_time,sb.descption,sb.type,si.sp_name
+		from sms_black_phone as sb, SMS_SP_INFO as si
+		where sb.target_id=si.id
+		and
+		type='3'
+		<if test="formData.mdn != null and formData.mdn != '' ">
+			and sb.mdn like '%'||#{formData.mdn}||'%'
+		</if>
+		<if test="formData.subAccountAppIds == null">
+			and si.user_id = ${formData.userid}
+		</if>
+		<if test="formData.subAccountAppIds != null">
+			and sb.target_id in ${formData.subAccountAppIds}
+		</if>
+		<if test="formData.spid != null and formData.spid != '' ">
+			and sb.target_id = ${formData.spid}
+		</if>
+		<if test="formData.queryStartTime != null and formData.queryStartTime != '' ">
+			and to_char(sb.create_time,'YYYY-MM-DD') &gt;= #{formData.queryStartTime}
+		</if>
+		<if test="formData.queryEndTime != null and formData.queryEndTime != '' ">
+			and  to_char(sb.create_time,'YYYY-MM-DD')&lt;= #{formData.queryEndTime}
+		</if>
+		and si.status = 1
+		order by sb.create_time desc limit ${length} offset ${start}
+	</select>
+</mapper>

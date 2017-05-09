@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="NoticeCMapper"><!-- 
+	<select id="getUserInfoByUserId" parameterType="int" resultType="Map">
+		select MOBILE,EMAIL from chanzor.APP_USER_INFO where ID = #{userid}
+	</select>
+	<select id="selectInboxId" resultType="int">
+		select chanzor.APP_USER_INBOX_ID.nextval from dual
+	</select>
+	<insert id="insertInbox" parameterType="Map">
+		INSERT INTO CHANZOR.APP_USER_INBOX(ID, USER_ID, TITLE, CONTENT) 
+			VALUES(#{id}, #{userid}, '系统消息', #{message})
+	</insert> -->
+</mapper>

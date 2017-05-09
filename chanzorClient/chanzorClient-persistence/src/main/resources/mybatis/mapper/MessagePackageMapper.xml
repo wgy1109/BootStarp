@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="MessagePackageMapper">
+	<resultMap id="BaseResultMap" type="MessagePackage">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="package_message_num" property="packageMessageNum"
+			jdbcType="INTEGER" />
+		<result column="package_message_price" property="packageMessagePrice"
+			jdbcType="NUMERIC" />
+		<result column="package_message_type" property="packageMessageType"
+			jdbcType="INTEGER" />
+		<result column="create_time" property="createTime" jdbcType="DATE" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, package_message_num, package_message_price,
+		package_message_type,
+		create_time
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from sms_message_package
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<select id="findMessagePackageByType" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from sms_message_package
+		where package_message_type =
+		#{0}
+		order by id asc
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		sms_message_package
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="MessagePackage">
+		insert into
+		sms_message_package (id, package_message_num,
+		package_message_price,
+		package_message_type, create_time)
+		values (#{id,jdbcType=INTEGER},
+		#{packageMessageNum,jdbcType=INTEGER},
+		#{packageMessagePrice,jdbcType=NUMERIC},
+		#{packageMessageType,jdbcType=INTEGER}, #{createTime,jdbcType=DATE})
+	</insert>
+	<insert id="insertSelective" parameterType="MessagePackage">
+		insert into sms_message_package
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="packageMessageNum != null">
+				package_message_num,
+			</if>
+			<if test="packageMessagePrice != null">
+				package_message_price,
+			</if>
+			<if test="packageMessageType != null">
+				package_message_type,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="packageMessageNum != null">
+				#{packageMessageNum,jdbcType=INTEGER},
+			</if>
+			<if test="packageMessagePrice != null">
+				#{packageMessagePrice,jdbcType=NUMERIC},
+			</if>
+			<if test="packageMessageType != null">
+				#{packageMessageType,jdbcType=INTEGER},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=DATE},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="MessagePackage">
+		update sms_message_package
+		<set>
+			<if test="packageMessageNum != null">
+				package_message_num =
+				#{packageMessageNum,jdbcType=INTEGER},
+			</if>
+			<if test="packageMessagePrice != null">
+				package_message_price =
+				#{packageMessagePrice,jdbcType=NUMERIC},
+			</if>
+			<if test="packageMessageType != null">
+				package_message_type =
+				#{packageMessageType,jdbcType=INTEGER},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=DATE},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="MessagePackage">
+		update
+		sms_message_package
+		set package_message_num =
+		#{packageMessageNum,jdbcType=INTEGER},
+		package_message_price =
+		#{packageMessagePrice,jdbcType=NUMERIC},
+		package_message_type =
+		#{packageMessageType,jdbcType=INTEGER},
+		create_time =
+		#{createTime,jdbcType=DATE}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+</mapper>

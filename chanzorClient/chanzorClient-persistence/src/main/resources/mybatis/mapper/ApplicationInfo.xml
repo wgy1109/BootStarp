@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ApplcationMapper">
+<!-- 
+	<resultMap type="ApplcationInfo" id="ApplcationInfoMap">
+		<id column="id" property="app_id" />
+		<result column="app_name" property="app_name" />
+		<result column="app_type" property="app_type" />
+		<result column="app_industry" property="app_industry" />
+		<result column="userid" property="user_id" />
+		<result column="status" property="status" />
+		<result column="createtime" property="createtime" />
+		<result column="description" property="app_description" />
+		<result column="signature" property="signature"/>
+		<result column="sp_id" property="sp_id"/>
+	</resultMap>
+
+
+	<insert id="insertApp" parameterType="ApplcationInfo">
+		insert into
+		chanzor.app_config_info
+		(id,app_name,app_type,app_industry,userid,status,createtime,description)
+		values
+		(#{app_id,jdbcType=INTEGER},#{app_name,jdbcType=VARCHAR},#{app_type,jdbcType=INTEGER},#{app_industry,jdbcType=INTEGER},#{user_id,jdbcType=INTEGER},#{status,jdbcType=INTEGER},sysdate,#{app_description,jdbcType=VARCHAR})
+	</insert>
+
+	<select id="getAppById" parameterType="java.lang.Integer"
+		resultMap="ApplcationInfoMap">
+		select * from APP_CONFIG_INFO where
+		id=#{0}
+	</select>
+
+	<update id="updateApp" parameterType="ApplcationInfo">
+		update
+	   APP_CONFIG_INFO set
+		app_name=#{app_name},
+		app_type=#{app_type},
+		app_industry =
+		#{app_industry },
+		description = #{app_description},
+		status=#{status}
+		where
+		id=#{app_id}
+	</update>
+
+	<delete id="deleteApp" parameterType="ApplcationInfo">
+		delete from
+		chanzor.app_config_info
+		where id=#{app_id}
+	</delete>
+
+
+	<select id="selcoutapp" parameterType="int" resultType="Integer">
+		select
+		count(id) from chanzor.app_config_info where userid = #{userid}
+	</select>
+
+	<select id="appListPage" parameterType="page"
+		resultMap="ApplcationInfoMap">
+		select u.id,u.APP_NAME,u.APP_TYPE,u.APP_INDUSTRY,u.USERID,u.STATUS,u.CREATETIME,u.DESCRIPTION,info.SIGNATURE,u.SP_ID from APP_CONFIG_INFO u join APP_USER_AUTHENTICATION_INFO c on (u.userid=c.userid) left join SMS_SP_INFO info on u.sp_id = info.id
+		where c.status=2 and u.sp_id is not null
+		 <if test="formData.sp_id!=null and formData.sp_id!=''">and u.sp_id = #{formData.sp_id}</if>
+		<if test="formData.app_name!=null and formData.app_name!=''">and u.app_name like CONCAT('%',#{formData.app_name},'%') </if>
+		<if test="formData.app_type!=null and formData.app_type!=''">and u.app_type like   CONCAT('%',#{formData.app_type},'%')   </if>
+		<if test="formData.app_industry!=null and formData.app_industry!=''">and u.app_industry like   CONCAT('%',#{formData.app_industry},'%')   </if>
+		<if test="formData.user_id!=null and formData.user_id!='' and user_id>0">and u.userid =#{formData.user_id} </if>
+		<if test="formData.status!=null and formData.status!=''">and u.status =#{formData.status}</if>
+		
+	</select>
+ -->
+</mapper>

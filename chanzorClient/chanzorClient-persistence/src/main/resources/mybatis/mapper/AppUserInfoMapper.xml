@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="appUserInfoMapper">
+	<select id="getAllappUserInfoByPage" parameterType="page" resultType="Map">
+		select * from (
+				select a.ID,a.ACCOUNT_NAME,a.PASSWORD,a.USER_NAME, case a.STATUS when 1 then '正常' else '异常' end  STATUS,a.MOBILE,a.CREATETIME,a.EMAIL,a.LAST_LOGIN_IP,a.ADDRESS,a.GRADE,a.CUSTOMER_MANAGER,count(b.ID) NUM from APP_USER_INFO a left join BUSINESS_USERINFO b on a.id = b.USER_ID
+				group by a.ID,a.ACCOUNT_NAME,a.PASSWORD,a.USER_NAME,a.STATUS,a.MOBILE,a.CREATETIME,a.EMAIL,a.LAST_LOGIN_IP,a.ADDRESS,a.GRADE,a.CUSTOMER_MANAGER )temp
+			where 1 = 1
+			<if test="formData.USER_NAME != null and formData.USER_NAME != '' ">
+				and  USER_NAME  like  CONCAT(CONCAT('%',#{formData.USER_NAME}),'%')
+			</if>
+			<if test="formData.CUSTOMER_MANAGER != null and formData.CUSTOMER_MANAGER != '' ">
+				and  CUSTOMER_MANAGER  = #{formData.CUSTOMER_MANAGER}
+			</if>
+	</select>
+	
+	<insert id="saveappUserInfo" parameterType="form">
+		insert into APP_USER_INFO (
+					ID
+					,
+					ACCOUNT_NAME
+					,
+					PASSWORD
+					,
+					USER_NAME
+					,
+					STATUS
+					,
+					MOBILE
+					,
+					CREATETIME
+					,
+					EMAIL
+					,
+					LAST_LOGIN_IP
+					,
+					ADDRESS
+					,
+					GRADE
+					,
+					CUSTOMER_MANAGER
+		) values(
+					nextval('"app_user_info_id_seq"')
+					,
+					#{ACCOUNT_NAME}
+					,
+					#{PASSWORD}
+					,
+					#{USER_NAME}
+					,
+					#{STATUS}
+					,
+					#{MOBILE}
+					,
+					#{CREATETIME}
+					,
+					#{EMAIL}
+					,
+					#{LAST_LOGIN_IP}
+					,
+					#{ADDRESS}
+					,
+					#{GRADE}
+					,
+					#{CUSTOMER_MANAGER}
+		)
+	</insert>
+	<update id="updateappUserInfo" parameterType="form">
+		update APP_USER_INFO set  
+							id = #{id}
+							,ID = #{ID}
+							,ACCOUNT_NAME = #{ACCOUNT_NAME}
+							,PASSWORD = #{PASSWORD}
+							,USER_NAME = #{USER_NAME}
+							,STATUS = #{STATUS}
+							,MOBILE = #{MOBILE}
+							,CREATETIME = #{CREATETIME}
+							,EMAIL = #{EMAIL}
+							,LAST_LOGIN_IP = #{LAST_LOGIN_IP}
+							,ADDRESS = #{ADDRESS}
+							,GRADE = #{GRADE}
+							,CUSTOMER_MANAGER = #{CUSTOMER_MANAGER}
+			  where id =#{ID}
+	</update>
+	<delete id="deleteappUserInfo" parameterType="form">
+		delete from APP_USER_INFO where id = #{id}
+	</delete>
+	<select id="getappUserInfoInfoById"  parameterType="form" resultType="Map">
+		select * from APP_USER_INFO where id =  #{id}
+	</select>
+	
+	<select id="getUserBusinessList"  parameterType="form" resultType="Map">
+		select b.ID, CUSTOMER_NAME, CUSTOMER_MOBILE, a.CUSTOMER_IDENTIFICATION CUSTOMER_IDENTIFICATION, CUSTOMER_TYPE from BUSINESS_USERINFO b,APP_BUSINESS_MANAGER a 
+		where b.CUSTOMER_IDENTIFICATION = a.CUSTOMER_IDENTIFICATION and  b.USER_ID =#{APPUSERID}
+	</select>
+	
+	<delete id="deleteAppuserinfoBusiness" parameterType="form">
+		DELETE from BUSINESS_USERINFO where user_id = #{APPUSERID} and customer_identification = #{CUSTOMER_IDENTIFICATION} 
+	</delete>
+	
+	<select id="getBusinessNotMyList"  parameterType="form" resultType="Map">
+		select CUSTOMER_NAME, CUSTOMER_MOBILE, CUSTOMER_IDENTIFICATION , CUSTOMER_TYPE  from APP_BUSINESS_MANAGER a where a.CUSTOMER_IDENTIFICATION not in 
+			(select b.CUSTOMER_IDENTIFICATION FROM BUSINESS_USERINFO b where b.USER_ID = #{APPUSERID} )
+	</select>
+	
+	<select id="getUserBusinessByUseridBusiness"  parameterType="form" resultType="Map">
+		select ID, USER_ID, CUSTOMER_IDENTIFICATION  from BUSINESS_USERINFO  where USER_ID = #{APPUSERID} and CUSTOMER_IDENTIFICATION = #{CUSTOMER_IDENTIFICATION}
+	</select>
+	
+	<select id="getBusinessByTypenum"  parameterType="form" resultType="Int">
+		select count(1) from APP_BUSINESS_MANAGER a where a.CUSTOMER_IDENTIFICATION in 
+			(select b.CUSTOMER_IDENTIFICATION FROM BUSINESS_USERINFO b where b.USER_ID = #{APPUSERID} )
+			and CUSTOMER_TYPE = #{CUSTOMER_TYPE}
+	</select>
+	
+	<insert id="saveBusinessUserinfo" parameterType="form">
+		insert into BUSINESS_USERINFO ( USER_ID, CUSTOMER_IDENTIFICATION ) values( #{APPUSERID}, #{CUSTOMER_IDENTIFICATION} )
+	</insert>
+	
+	<select id="getMyappUserInfoByPage" parameterType="page" resultType="Map">
+		select a.ID,a.ACCOUNT_NAME,a.PASSWORD,a.USER_NAME, case a.STATUS when 1 then '正常' else '异常' end  STATUS,
+			a.MOBILE,a.CREATETIME,a.EMAIL,a.LAST_LOGIN_IP,a.ADDRESS,a.GRADE,a.CUSTOMER_MANAGER from APP_USER_INFO a where a.ID in (
+			select b.USER_ID from BUSINESS_USERINFO b, APP_BUSINESS_MANAGER bm where 
+			b.CUSTOMER_IDENTIFICATION=bm.CUSTOMER_IDENTIFICATION and bm.CUSTOMER_NAME = #{formData.userName}
+			)
+			<if test="formData.USER_NAME != null and formData.USER_NAME != '' ">
+				and  a.USER_NAME  like  CONCAT(CONCAT('%',#{formData.USER_NAME}),'%')
+			</if>
+			<if test="formData.CUSTOMER_MANAGER != null and formData.CUSTOMER_MANAGER != '' ">
+				and  a.CUSTOMER_MANAGER  = #{formData.CUSTOMER_MANAGER}
+			</if>
+	</select>
+	
+</mapper>

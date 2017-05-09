@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="AppUserAuthenticationMapper">
+	<select id="getAllAppUserAuthenticationByPage" parameterType="page" resultType="Map">
+		select * from APP_USER_AUTHENTICATION_INFO where 1 =1 
+			<if test="formData.COMPANY != null and formData.COMPANY != '' ">
+				and  "COMPANY"  like CONCAT(CONCAT('%',#{formData.COMPANY}),'%')
+			</if>
+				and  "STATUS"  = 1
+	</select>
+	
+	<insert id="saveAppUserAuthentication" parameterType="form">
+		insert into APP_USER_AUTHENTICATION_INFO (
+				"ID", "COMPANY", "COMPANY_ADDRESS", "ORGANIZATION_NO", "ORGANIZATION_IMAGE", "TAXPAYER_NO", "TAXPAYER_IMAGE", "REGISTERED_NO", "REGISTERED_IMAGE", "LEGAL_REPRESENTATIVE", "USERID", "STATUS", "IDCARD_IMAGE", "CONTACT"
+		) values(
+					nextval('"app_user_authentication_info_id_seq"')
+					,
+					#{COMPANY}
+					,
+					#{COMPANY_ADDRESS}
+					,
+					#{ORGANIZATION_NO}
+					,
+					#{ORGANIZATION_IMAGE}
+					,
+					#{TAXPAYER_NO}
+					,
+					#{TAXPAYER_IMAGE}
+					,
+					#{REGISTERED_NO}
+					,
+					#{REGISTERED_IMAGE}
+					,
+					#{LEGAL_REPRESENTATIVE}
+					,
+					#{USERID}
+					,
+					#{STATUS}
+					,
+					#{IDCARD_IMAGE}
+					,
+					#{CONTACT}
+		)
+	</insert>
+	<update id="updateAppUserAuthentication" parameterType="form">
+		update APP_USER_AUTHENTICATION_INFO set  "COMPANY" = #{COMPANY}, "COMPANY_ADDRESS" = #{COMPANY_ADDRESS}, "ORGANIZATION_NO" = #{ORGANIZATION_NO}, "ORGANIZATION_IMAGE" = #{ORGANIZATION_IMAGE}, "TAXPAYER_NO" = #{TAXPAYER_NO}, "TAXPAYER_IMAGE" = #{TAXPAYER_IMAGE}, "REGISTERED_NO" = #{REGISTERED_NO}, "REGISTERED_IMAGE" = #{REGISTERED_IMAGE}, "LEGAL_REPRESENTATIVE" = #{LEGAL_REPRESENTATIVE}, "USERID" = #{USERID}, "STATUS" = #{STATUS}, "IDCARD_IMAGE" = #{IDCARD_IMAGE}, "CONTACT" = #{CONTACT}
+
+			  where "ID" =#{ID}
+	</update>
+	<delete id="deleteAppUserAuthentication" parameterType="form">
+		delete from APP_USER_AUTHENTICATION_INFO where "ID" = #{id}
+	</delete>
+	<select id="getAppUserAuthenticationInfoById"  parameterType="form" resultType="Map">
+		select * from APP_USER_AUTHENTICATION_INFO where "ID" =  #{id}
+	</select>
+	
+	<update id="updateStatus" parameterType="form">
+		update APP_USER_AUTHENTICATION_INFO set "STATUS" = #{status} where "ID" in
+		<foreach collection="list" open="(" close=")" separator="," item="item">
+			#{item}
+		</foreach>
+	</update>
+	
+	<select id="getAllAppUserAuthenticationByExaminedPage" parameterType="page" resultType="Map">
+		select * from APP_USER_AUTHENTICATION_INFO where 1 =1 
+			<if test="formData.COMPANY != null and formData.COMPANY != '' ">
+				and  "COMPANY"  like CONCAT(CONCAT('%',#{formData.COMPANY}),'%')
+			</if>
+				and  "STATUS"  != 1
+	</select>
+	
+</mapper>

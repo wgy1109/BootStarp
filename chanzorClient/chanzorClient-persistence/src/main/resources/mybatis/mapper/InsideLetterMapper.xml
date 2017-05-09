@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="InsideLetterMapper">
+
+	<insert id="insertLetter" parameterType="map">
+		INSERT INTO
+		SMS_INSIDE_LETTER
+		(id,user_id, title, status, content, create_time)
+		VALUES (nextval('"sms_inside_letter_id_seq"'), #{userId},
+		#{title,jdbcType=VARCHAR},#{status,jdbcType=INTEGER},
+		#{content,jdbcType=VARCHAR}, #{createTime})
+	</insert>
+
+	<select id="findLetterListPage" parameterType="page" resultType="map">
+
+		select * from SMS_INSIDE_LETTER where user_id =#{formData.userId}
+		order by create_time desc
+
+	</select>
+
+	<select id="findUnreadLetter" parameterType="java.lang.Integer"
+		resultType="java.lang.Integer">
+		select count(*) from SMS_INSIDE_LETTER where user_id=#{0}
+		and status=0
+	</select>
+
+	<update id="updUnreadLetter" parameterType="java.lang.Integer">
+
+		update
+		SMS_INSIDE_LETTER set status=1 where id=#{0}
+
+	</update>
+
+	<delete id="delLetter" parameterType="java.lang.Integer">
+
+		delete from
+		SMS_INSIDE_LETTER where id=#{0}
+
+	</delete>
+	<select id="findTopLteerByUser" parameterType="java.lang.Integer"
+		resultType="map">
+		select * from SMS_INSIDE_LETTER where user_id=#{0}
+		and
+		status=0
+		order by
+		create_time desc
+		limit 3
+
+	</select>
+
+
+	<select id="checkAllLetter" parameterType="java.lang.Integer">
+		update
+		SMS_INSIDE_LETTER set status=1 where user_id=#{0}
+	</select>
+	
+	<select id="getLetterByidMapper" parameterType="java.lang.Integer" resultType="map">
+		select * from SMS_INSIDE_LETTER where id = #{0}
+	</select>
+</mapper>

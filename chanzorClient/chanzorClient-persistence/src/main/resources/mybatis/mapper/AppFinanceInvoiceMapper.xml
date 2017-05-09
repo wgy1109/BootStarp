@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="AppFinanceInvoiceMapper"><!-- 
+	<select id="getAllAppFinanceInvoiceByPage" parameterType="page" resultType="Map">
+		  select i.ID,  i.USER_ID,  i.INVOICE_VALUE,  case INVOICE_STATUS when 0 then '普通发票' when 1 then '增值税发票' else '发票' end INVOICE_STATUS,  
+		  case AUDIT_STATUS when 0 then '未发送' when 1 then '已发送' end AUDIT_STATUS , 
+		  i.COLLECT_ADDRESS,  i.COLLECT_NAME,  i.COLLECT_PHONE,  i.INVOICE_CREATE_TIME,  i.INVOICE_UPDATE_USER_ID,  i.INVOICE_UPDATE_TIME,  i.INVOICE_NOTES,  i.INVOICE_COURIER_NUM,  auth.COMPANY COMPANY 
+			 from APP_FINANCE_INVOICE i inner join APP_USER_AUTHENTICATION_INFO auth
+			  on i.USER_ID=auth.USERID
+			  <if test="formData.COLLECT_NAME != null and formData.COLLECT_NAME != '' ">
+				and  i.COLLECT_NAME like CONCAT(CONCAT('%',#{formData.COLLECT_NAME}),'%') 
+				</if>
+			  <if test="formData.COLLECT_PHONE != null and formData.COLLECT_PHONE != '' ">
+					and  i.COLLECT_PHONE  like CONCAT(#{formData.COLLECT_PHONE},'%') 
+				</if>
+			  <if test="formData.INVOICE_STATUS != null and formData.INVOICE_STATUS != '' ">
+				and  i.INVOICE_STATUS  = #{formData.INVOICE_STATUS}
+				</if>
+	</select>
+	
+	<insert id="saveAppFinanceInvoice" parameterType="form">
+		insert into APP_FINANCE_INVOICE (
+					ID
+					,
+					USER_ID
+					,
+					INVOICE_VALUE
+					,
+					INVOICE_STATUS
+					,
+					AUDIT_STATUS
+					,
+					COLLECT_ADDRESS
+					,
+					COLLECT_NAME
+					,
+					COLLECT_PHONE
+					,
+					INVOICE_CREATE_TIME
+					,
+					INVOICE_UPDATE_USER_ID
+					,
+					INVOICE_UPDATE_TIME
+					,
+					INVOICE_NOTES
+					,
+					INVOICE_COURIER_NUM
+		) values(
+					nextval('"app_finance_invoice_ID_seq"')
+					,
+					#{USER_ID}
+					,
+					#{INVOICE_VALUE}
+					,
+					#{INVOICE_STATUS}
+					,
+					#{AUDIT_STATUS}
+					,
+					#{COLLECT_ADDRESS}
+					,
+					#{COLLECT_NAME}
+					,
+					#{COLLECT_PHONE}
+					,
+					#{INVOICE_CREATE_TIME}
+					,
+					#{INVOICE_UPDATE_USER_ID}
+					,
+					#{INVOICE_UPDATE_TIME}
+					,
+					#{INVOICE_NOTES}
+					,
+					#{INVOICE_COURIER_NUM}
+		)
+	</insert>
+	<update id="updateAppFinanceInvoice" parameterType="form">
+		update APP_FINANCE_INVOICE set  
+							id = #{id}
+							,ID = #{ID}
+							,USER_ID = #{USER_ID}
+							,INVOICE_VALUE = #{INVOICE_VALUE}
+							,INVOICE_STATUS = #{INVOICE_STATUS}
+							,AUDIT_STATUS = #{AUDIT_STATUS}
+							,COLLECT_ADDRESS = #{COLLECT_ADDRESS}
+							,COLLECT_NAME = #{COLLECT_NAME}
+							,COLLECT_PHONE = #{COLLECT_PHONE}
+							,INVOICE_CREATE_TIME = #{INVOICE_CREATE_TIME}
+							,INVOICE_UPDATE_USER_ID = #{INVOICE_UPDATE_USER_ID}
+							,INVOICE_UPDATE_TIME = #{INVOICE_UPDATE_TIME}
+							,INVOICE_NOTES = #{INVOICE_NOTES}
+							,INVOICE_COURIER_NUM = #{INVOICE_COURIER_NUM}
+			  where id =#{ID}
+	</update>
+	<delete id="deleteAppFinanceInvoice" parameterType="form">
+		delete from APP_FINANCE_INVOICE where id = #{id}
+	</delete>
+	<select id="getAppFinanceInvoiceInfoById"  parameterType="form" resultType="Map">
+		select * from APP_FINANCE_INVOICE where ID =  #{id}
+	</select>
+	
+	<update id="updateTimeCourierNum" parameterType="form">
+		update APP_FINANCE_INVOICE set  
+							INVOICE_UPDATE_TIME = #{INVOICE_UPDATE_TIME}
+							,AUDIT_STATUS = #{AUDIT_STATUS}
+							,INVOICE_COURIER_NUM = #{INVOICE_COURIER_NUM}
+			  where id =#{id}
+	</update>
+	
+	 -->
+</mapper>

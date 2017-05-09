@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="SmsMasterplateMapper">
+	<select id="getAllSmsMasterplateByPage" parameterType="page"
+		resultType="Map">
+		select s.ID ID,s.CONTENT CONTENT,s.SP_ID SP_ID,case s.STATUS when 1
+		then '待审核' when 2 then '审核驳回' when 0 then '审核通过' else '未审核' end
+		STATUS, case s.TYPE when 1 then '启用' when 2 then '禁用' else '未通过' end
+		TYPE, sp.SP_NAME NAME from SMS_MASTERPLATE s,SMS_SP_INFO sp where
+		sp.ID=s.SP_ID
+		<if test="formData.CONTENT !=null and formData.CONTENT !=''">
+			and s.CONTENT like
+			CONCAT(CONCAT('%',#{formData.CONTENT}),'%')
+		</if>
+		<if
+			test="formData.SP_ID!=null and formData.SP_ID != '' and  formData.SP_ID>0">
+			and s.SP_ID=${formData.SP_ID}
+		</if>
+		<if test="formData.NAME !=null and formData.NAME !=''">
+			and sp.SP_NAME like
+			CONCAT(CONCAT('%',#{formData.NAME}),'%')
+		</if>
+		<if
+			test="formData.STATUS!=null and formData.STATUS != '' and  formData.STATUS!=-1">
+			and s.STATUS=#{formData.STATUS}
+		</if>
+		<if test="formData.TYPE!=null and formData.TYPE!= '' and  formData.TYPE!=0">
+			and s.TYPE=#{formData.TYPE}
+		</if>
+		order by s.ID desc
+	</select>
+
+	<insert id="saveSmsMasterplate" parameterType="form">
+		insert into
+		SMS_MASTERPLATE (
+		ID
+		,
+		CONTENT
+		,
+		SP_ID
+		,
+		STATUS
+		,
+		TYPE
+		,
+		TITLE
+		) values(
+		nextval('"sms_masterplate_id_seq"'),
+		,
+		#{CONTENT}
+		,
+		#{SP_ID}
+		,
+		#{STATUS}
+		,
+		#{TYPE}
+		,
+		#{TITLE}
+		)
+	</insert>
+	<update id="updateSmsMasterplate" parameterType="form">
+		update
+		SMS_MASTERPLATE set
+		id = #{id}
+		,CONTENT = #{CONTENT}
+		where id =#{id}
+	</update>
+	<delete id="deleteSmsMasterplate" parameterType="form">
+		delete from
+		SMS_MASTERPLATE where id = #{id}
+	</delete>
+	<select id="getSmsMasterplateInfoById" parameterType="form"
+		resultType="Map">
+		select s.ID ID,s.CONTENT CONTENT,s.SP_ID SP_ID,case
+		s.STATUS when 1 then '待审核' when 2 then '审核驳回' when 0 then '审核通过' else
+		'未审核' end STATUS,sp.SP_NAME NAME
+		from SMS_MASTERPLATE s,SMS_SP_INFO sp where sp.ID=s.SP_ID and s.ID = #{id}
+	</select>
+
+	<update id="updateStatus" parameterType="form">
+		update SMS_MASTERPLATE set STATUS = #{status} where id in
+		<foreach collection="list" open="(" close=")" separator=","
+			item="item">
+			#{item}
+		</foreach>
+	</update>
+
+	<select id="selectThroughNumByid" parameterType="form"
+		resultType="Map">
+		select count(1) num from SMS_MASTERPLATE s where STATUS = 0
+		and s.ID = #{authid}
+	</select>
+
+	<update id="updateTypeByid" parameterType="form">
+		update SMS_MASTERPLATE
+		set TYPE = #{type} where ID = #{authid}
+	</update>
+
+
+</mapper>

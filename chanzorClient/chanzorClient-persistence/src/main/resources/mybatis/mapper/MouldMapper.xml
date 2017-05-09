@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="MouldMapper">
+	
+	<select id="getMouldById" parameterType="form" resultType="Map">
+		select id, title, content from sms_sys_template where id = #{id}
+	</select>
+	
+	<select id="getMouldList"  resultType="Map">
+		select id, title from sms_sys_template 
+	</select>
+
+
+</mapper>

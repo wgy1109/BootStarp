@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="UserInfoMapper">
+	<select id="login" parameterType="form" resultType="Map">
+		select u.* from SMS_USER_INFO u
+		where 1=1 and u.user_name = #{userName}
+	</select>
+	
+	<update id="updateLastLogin" parameterType="form" >
+		update SMS_USER_INFO u 
+		set u.ID = #{user_id}
+		<if test="password != null and password != '' ">
+		, u.PASSWORD=#{password}
+		</if>
+		<if test="lastlogin_time != null and lastlogin_time != '' ">
+		, u.LAST_LOGIN_TIME=#{lastlogin_time}, u.LAST_LOGIN_IP=#{lastlogin_ip}
+		</if>
+		where u.ID=#{user_id}
+	</update>
+	
+	<insert id="saveOperateLog" parameterType="form">
+		insert into SMS_OPERATE_LOG 
+		(sp_id,username,opearte_type,opearte_result,opearte_content,createtime,ip)
+		values
+		(#{sp_id},#{username},#{opearte_type},#{opearte_result},#{opearte_content},#{createtime},#{ip})
+	</insert>
+	<update id="updateUserRights" parameterType="UserInfo">
+		update SMS_USER_INFO
+		set user_rights=#{user_rights} where id=#{user_id}
+	</update>
+	
+	<select id="getUseridnameByRoleid" parameterType="form" resultType="Map">
+		select ID, USER_NAME from SMS_USER_INFO where ROLE_ID = #{roleid} and id not in (select CUSTOMER_ID from APP_BUSINESS_MANAGER) and  status = 1
+	</select>
+	
+	<select id="getuserNameByid" parameterType="String" resultType="Map">
+		select ID, USER_NAME from SMS_USER_INFO where ID = #{id} 
+	</select>
+	
+</mapper>

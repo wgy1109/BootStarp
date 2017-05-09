@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="RoleMapper">
+	<resultMap type="RoleInfo" id="roleResultMap">
+		<id column="id" property="role_id" />
+		<id column="description" property="description" />
+		<id column="create_user" property="create_user" />
+		<result column="role_name" property="roleName" />
+		<result column="rights" property="rights" />
+	</resultMap>
+
+	<select id="listRolesPage" parameterType="page" resultMap="roleResultMap">
+		select id,description,role_name,rights,create_user from SMS_USER_ROLE
+		where status= 1
+		and id &gt;= #{formData.role_id}
+	</select>
+	<select id="listAllRoles" parameterType="int" resultMap="roleResultMap">
+		select *
+		from SMS_USER_ROLE where status=1
+		and id &gt;= #{role_id}
+	</select>
+	<select id="getRoleById" parameterType="int" resultMap="roleResultMap">
+		select *
+		from SMS_USER_ROLE where id=#{role_id} and status=1
+	</select>
+	<select id="getRoleMapById" parameterType="int" resultType="map">
+		select *
+		from SMS_USER_ROLE where id=#{role_id} and status=1
+	</select>
+	<select id="getCountByName" parameterType="RoleInfo" resultType="int">
+		select count(id) from SMS_USER_ROLE where role_name=#{roleName} and
+		status=1
+		<if test="role_id!=null or role_id>0">
+			and id!=#{role_id}
+		</if>
+	</select>
+
+	<insert id="insertRole" parameterType="RoleInfo">
+		insert into SMS_USER_ROLE
+		(ID,ROLE_NAME,DESCRIPTION,CREATE_USER)
+		values
+		(nextval('"sms_user_role_id_seq"'),#{roleName,jdbcType=VARCHAR},#{description,jdbcType=VARCHAR},#{create_user,jdbcType=VARCHAR})
+	</insert>
+
+	<update id="updateRoleBaseInfo" parameterType="RoleInfo">
+		update
+		SMS_USER_ROLE set role_name=#{roleName},description=#{description}
+		where id=#{role_id}
+	</update>
+	<update id="updateRoleRights" parameterType="RoleInfo">
+		update SMS_USER_ROLE
+		set rights=#{rights} where id=#{role_id}
+	</update>
+	<update id="deleteRoleById" parameterType="int">
+		update SMS_USER_ROLE
+		set status=2 where id=#{role_id}
+	</update>
+	<select id="getRoleMessage" parameterType="String" resultType="Map">
+		select u.* from SMS_USER_ROLE u
+		where 1=1 and u.id = #{roleid}
+	</select>
+
+	<select id="getRoleListMap" parameterType="int" resultType="Map">
+		select ID, ROLE_NAME from SMS_USER_ROLE where STATUS = 1
+		<if test="id!=null and id != '0' ">
+			and ID = #{id}
+		</if>
+	</select>
+
+
+</mapper>
+
+
+

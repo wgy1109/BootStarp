@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SpConsumerDetailMapper">
+	<select id="selConmsumerlistP" parameterType="page" resultType="Map">
+		select sd.id,
+		sd.charge_time,
+		sd.sp_id,
+		sd.charge_num,
+		coalesce(sd.charge_opeartor,'') as chargeopeartor ,
+		sd.amount,
+		sd.type,
+		sp.sp_service_type spServiceType,
+		sd.balance,
+		sd.price,
+		coalesce(
+		sd.descption,'') as descption ,
+		sp.sp_name,
+		sp.platform,
+		st.sale_price
+		from
+		<if test="formData.type==1 or formData.type==7">
+			SMS_CHARGE_RECORD_USER sd
+		</if>
+		<if test="formData.type!=1 and formData.type!=7">
+			SMS_CHARGE_RECORD sd
+		</if>
+		, SMS_SP_INFO sp,sms_sp_setting st
+		where
+		sp.id =
+		sd.sp_id and sd.sp_id=st.sp_id 
+		and sp.USER_ID=${formData.userId} 
+		and (alipay_type = 1 or alipay_type is null )
+		<if test="formData.spId!=null and formData.spId!=''">
+			and sd.sp_id = ${formData.spId}
+		</if>
+		<if test="formData.sp_name!=null and formData.sp_name != '' ">
+			and sp.sp_name like '%'||#{formData.sp_name}||'%'
+		</if>
+		<if test="formData.queryStartTime!=null and formData.queryStartTime!=''">
+			and sd.charge_time &gt;= #{formData.queryStartTime}::date 
+		</if>
+		<if test="formData.queryEndTime!=null and formData.queryEndTime!=''">
+			and sd.charge_time &lt;= #{formData.queryEndTime}::date 
+		</if>
+		<if test="formData.type!=null and formData.type!=0">
+			and sd.type = ${formData.type}
+		</if>
+		<if test="formData.sp_service_type!=null and formData.sp_service_type!=0">
+			and sp.sp_service_type = ${formData.sp_service_type}
+		</if>
+		order by sd.charge_time desc limit ${length} offset ${start}
+	</select>
+	<select id="selConmsumerlistCount" parameterType="page"
+		resultType="Map">
+		select count(sd.id) count from
+		<if test="formData.type==1 or formData.type==7">
+			SMS_CHARGE_RECORD_USER sd
+		</if>
+		<if test="formData.type!=1 and formData.type!=7">
+			SMS_CHARGE_RECORD sd
+		</if>
+		, SMS_SP_INFO sp
+		where sp.id = sd.sp_id
+		and sp.USER_ID=${formData.userId} 
+		and (alipay_type = 1 or alipay_type is null )
+		<if test="formData.spId!=null and formData.spId!=''">
+			and sd.sp_id = ${formData.spId}
+		</if>
+		<if test="formData.sp_name!=null and formData.sp_name != '' ">
+			and sp.sp_name like '%'||#{formData.sp_name}||'%'
+		</if>
+		<if test="formData.queryStartTime!=null and formData.queryStartTime!=''">
+			and sd.charge_time &gt;= #{formData.queryStartTime}::date
+		</if>
+		<if test="formData.queryEndTime!=null and formData.queryEndTime!=''">
+			and sd.charge_time &lt;= #{formData.queryEndTime}::date
+		</if>
+		<if test="formData.type!=null and formData.type!=0">
+			and sd.type = ${formData.type}
+		</if>
+	</select>
+</mapper>

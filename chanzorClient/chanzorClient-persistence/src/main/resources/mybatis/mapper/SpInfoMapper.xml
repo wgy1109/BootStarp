@@ -1,0 +1,1310 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SpinfoMapper">
+	<sql id="spInfoColumns">
+		sp.id,sp.sp_name,sp.ip,sp.status,sp.sp_name,sp.create_time,sp.mobile_prefix,sp.mobile_suffix,sp.mobile_num,sp.unicom_prefix,sp.unicom_suffix,sp.unicom_num,sp.telecom_prefix,sp.telecom_suffix,sp.telecom_num,sp.report_url,sp.reply_url,sp.is_audit_word,
+		sp.sp_type,sp.contact_name,sp.contact_mdn,sp.sp_saler,sp.sp_saler_mdn,sp.droptime,sp.sp_desc,sp.platfrom
+	</sql>
+
+	<resultMap type="SpInfo" id="spInfoAndSpcharge">
+		<result column="spid" property="spid" />
+		<result column="sp_name" property="sp_name" />
+		<result column="fee_type" property="feetype" />
+		<result column="effect_month" property="effect_month" />
+		<association property="spCharge" column="spid" javaType="SpCharge">
+			<id column="spid" property="sp_id" />
+			<result column="max_num" property="max_num" />
+			<result column="use_num" property="use_num" />
+			<result column="leftover_num" property="leftover_num" />
+			<result column="id" property="id" />
+		</association>
+	</resultMap>
+
+	<resultMap type="SpInfo" id="spInfoAndChannel">
+		<id column="id" property="spid" />
+		<result column="sp_name" property="sp_name" />
+		<result column="mobile_prefix" property="mobile_prefix" />
+		<result column="mobile_suffix" property="mobile_suffix" />
+		<result column="mobile_num" property="mobile_num" />
+		<result column="unicom_prefix" property="unicom_prefix" />
+		<result column="unicom_suffix" property="unicom_suffix" />
+		<result column="unicom_num" property="unicom_num" />
+		<result column="telecom_prefix" property="telecom_prefix" />
+		<result column="telecom_suffix" property="telecom_suffix" />
+		<result column="telecom_num" property="telecom_num" />
+		<result column="platform" property="platform" />
+		<result column="content_type" property="content_type" />
+		<result column="gname" property="gname" />
+	</resultMap>
+
+	<resultMap type="ChargeRecord" id="ChargeRecordResult">
+		<id column="id" property="id" />
+		<result column="sp_name" property="sp_name" />
+		<result column="charge_num" property="chargeNum" />
+		<result column="charge_opeartor" property="operator" />
+		<result column="amount" property="amount" />
+		<result column="price" property="price" />
+		<result column="sp_id" property="sp_id" />
+		<result column="type" property="type" />
+		<result column="descption" property="descption" />
+		<result column="platform" property="platform" />
+	</resultMap>
+
+	<resultMap type="SpInfo" id="spInfoResultMap">
+		<id column="id" property="spid" />
+		<id column="user_id" property="userId" />
+		<result column="sp_name" property="sp_name" />
+		<result column="password" property="password" />
+		<result column="ip" property="ip" />
+		<result column="status" property="status" />
+		<result column="signature" property="signature" />
+		<result column="create_time" property="createTime" />
+		<result column="fee_type" property="feetype" />
+		<result column="mobile_prefix" property="mobile_prefix" />
+		<result column="mobile_suffix" property="mobile_suffix" />
+		<result column="mobile_num" property="mobile_num" />
+		<result column="unicom_prefix" property="unicom_prefix" />
+		<result column="unicom_suffix" property="unicom_suffix" />
+		<result column="unicom_num" property="unicom_num" />
+		<result column="telecom_prefix" property="telecom_prefix" />
+		<result column="telecom_suffix" property="telecom_suffix" />
+		<result column="telecom_num" property="telecom_num" />
+		<result column="report_url" property="report_url" />
+		<result column="reply_url" property="reply_url" />
+		<result column="account_name" property="username" />
+		<result column="leftover_num" property="leftover_num" />
+		<result column="is_audit_word" property="is_audit_word" />
+		<result column="error_count" property="error_count" />
+		<result column="contact_name" property="spContact_name" />
+		<result column="contact_mdn" property="spContact_mdn" />
+		<result column="sp_saler" property="sp_saler" />
+		<result column="sp_saler_mdn" property="sp_saler_mdn" />
+		<result column="droptime" property="droptime" />
+		<result column="sp_channelconfig" property="sp_channelconfig" />
+		<result column="sp_audit_type" property="audit_type" />
+		<result column="sp_type" property="sp_type" />
+		<result column="same_mdn_max_num" property="samemdnmaxnum" />
+		<result column="min_send_total" property="minsendtotal" />
+		<result column="no_limit_mdn" property="no_limit_mdn" />
+		<result column="return_type" property="return_type" />
+		<result column="sp_audit_number" property="sp_audit_number" />
+		<result column="sale_price" property="saleprice" />
+		<result column="email" property="email" />
+		<result column="sp_desc" property="sp_desc" />
+		<result column="platform" property="platform" />
+		<result column="content_type" property="content_type" />
+		<result column="deduction_type" property="deductionType" />
+		<result column="is_need_signture" property="is_need_signture" />
+		<result column="groupid" property="groupid" />
+		<result column="spchannelgroupid" property="spchannelgroupid" />
+		<result column="sp_industry" property="sp_industry" />
+		<result column="sp_through_status" property="sp_through_status" />
+		<result column="sp_website" property="sp_website" />
+		<result column="sp_app_type" property="sp_app_type" />
+		<result column="sp_service_type" property="sp_service_type" />
+		<result column="photo_img" property="photo_img" />
+		<result column="sp_reject_reason" property="spRejectReason" />
+	</resultMap>
+
+	<resultMap type="SpInfo" id="spInfoconfigMap">
+		<id column="sp_id" property="spid" />
+		<result column="sp_name" property="sp_name" />
+		<result column="same_mdn_max_num" property="samemdnmaxnum" />
+		<result column="min_send_total" property="minsendtotal" />
+		<result column="no_limit_mdn" property="no_limit_mdn" />
+		<result column="return_type" property="return_type" />
+		<result column="sp_audit_number" property="sp_audit_number" />
+		<result column="sale_price" property="saleprice" />
+	</resultMap>
+
+	<resultMap type="ProviceInfo" id="ProviceInfoMap">
+		<result column="id" property="id" />
+		<result column="pname" property="pname" />
+	</resultMap>
+
+	<resultMap type="SpInfo" id="spAlarmResultMap">
+		<id column="id" property="id" />
+		<result column="salername" property="sp_saler" />
+		<result column="email" property="email" />
+		<result column="mdn" property="sp_saler_mdn" />
+		<result column="spid" property="spid" />
+		<result column="alarmnumber" property="alarmnumber" />
+		<result column="version" property="version" />
+	</resultMap>
+
+	<select id="getSpDescById" parameterType="SpInfo" resultMap="spInfoResultMap">
+		select ssi.id spid,ssi.sp_desc from SMS_SP_INFO ssi
+		where ssi.id =
+		#{spid}
+	</select>
+
+	<select id="getAllProvince" resultMap="ProviceInfoMap">
+		select * from
+		sms_platform_info
+	</select>
+
+	<select id="listPageSpAlarm" parameterType="SpInfo" resultMap="spAlarmResultMap">
+		select b.*, a.sp_name
+		from (select si.id,
+		si.salername,
+		si.email,
+		si.mdn,
+		si.spid,
+		si.alarmnumber,
+		si.version
+		from sms_saler_info si) b
+		, (select
+		sp.id, sp.sp_name from SMS_SP_INFO sp) a
+		where a.id = b.sp_id
+		<if test="spid!=null and spid!=0">
+			and spid=#{spid}
+		</if>
+		<if test="sp_name!=null and sp_name!=''">
+			and a.sp_name like '%'||#{sp_name}||'%'
+		</if>
+		order by a.id desc
+	</select>
+
+	<delete id="deleteSpAlarm" parameterType="int">
+		delete from
+		sms_saler_info where id=#{id}
+	</delete>
+
+	<select id="getSpAlarmById" parameterType="int" resultMap="spAlarmResultMap">
+		select b.*, a.sp_name
+		from (select si.id,
+		si.salername,
+		si.email,
+		si.mdn,
+		si.sp_id,
+		si.alarmnumber,
+		si.version
+		from sms_saler_info si) b
+		left join
+		(select sp.id, sp.sp_name from SMS_SP_INFO sp) a
+		on a.id = b.sp_id
+		where
+		b.id=#{id}
+	</select>
+
+	<update id="updateSpAlarmById" parameterType="SpInfo">
+		update
+		sms_saler_info set
+		salername=#{sp_saler,jdbcType=VARCHAR},
+		email=#{email,jdbcType=VARCHAR},
+		sp_id=#{spid},
+		version=#{version},
+		mdn=#{sp_saler_mdn,jdbcType=VARCHAR},
+		alarmnumber=#{alarmnumber}
+		where
+		id=#{id}
+	</update>
+
+	<insert id="insertSpAlarm" parameterType="SpInfo">
+		<selectKey resultType="int" order="BEFORE" keyProperty="id">
+			select sms_saler_info_id.nextval from dual
+		</selectKey>
+		insert into sms_saler_info
+		(ID,sp_id,SALERNAME,MDN,EMAIL,ALARMNUMBER,VERSION) values
+		(nextval('"sms_saler_info_id_seq"'),#{spid},#{sp_saler,jdbcType=VARCHAR},#{sp_saler_mdn,jdbcType=VARCHAR},#{email,jdbcType=VARCHAR},#{alarmnumber},#{version})
+	</insert>
+
+	<select id="listAllSpInfo" resultMap="spInfoResultMap">
+		select
+		sp.id,sp.sp_name,sp.ip, decode(sp.status,'1','正常','2','销户') status,
+		status,decode(sp.fee_type,'1','后付费','2','预付费')
+		fee_type,sp.create_time,sp.mobile_prefix,sp.mobile_suffix,sp.mobile_num,sp.unicom_prefix,sp.unicom_suffix,sp.unicom_num,sp.telecom_prefix,sp.telecom_suffix,sp.telecom_num,sp.report_url,sp.reply_url,sp.is_audit_word,
+		sp.error_count,sp.contact_name,sp.contact_mdn,sp.sp_saler,sp.sp_saler_mdn,sp.droptime,sp.sp_desc,sp.platform
+		from SMS_SP_INFO sp
+	</select>
+
+	<select id="SpInfolistPage" parameterType="page" resultMap="spInfoResultMap">
+		select sp.id,sp.sp_name,sp.ip,sp.sp_service_type,
+		sp_reject_reason,
+		case sp.status
+		when
+		'1' then '正常'
+		when '2'
+		then '销售'
+		end status,
+		case
+		sp.fee_type
+		when '1' then
+		'后付费'
+		when '2' then
+		'预付费'
+		end
+		fee_type,sp.create_time,sp.mobile_prefix,sp.mobile_suffix,sp.sp_name,sp.account_name,sp.password,
+		sp.mobile_num,sp.unicom_prefix,sp.unicom_suffix,sp.unicom_num,sp.telecom_prefix,
+		sp.telecom_suffix,sp.telecom_num,sp.report_url,sp.reply_url,
+		sp.is_audit_word,sc.leftover_num,sp.sp_app_info,sa.sale_price as
+		saleprice,
+		sp.error_count,sp.contact_name,sp.contact_mdn,sp.sp_type,sp.signature,sp.sp_saler,sa.content_type,sp.sp_saler_mdn,sp.drop_time,sp.sp_desc,sp.platform,sp.channel_group_id,sp.sp_industry,sp.sp_through_status,sp.sp_website
+		from SMS_SP_INFO sp inner join sms_sp_setting sa on sp.ID=sa.SP_ID
+		inner join sms_sp_account sc on sp.Id=sc.sp_id
+		where sp.status='1'
+		<if test="formData.sp_name!=null and formData.sp_name!=''">
+			and sp_name like '%'||#{formData.sp_name}||'%'
+		</if>
+		<if
+			test="formData.platform!=null and formData.platform!='' and formData.platform >0">
+			and platform =#{formData.platform}
+		</if>
+		<if test="formData.sp_saler!=null and formData.sp_saler!=''">
+			and sp_saler like CONCAT('%',#{formData.sp_saler},'%')
+
+		</if>
+		<if
+			test="formData.sp_industry!=null and formData.sp_industry!=0 and formData.sp_industry!=''">
+			and sp_industry = ${formData.sp_industry}
+
+		</if>
+		<if
+			test="formData.sp_through_status!=null and formData.sp_through_status!=-1 and formData.sp_through_status!=''">
+			and sp_through_status = ${formData.sp_through_status}
+
+		</if>
+		<if
+			test="formData.sp_service_type!=null and formData.sp_service_type!=0 and formData.sp_service_type!=''">
+			and sp_service_type = ${formData.sp_service_type}
+
+		</if>
+		<if
+			test="formData.userId!=null and formData.userId!='' and formData.subAccountAppIds == null">
+			and user_id = ${formData.userId}
+		</if>
+		<if test="formData.spid!=null and formData.spid!=0">
+			and sp.id=${formData.spid}
+		</if>
+		<if test="formData.createtime!=null and formData.createtime!='' ">
+			and create_time&gt;=#{formData.createtime ,jdbcType=DATE}
+		</if>
+		<if test="formData.createtime1!=null and formData.createtime1!='' ">
+			and create_time&lt;=#{formData.createtime1 ,jdbcType=DATE}
+		</if>
+		<if test="formData.subAccountAppIds!=null">
+			and sp.id in ${formData.subAccountAppIds}
+		</if>
+		order by id asc
+	</select>
+
+	<select id="findSpListByUserId" parameterType="java.lang.Integer"
+		resultMap="spInfoResultMap">
+		select sp.id,sp.sp_name,sp.ip,
+		case sp.status
+		when '1' then
+		'正常'
+		when '2'
+		then '销售'
+		end status,
+		case sp.fee_type
+		when '1' then '后付费'
+		when '2' then
+		'预付费'
+		end
+		fee_type,sp.create_time,sp.mobile_prefix,sp.mobile_suffix,
+		sp.mobile_num,sp.unicom_prefix,sp.unicom_suffix,sp.unicom_num,sp.telecom_prefix,
+		a.photo_img,sp.account_name,
+		sp.telecom_suffix,sp.telecom_num,sp.report_url,sp.reply_url,
+		sp.is_audit_word,sp.sp_service_type,
+		sp.sp_name,sp.password,
+		sp.error_count,sp.contact_name,sp.contact_mdn,sp.sp_type,sp.signature,sp.sp_saler,sa.content_type,sa.deduction_type,sp.sp_saler_mdn,sp.drop_time,sp.sp_desc,sp.platform,sp.channel_group_id,sp.sp_industry,sp.sp_through_status,sp.sp_website,
+		sc.leftover_num from SMS_SP_INFO sp inner join sms_sp_setting sa on
+		sp.ID=sa.SP_ID
+		inner join sms_sp_account sc on sp.Id=sc.sp_id inner
+		join app_user_info a on sp.user_id=a.id
+		where
+		sp.status='1' and
+		user_id=#{userid}
+		order by id asc
+
+	</select>
+	<select id="listPageUnlockSpInfo" parameterType="SpInfo"
+		resultMap="spInfoResultMap">
+		select id,sp_name,error_count from SMS_SP_INFO where
+		status='1' and
+		error_count>=5
+	</select>
+
+	<select id="spChargeListPage" parameterType="page" resultMap="spInfoAndSpcharge">
+		select sp.sp_id,
+		sp.sp_name,
+		sp.fee_type,
+		sp.platform,
+		a.max_num,
+		a.use_num,
+		a.leftover_num,
+		a.effect_month
+		from ( select id
+		sp_id,sp_name,fee_type,platform from SMS_SP_INFO where status!='2' and
+		groupid='0'
+		<if test="formData.spid!=null and formData.spid!=0">
+			and id=#{formData.spid}
+		</if>
+		<if test="formData.sp_name!=null and formData.sp_name!=''">
+			and sp_name like CONCAT('%',#{formData.sp_name},'%')
+		</if>
+		<if test="formData.sp_saler!=null and formData.sp_saler!=''">
+			and sp_saler = #{formData.sp_saler}
+		</if>
+		<if test="formData.sp_type!=null and sp_type!='' and formData.sp_type!=0">
+			and sp_type= #{formData.sp_type}
+		</if>
+		<if
+			test="formData.platform!=null and formData.platform!='' and formData.platform >0">
+			and platform =#{formData.platform}
+		</if>
+		) sp inner join (select sc.sp_id,
+		sc.max_num,
+		sc.use_num,
+		sc.leftover_num,
+		sc.effect_month
+		from sms_sp_account sc
+		<if test="formData.effect_month!=null and formData.effect_month!='' ">
+			where sc.effect_month =#{formData.effect_month}
+		</if>
+		<if test="formData.effect_month==null || formData.effect_month=='' ">
+			where sc.effect_month =date_format( curdate(),'%Y-%m')
+		</if>
+		) a
+		on a.sp_id = sp.sp_id
+		order by sp.sp_id desc
+	</select>
+
+	<select id="exportChargeList" parameterType="SpInfo" resultType="Map">
+		select sp.spid,
+		sp.sp_name,
+		sp.fee_type,
+		a.max_num,
+		a.use_num,
+		a.leftover_num,
+		a.id,
+		a.effect_month
+		from ( select id spid
+		,sp_name,fee_type from SMS_SP_INFO where status!='2'
+		<if test="spid!=null and spid!=0">
+			and id=#{spid}
+		</if>
+		<if test="sp_name!=null and sp_name!=''">
+			and sp_name like '%'||#{sp_name}||'%'
+		</if>
+		) sp left join (select sc.sp_id,
+		sc.max_num,
+		sc.use_num,
+		sc.leftover_num,
+		sc.id,
+		sc.effect_month
+		from sms_sp_account sc
+		<if test="effect_month!=null and effect_month!='' ">
+			where sc.effect_month =#{effect_month}
+		</if>
+		<if test="effect_month==null || effect_month=='' ">
+			where sc.effect_month =to_char(sysdate,'yyyy-mm')
+		</if>
+		) a
+		on a.sp_id = sp.spid
+	</select>
+
+	<select id="listPageChargeRecord" parameterType="ChargeRecord"
+		resultMap="ChargeRecordResult">
+		select sd.id,
+		sd.charge_time,
+		sd.sp_id,
+		sd.charge_num,
+		sd.charge_opeartor,
+		sd.amount,
+		sd.type,
+		sd.price,
+		sd.descption,
+		sp.sp_name,
+		sp.platform
+		from
+		sms_charge_record sd, SMS_SP_INFO sp
+		where
+		sp.id = sd.sp_id
+		<if test="platform!=null and platform!=0">
+			and sp.platform = #{platform}
+		</if>
+		<if test="sp_id!=null and sp_id!=0">
+			and sp.id=#{sp_id}
+		</if>
+		<if test="month!=null and month!=''">
+			and to_char(sd.charge_time ,'yyyy-mm')=#{month}
+		</if>
+		<if test="sp_name!=null and sp_name!=''">
+			and sp.sp_name like '%'||#{sp_name}||'%'
+		</if>
+		order by sd.charge_time desc
+	</select>
+
+	<select id="exportspChargeRecord" parameterType="ChargeRecord"
+		resultType="Map">
+		select sd.id,
+		to_char( sd.charge_time,'yyyy-MM-dd hh24:mi:ss')
+		charge_time,
+		sd.sp_id,
+		sd.charge_num,
+		sd.charge_opeartor,
+		sd.amount,
+		decode(sd.type,'1','充值','2','扣减')type,
+		sd.price,
+		sd.descption,
+		sp.sp_name
+		from sms_charge_record sd, SMS_SP_INFO sp
+		where sp.id =
+		sd.sp_id
+		<if test="sp_id!=null and sp_id!=0">
+			and sp.id=#{sp_id}
+		</if>
+		<if test="month!=null and month!=''">
+			and to_char(sd.charge_time ,'yyyy-mm')=#{month}
+		</if>
+		<if test="sp_name!=null and sp_name!=''">
+			and sp.sp_name like '%'||#{sp_name}||'%'
+		</if>
+		order by sd.charge_time desc
+	</select>
+
+	<select id="listSpChannelInfoPage" parameterType="page"
+		resultMap="spInfoAndChannel">
+		select a.*,b.gname from(select
+		sp.id,sp.sp_name,sp.platform,sa.content_type,sa.channelgroupid
+		from
+		SMS_SP_INFO sp,sms_sp_setting sa
+		where sp.id=sa.sp_id
+		and sp.status='1'
+		<if
+			test="formData.sp_type!=null and formData.sp_type!='' and formData.sp_type!=-1">
+			and sp.sp_type =#{formData.sp_type}
+		</if>
+		<if
+			test="formData.platform!=null and formData.platform!='' and formData.platform >0">
+			and sp.platform =#{formData.platform}
+		</if>
+		<if test="formData.sp_name!=null and formData.sp_name!=''">
+			and sp.sp_name like CONCAT('%',#{formData.sp_name},'%')
+		</if>
+		<if test="formData.spid!=null and formData.spid!=0">
+			and sp.id=#{formData.spid}
+		</if>
+		) a left join SMS_SEND_CHANNEL_GROUP b on a.channel_group_id = b.id
+		order by a.id desc
+	</select>
+
+	<select id="listSpConfigPage" parameterType="page" resultMap="spInfoconfigMap">
+		select s.sp_name,
+		g.sp_id,
+		g.same_mdn_max_num,
+		g.min_send_total,
+		g.no_limit_mdn,
+		g.return_type,
+		g.sp_audit_number,
+		g.sale_price
+		from
+		sms_sp_setting g, SMS_SP_INFO s
+		where s.id = g.sp_id
+		and s.status !=
+		'2'
+		<if test="formData.sp_name!=null and formData.sp_name!=''">
+			and s.sp_name like CONCAT('%',#{formData.sp_name},'%')
+		</if>
+		<if test="formData.spid!=null and formData.spid!=0">
+			and s.id=#{formData.spid}
+		</if>
+		order by s.id desc
+	</select>
+
+	<select id="getSpInfo" parameterType="SpInfo" resultMap="spInfoResultMap">
+		select
+		sp.id,sp.sp_name,sp.ip,sp.status,sp.account_name,sp.fee_type,sp.create_time,sp.mobile_prefix,sp.mobile_suffix,sp.mobile_num,sp.unicom_prefix,sp.unicom_suffix,sp.unicom_num,sp.telecom_prefix,sp.telecom_suffix,sp.telecom_num,sp.report_url,sp.reply_url,sp.is_audit_word,
+		sp.error_count,sp.contact_name,sp.contact_mdn,sp.sp_saler,sp.sp_saler_mdn,sp.droptime,sp.platform
+		from SMS_SP_INFO sp
+		where 1=1
+		<if test="sp_name!=null ">
+			and sp.sp_name like CONCAT('%',#{sp_name},'%')
+		</if>
+		<if test="spid!=null and spid>0">
+			and sp.id = #{spid}
+		</if>
+	</select>
+
+	<select id="getSpinfoById" parameterType="int" resultMap="spInfoResultMap">
+		select
+		sp.account_name,sp.password,sp.contact_name,sp.contact_mdn,sp.sp_saler,sp.signature,sp.sp_saler_mdn,sp.drop_time,sp.sp_channelconfig,sa.sp_audit_type,
+		sp.user_id,sp.id,sp.sp_name,sp.ip,sp.status,sp.fee_type,sp.create_time,sp.mobile_prefix,sp.mobile_suffix,sp.mobile_num,sp.unicom_prefix,sp.unicom_suffix,sp.unicom_num,sp.telecom_prefix,sp.telecom_suffix,sp.telecom_num,sp.report_url,sp.reply_url,sp.is_audit_word,sp.sp_type,
+		sa.same_mdn_max_num,
+		sa.min_send_total,
+		sa.no_limit_mdn,
+		sp.sp_app_type,
+		sp.extend,
+		sa.return_type,
+		sa.sale_price,
+		sa.sp_audit_number,
+		sa.is_valid_bome,
+		sa.is_report_now,
+		sp.sp_industry,
+		sp.sp_website,
+		sp.sp_desc,
+		sp.sp_app_info,
+		sp.platform,
+		sa.content_type,
+		sp.is_need_signture,
+		sa.channel_group_id,
+		sp.sp_service_type,
+		sp.sp_through_status,
+		sp.sp_other_info,
+		sp.sp_weixin_info,
+		sc.leftover_num
+		from
+		SMS_SP_INFO
+		sp,sms_sp_setting
+		sa,sms_sp_account sc
+		where
+		sp.id=sa.sp_id and
+		sp.Id=sc.sp_id
+		and sp.id =
+		#{spid}
+	</select>
+
+	<select id="getSpCountByUsername" parameterType="SpInfo"
+		resultType="int">
+		select count(1) from SMS_SP_INFO s
+		<where>
+			<if test="username!=null and username!=''">
+				s.username = #{username}
+			</if>
+
+			and s.status='1'
+		</where>
+	</select>
+	<select id="selSpCountByUserId" parameterType="java.lang.Integer"
+		resultType="Integer">
+		select count(1) from SMS_SP_INFO sp inner join
+		sms_sp_setting sa on
+		sp.ID=sa.SP_ID
+		inner join sms_sp_account sc on
+		sp.Id=sc.sp_id
+		where sp.user_id = #{0}
+		and sp.status='1'
+	</select>
+
+	<select id="selAllSpCountByUserId" parameterType="java.lang.Integer"
+		resultType="java.lang.Integer">
+		select count(*) from SMS_SP_INFO where user_id=#{0}
+	</select>
+	<select id="getSpCountById" parameterType="java.lang.Integer"
+		resultType="java.lang.Integer">
+		select count(1) from SMS_SP_INFO s
+		<where>
+			<if test="username!=null and username!=''">
+				s.username = #{username}
+			</if>
+
+			and s.status='1'
+		</where>
+	</select>
+	<select id="getMailBySp_saler" parameterType="SpInfo"
+		resultType="String">
+		select email from sms_saler_info
+		<where>
+			<if test="sp_saler!=null and sp_saler!=''">
+				salername = #{sp_saler}
+			</if>
+		</where>
+	</select>
+
+	<select id="getChargeCountById" parameterType="SpCharge"
+		resultType="int">
+		select count(id) from sms_sp_account where effect_month
+		=DATE_FORMAT(CURDATE(),'%Y-%m')
+		<if test="sp_id!=null and sp_id>0">
+			and sp_id = #{sp_id}
+		</if>
+	</select>
+
+	<select id="getChargeAmountBymonth" parameterType="ChargeRecord"
+		resultType="float">
+		select nvl(sum(sd.amount),0) amount
+		from sms_charge_record
+		sd,SMS_SP_INFO sp
+		where sp.id=sd.sp_id and to_char(sd.charge_time,
+		'yyyy-mm')=#{month}
+		<if test="sp_name!=null and sp_name !=''">
+			and sp.sp_name like '%'||#{sp_name}||'%'
+		</if>
+		<if test="sp_id!=null and sp_id>0">
+			and sd.sp_id = #{sp_id}
+		</if>
+	</select>
+
+	<insert id="insertSpinfo" parameterType="SpInfo">
+		<selectKey resultType="java.lang.Integer" order="AFTER"
+			keyProperty="spid">
+			SELECT currval('sms_sp_info_id_seq')
+		</selectKey>
+		insert into SMS_SP_INFO
+		(user_id,sp_name,ip,report_url,reply_url,is_audit_word,
+		error_count,contact_name,contact_mdn,sp_saler,sp_saler_mdn,account_name,password,sp_type,platform,is_need_signture,channel_group_id,signature,sp_website,sp_through_status,sp_industry,is_use_blacklist,sp_app_type,sp_app_info,extend,sp_desc,is_templete_send,ismulti,sp_service_type,sp_other_info,sp_weixin_info,is_default)
+		values
+		(${userId},#{sp_name},#{ip,jdbcType=VARCHAR},#{report_url,jdbcType=VARCHAR},#{reply_url,jdbcType=VARCHAR},
+		${is_audit_word},0,#{spContact_name,jdbcType=VARCHAR},#{spContact_mdn,jdbcType=VARCHAR},#{sp_saler,jdbcType=VARCHAR},#{sp_saler_mdn,jdbcType=VARCHAR},#{username},#{password},${sp_type},#{platform},#{is_need_signture},#{groupid},#{signature},#{sp_website},${sp_through_status},${sp_industry},#{is_use_blacklist},#{sp_app_type},#{sp_app_info},#{extend},#{sp_desc},${is_templete_send},${isMulti},${sp_service_type},#{sp_other_info},#{sp_weixin_info},#{is_default})
+	</insert>
+	<insert id="insertSpSetting" parameterType="Integer">
+		insert into
+		sms_sp_setting
+		(sp_id,sp_audit_type,return_type,content_type,same_mdn_max_num,min_send_total,is_valid_bome,
+		same_content_max_num,sale_price,
+		sp_audit_number,is_report_now,receive_mode,deduction_type,channel_group_id,weight_level,join_number,corp_id_cut_num)
+		values(${spid},#{audit_type},${return_type},${content_type},
+		#{samemdnmaxnum},${minsendtotal},
+		${isvalidbome},#{samecontentmaxnum},
+		${saleprice},
+		#{sp_audit_number},
+		#{isreportnow},${receive_mode},${deductionType},${channelgroupid},${weight_level},#{joinNumber},${corpIdCutNum})
+	</insert>
+
+	<insert id="insertSpCharge" parameterType="SpCharge">
+		insert into
+		sms_sp_account
+		(sp_id,max_num,use_num,leftover_num,effect_month)
+		values
+		(${sp_id},${max_num},${use_num},${leftover_num},#{effect_month})
+	</insert>
+
+	<insert id="insertSpChargeRecord" parameterType="ChargeRecord">
+		insert into
+		${tablename}
+		(sp_id,charge_num,charge_opeartor,productid,descption,amount,price,type)
+		values
+		(${sp_id},#{chargeNum},#{operator,jdbcType=VARCHAR},1,#{descption,jdbcType=VARCHAR},#{amount},#{price},#{type})
+	</insert>
+
+	<update id="updateSpInfo" parameterType="SpInfo">
+		update SMS_SP_INFO
+		<set>
+			<if test="userId!=null and userId !=''">
+				user_id=#{userId},
+			</if>
+			<if test="sp_name != null and sp_name!=''">
+				sp_name=#{sp_name,jdbcType=VARCHAR},
+			</if>
+			<if test="platform != null and platform!=''">
+				platform=#{platform,jdbcType=VARCHAR},
+			</if>
+			<if test="sp_app_type != null and sp_app_type!=''">
+				sp_app_type=#{sp_app_type},
+			</if>
+			<if test="sp_app_info != null and sp_app_info!=''">
+				sp_app_info=#{sp_app_info},
+			</if>
+			<if test="sp_industry != null and sp_industry!=''">
+				sp_industry=#{sp_industry},
+			</if>
+			<if test="username != null and username!=''">
+				username=#{username,jdbcType=VARCHAR},
+			</if>
+			<if test="sp_website != null and sp_website!=''">
+				sp_website=#{sp_website,jdbcType=VARCHAR},
+			</if>
+			<if test="sp_desc != null and sp_desc!=''">
+				sp_desc=#{sp_desc,jdbcType=VARCHAR},
+			</if>
+			<if test="password != null and password!=''">
+				password=#{password,jdbcType=VARCHAR},
+			</if>
+			<if test="is_audit_word != null and is_audit_word!=''">
+				is_audit_word=#{is_audit_word},
+			</if>
+			<if test="spContact_name != null and spContact_name!=''">
+				contact_name=#{spContact_name,jdbcType=VARCHAR},
+			</if>
+			<if test="spContact_mdn != null and spContact_mdn!=''">
+				contact_mdn=#{spContact_mdn,jdbcType=VARCHAR},
+			</if>
+			<if test="ip != null and ip!=''">
+				ip=#{ip,jdbcType=VARCHAR},
+			</if>
+			<if test="sp_type != null and sp_type !=''">
+				sp_type=#{sp_type},
+			</if>
+			<if test="report_url != null and report_url !=''">
+				report_url=#{report_url,jdbcType=VARCHAR},
+			</if>
+			<if test="reply_url != null and reply_url !=''">
+				reply_url=#{reply_url,jdbcType=VARCHAR},
+			</if>
+			<if test="sp_saler != null and sp_saler !=''">
+				sp_saler=#{sp_saler,jdbcType=VARCHAR},
+			</if>
+			<if test="sp_saler_mdn != null and sp_saler_mdn !=''">
+				sp_saler_mdn=#{sp_saler_mdn,jdbcType=VARCHAR},
+			</if>
+			<if test="is_need_signture != null and is_need_signture !=''">
+				is_need_signture=#{is_need_signture,jdbcType=VARCHAR},
+			</if>
+			<if test="signature != null and signature !=''">
+				signature=#{signature,jdbcType=VARCHAR},
+			</if>
+			<if test="sp_through_status != null and sp_through_status !=''">
+				sp_through_status=#{sp_through_status},
+			</if>
+			<if test="groupid != null and groupid !=''">
+				groupid=#{groupid,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null and status !=''">
+				status=${status},
+			</if>
+			<if test="sp_signature_type != null and sp_signature_type !=''">
+				sp_signature_type=#{sp_signature_type},
+			</if>
+			<if test="sp_signature_img != null and sp_signature_img !=''">
+				sp_signature_img=#{sp_signature_img},
+			</if>
+			<if test="sp_service_type != null and sp_service_type !=''">
+				sp_service_type=#{sp_service_type},
+			</if>
+			<if test="sp_relation_prove != null and sp_relation_prove !=''">
+				sp_relation_prove=#{sp_relation_prove},
+			</if>
+			<if test="sp_domain_auth != null and sp_domain_auth !=''">
+				sp_domain_auth=#{sp_domain_auth},
+			</if>
+			<if test="sp_signature_auth != null and sp_signature_auth !=''">
+				sp_signature_auth=#{sp_signature_auth},
+			</if>
+			<if test="sp_other_info != null and sp_other_info !=''">
+				sp_other_info=#{sp_other_info},
+			</if>
+			<if test="sp_weixin_info != null and sp_weixin_info !=''">
+				sp_weixin_info=#{sp_weixin_info},
+			</if>
+		</set>
+		where id=#{spid}
+	</update>
+
+	<update id="updateSpSetting" parameterType="SpInfo">
+		update
+		sms_sp_setting c
+
+		<set>
+			<if test="audit_type != null">
+				sp_audit_type = #{audit_type},
+			</if>
+			<if test="content_type != null">
+				content_type = #{content_type},
+			</if>
+			<if test="channelgroupid != null">
+				channel_group_id = #{channelgroupid}
+			</if>
+		</set>
+		where c.sp_id =#{spid}
+	</update>
+
+	<update id="updateSpConfig" parameterType="SpInfo">
+		update sms_sp_setting c
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="samemdnmaxnum != null">same_mdn_max_num=#{samemdnmaxnum,jdbcType=VARCHAR},</if>
+			<if test="minsendtotal != null">min_send_total=#{minsendtotal},</if>
+			<if test="no_limit_mdn != null">no_limit_mdn=#{no_limit_mdn,jdbcType=VARCHAR},</if>
+			<if test="return_type != null">return_type=#{return_type},</if>
+			<if test="saleprice != null">sale_price=#{saleprice},</if>
+			<if test="isvalidbome != null">is_valid_bome=#{isvalidbome},</if>
+			<if test="isreportnow != null">is_report_now=#{isreportnow},</if>
+			sp_audit_number=#{sp_audit_number}
+		</trim>
+		where
+		c.sp_id = #{spid}
+	</update>
+
+
+
+	<update id="updateSpCharge" parameterType="SpCharge">
+		update sms_sp_account
+		c
+		set c.max_num = #{max_num}, c.leftover_num =
+		c.leftover_num+#{chargeNum}
+		where
+		c.effect_month =
+		DATE_FORMAT(NOW(),'%Y-%m')
+		and c.sp_id = #{sp_id}
+	</update>
+
+	<update id="updateSpLeftover" parameterType="SpCharge">
+		update
+		sms_sp_account
+		c set c.leftover_num =c.leftover_num-#{max_num}
+		where
+		c.effect_month =
+		DATE_FORMAT(NOW(),'%Y-%m')
+		and c.sp_id = #{sp_id}
+	</update>
+
+	<update id="updateSpChannel" parameterType="SpInfo">
+		update SMS_SP_INFO
+		set
+		mobile_prefix=#{mobile_prefix,jdbcType=VARCHAR},
+		mobile_suffix=#{mobile_suffix,jdbcType=VARCHAR},
+		mobile_num=#{mobile_prefix,jdbcType=VARCHAR}||#{mobile_suffix,jdbcType=VARCHAR},
+
+		unicom_prefix=#{unicom_prefix,jdbcType=VARCHAR},
+		unicom_suffix=#{unicom_suffix,jdbcType=VARCHAR},
+		unicom_num=#{unicom_prefix,jdbcType=VARCHAR}||#{unicom_suffix,jdbcType=VARCHAR},
+
+		telecom_prefix=#{telecom_prefix,jdbcType=VARCHAR},
+		telecom_suffix=#{telecom_suffix,jdbcType=VARCHAR},
+		telecom_num=#{telecom_prefix,jdbcType=VARCHAR}||#{telecom_suffix,jdbcType=VARCHAR},
+		sp_channelconfig=#{sp_channelconfig}
+
+		where id=#{spid}
+	</update>
+
+
+	<update id="updateSpChannelConfig" parameterType="SpInfo">
+		update
+		SMS_SP_INFO
+		set sp_channelconfig = #{sp_channelconfig}
+		where id=#{spid}
+	</update>
+
+
+	<update id="updateSpApiInfo" parameterType="SpInfo">
+		update SMS_SP_INFO
+		set
+		ip=#{ip,jdbcType=VARCHAR},
+		report_url=#{report_url,jdbcType=VARCHAR},
+		reply_url=#{reply_url,jdbcType=VARCHAR}
+		where id=#{spid}
+	</update>
+
+	<update id="deleteSpInfo" parameterType="int">
+		update SMS_SP_INFO set
+		status='2',droptime=NOW() where id=#{spid}
+	</update>
+
+	<update id="updateSpInfostatus" parameterType="map">
+		update SMS_SP_INFO
+		set is_lock=#{isLosk} where id=#{spid}
+	</update>
+
+	<update id="updateUnlockSp" parameterType="SpInfo">
+		update SMS_SP_INFO set
+		error_count=0
+	</update>
+
+	<update id="updateSpInfoDescById">
+		update SMS_SP_INFO set
+		sp_desc=#{sp_desc,jdbcType=VARCHAR} where id=#{spid}
+	</update>
+
+	<insert id="insertOrderPackage" parameterType="SpOrderPackage">
+		insert into
+		SMS_SP_ORDER_PACKGE (id,package_id,sp_id,status,ordertime)
+		values
+		(nextval('"sms_sp_order_packge_id_seq"'),#{package_id},#{sp_id},#{status,jdbcType=VARCHAR},NOW())
+	</insert>
+
+	<update id="updateOrderPackage" parameterType="SpOrderPackage">
+		update
+		SMS_SP_ORDER_PACKGE set
+		package_id=#{package_id,jdbcType=VARCHAR},
+		sp_id =
+		#{sp_id,jdbcType=VARCHAR},
+		status = #{status,jdbcType=VARCHAR}
+		where id={id}
+	</update>
+
+	<!-- 根据通道组ID查询通道组下的应用 -->
+	<select id="getSpinfoListByGroupId" parameterType="form"
+		resultType="Map">
+		select ID, SP_NAME from SMS_SP_INFO where groupid = #{id}
+	</select>
+	<select id="getSpinfoListNumByGroupId" parameterType="form"
+		resultType="Map">
+		select count(1) num from SMS_SP_INFO where groupid =
+		#{authid}
+	</select>
+	<!-- 修改应用的通道组 -->
+	<update id="updateGroupidByList" parameterType="form">
+		update SMS_SP_INFO set
+		groupid=#{newgroupid} where id in
+		<foreach collection="list" open="(" close=")" separator=","
+			item="item">
+			#{item}
+		</foreach>
+	</update>
+
+	<select id="getOKSpinfoByUserID" parameterType="form"
+		resultType="Map">
+		select sp.ID ID,sp.SP_NAME SP_NAME
+		from SMS_SP_INFO sp inner
+		join
+		sms_sp_setting sa on
+		sp.ID=sa.SP_ID
+		inner
+		join sms_sp_account sc on
+		sp.Id=sc.sp_id
+		where
+		sp.user_id=#{userId}
+		and
+		sp.status='1'
+		<!-- and sp.sp_through_status = '2' -->
+		and sp.sp_service_type = '1'
+		order by
+		create_time
+		desc
+	</select>
+
+	<select id="getYESSpinfoByUserID" parameterType="form"
+		resultType="Map">
+		select sp.ID ID,sp.SP_NAME SP_NAME
+		from SMS_SP_INFO sp inner
+		join
+		sms_sp_setting sa on
+		sp.ID=sa.SP_ID
+		inner
+		join sms_sp_account sc on
+		sp.Id=sc.sp_id
+		where 1=1
+		<if test="subAccountAppIds != null">
+			and sp.id in ${subAccountAppIds}
+		</if>
+		<if test="subAccountAppIds == null">
+			and sp.user_id=#{userId}
+		</if>
+		and
+		sp.status='1'
+		<!-- and (sp.SP_THROUGH_STATUS = '2' or sp.SP_THROUGH_STATUS='3') -->
+		and sp.sp_service_type = '1'
+		<if test="spId!=null and spId!=''">
+			and sp.id=${spId}
+		</if>
+		order by create_time
+		desc
+
+	</select>
+	<select id="selSpName" parameterType="java.lang.Integer"
+		resultType="java.lang.Integer">
+		select spinfo_username from SMS_SP_USERNAME
+
+	</select>
+	<update id="updSpName" parameterType="java.lang.Integer">
+		update SMS_SP_USERNAME set
+		spinfo_username=#{0}
+	</update>
+
+	<select id="getSpIdListByForm" parameterType="form" resultType="java.lang.Integer">
+		select sp.id from SMS_SP_INFO sp inner join sms_sp_setting sa on
+		sp.ID=sa.SP_ID
+		inner join sms_sp_account sc on sp.Id=sc.sp_id
+		where
+		sp.status='1'
+		<if test="spId!=null and spId !='' and spId!=0">
+			and sp.id =${spId}
+		</if>
+
+		and sp.user_id=${userId}
+		order by create_time desc
+
+	</select>
+	<select id="getSpUserName" parameterType="java.lang.Integer"
+		resultType="java.lang.String">
+		select account_name from SMS_SP_INFO where id=#{0}
+	</select>
+
+	<select id="findSpInfoCompanyStatus" parameterType="java.lang.Integer"
+		resultType="java.lang.Integer">
+		select status from APP_USER_AUTHENTICATION_INFO where
+		id=#{0}
+	</select>
+
+	<select id="getTestExtend" resultType="java.lang.String">
+		select extend from
+		SMS_SP_INFO where status='1' order by extend asc
+	</select>
+
+
+	<select id="selPrefixExtend" resultType="java.lang.String">
+		select prm_value
+		from
+		sms_system_param where prm_name='prefix_extend'
+	</select>
+
+	<select id="getMinsendTotalByIdClient" parameterType="java.lang.Integer"
+		resultType="java.lang.Integer">
+		select min_send_total from sms_sp_setting where sp_id =
+		#{0}
+	</select>
+
+	<select id="findSpListNoFrozenByUserId" parameterType="java.lang.Integer"
+		resultMap="spInfoResultMap">
+		select sp.id,sp.sp_name,sp.ip,
+		case sp.status
+		when '1' then
+		'正常'
+		when '2'
+		then '销售'
+		end status,
+		case sp.fee_type
+		when '1' then '后付费'
+		when '2' then
+		'预付费'
+		end
+		fee_type,sp.create_time,sp.mobile_prefix,sp.mobile_suffix,
+		sp.mobile_num,sp.unicom_prefix,sp.unicom_suffix,sp.unicom_num,sp.telecom_prefix,
+		sp.telecom_suffix,sp.telecom_num,sp.report_url,sp.reply_url,
+		sp.is_audit_word,
+		sp.sp_name,sp.password,
+		sp.error_count,sp.contact_name,sp.contact_mdn,sp.sp_type,sp.signature,sp.sp_saler,sa.content_type,sp.sp_saler_mdn,sp.drop_time,sp.sp_desc,sp.platform,sp.channel_group_id,sp.sp_industry,sp.sp_through_status,sp.sp_website,
+		sc.leftover_num from SMS_SP_INFO sp inner join sms_sp_setting sa on
+		sp.ID=sa.SP_ID
+		inner join sms_sp_account sc on sp.Id=sc.sp_id
+		where
+		sp.status='1' and sp_through_status != 4 and user_id=#{userid}
+		order by
+		create_time desc
+
+	</select>
+	<select id="findSpListByUserMobile" parameterType="java.lang.String"
+		resultMap="spInfoResultMap">
+
+		select * from sms_sp_info where user_id =(select user_id
+		from app_user_info
+		where mobile=#{0})
+	</select>
+	<select id="getYesterDayMessageBySpId" parameterType="java.lang.Integer"
+		resultType="map">
+		select* from
+		${tableName} s where s.submit_date &lt;
+		CURRENT_DATE and s.submit_date
+		&gt;= ( CURRENT_DATE - integer '1' ) and
+		s.user_sp_id
+		= ${spId}
+	</select>
+	<select id="getPreWeekMessageBySpId" parameterType="form"
+		resultType="map">
+		select s.submit_date,
+		sum(s.fail_count) as fail_count,
+		sum(s.success_count) as success_count ,
+		sum(s.unknown_count) as
+		unknown_count,
+		sum(s.sended_count) as sended_count,
+		sum(s.submit_count)as submit_count from
+		${tableName} s where 1=1
+		<if
+			test="dayTimeStart!=null and dayTimeStart!='' and dayTimeEnd!=null and dayTimeEnd!=''">
+			and to_char(s.submit_date,'YYYY-MM-DD') &lt;=
+			#{dayTimeEnd} and
+			to_char(s.submit_date,'YYYY-MM-DD')
+			&gt;=#{dayTimeStart}
+		</if>
+		<if
+			test="dayTimeStart==null or dayTimeStart=='' or dayTimeEnd==null or dayTimeEnd==''">
+			and s.submit_date &lt;
+			CURRENT_DATE and s.submit_date
+			&gt;= (
+			CURRENT_DATE - integer '7' )
+		</if>
+		and
+		s.user_sp_id
+		=${spId}
+		group by s.submit_date order by s.submit_date
+		asc
+	</select>
+	<select id="getPreMonthMessageBySpId" parameterType="form"
+		resultType="map">
+		select sum(submit_count) as
+		submit_count,sum(sended_count) as
+		sended_count ,sum(success_count)
+		as success_count,
+		sum(fail_count)
+		as
+		fail_count ,sum(unknown_count)
+		as
+		unknown_count,to_char(submit_date,'YYYY-MM') as submit_date
+		from
+		${tableName}
+		where user_sp_id=${spId} and submit_date
+		!= now()
+		<if
+			test="monthTimeStart!=null and monthTimeStart!='' and monthTimeEnd!=null and monthTimeEnd!=''">
+			and to_char(submit_date,'YYYY-MM') &lt;=
+			#{monthTimeEnd} and
+			to_char(submit_date,'YYYY-MM')
+			&gt;=#{monthTimeStart}
+		</if>
+		GROUP
+		BY
+		to_char(submit_date, 'YYYY-MM')
+		ORDER BY to_char(submit_date,
+		'YYYY-MM') asc
+		<if
+			test="monthTimeStart==null or monthTimeStart=='' or monthTimeEnd==null or monthTimeEnd==''">
+			LIMIT 7
+		</if>
+	</select>
+
+
+	<select id="findSpListByuserIdType" parameterType="map"
+		resultMap="spInfoResultMap">
+		select sp.id, sp.sp_name, sp.sp_service_type from
+		SMS_SP_INFO sp
+		where
+		sp.status='1' and sp.sp_through_status != 4
+		<if test="userid != null and subAccountAppIds == null">
+			and user_id=${userid}
+		</if>
+		<if test="subAccountAppIds != null">
+			and sp.id in ${subAccountAppIds}
+		</if>
+
+	    <if test="sp_service_type != 0 and sp_service_type != '' ">
+			and sp.sp_service_type = ${sp_service_type}
+		</if>
+		<if test="spId!=null and spId != '' ">
+			and sp.id = ${spId}
+		</if>
+		order by
+		create_time desc
+	</select>
+	<select id="selSendInfoBYMonth" resultType="map" parameterType="java.lang.Integer">
+		select sum(submit_count) as count
+		,to_char(submit_date, 'MM') as month
+		from
+		${tableName}
+		where
+		to_char(submit_date,'YYYY')
+		=to_char(now(),'YYYY')
+		and
+		user_sp_id=${spId}
+		group by
+		to_char(submit_date,
+		'MM')
+		order by
+		to_char(submit_date, 'MM')
+		asc
+
+	</select>
+	<select id="findSpInfoListByUserIdAndServiceType" parameterType="map"
+		resultMap="spInfoResultMap">
+		select sp.id,sp.sp_name,sp.ip,
+		case sp.status
+		when '1' then
+		'正常'
+		when '2'
+		then '销售'
+		end status,
+		case sp.fee_type
+		when '1' then '后付费'
+		when '2' then
+		'预付费'
+		end
+		fee_type,sp.create_time,sp.mobile_prefix,sp.mobile_suffix,
+		sp.mobile_num,sp.unicom_prefix,sp.unicom_suffix,sp.unicom_num,sp.telecom_prefix,
+		sp.telecom_suffix,sp.telecom_num,sp.report_url,sp.reply_url,
+		sp.is_audit_word,
+		sp.sp_name,sp.password,
+		sp.error_count,sp.contact_name,sp.contact_mdn,sp.sp_type,sp.signature,sp.sp_saler,sa.content_type,sp.sp_saler_mdn,sp.drop_time,sp.sp_desc,sp.platform,sp.channel_group_id,sp.sp_industry,sp.sp_through_status,sp.sp_website,
+		sc.leftover_num from SMS_SP_INFO sp inner join sms_sp_setting sa on
+		sp.ID=sa.SP_ID
+		inner join sms_sp_account sc on sp.Id=sc.sp_id
+		where
+		sp.status='1' and user_id=#{userId}
+		and
+		sp_service_type=${serviceType}
+		and sp_through_status!=4
+		order by
+		create_time desc
+
+	</select>
+	<select id="selDefaultSpInfoByServiceType" parameterType="form"
+		resultType="java.lang.Integer">
+		select id from sms_sp_info where user_id=${user_id} and
+		sp_service_type=${sp_service_type} and is_default=true
+	</select>
+
+	<select id="selectSpInfoByAccount" parameterType="map"
+		resultMap="spInfoResultMap">
+		select * from sms_sp_info where
+		account_name=#{username} and
+		password=#{initPassword}
+	</select>
+
+	<update id="updSpInfoPassWord" parameterType="map">
+		update sms_sp_info
+		set password=#{password} where id=${spId}
+	</update>
+
+	<update id="updSpInfoIP" parameterType="map">
+		update sms_sp_info set
+		ip=#{ip} where id=${spId}
+	</update>
+
+	<select id="getAuditPassVoiceSpinfoByUserID" parameterType="form"
+		resultType="Map">
+		select sp.ID ID,sp.SP_NAME SP_NAME
+		from SMS_SP_INFO sp inner
+		join
+		sms_sp_setting sa on
+		sp.ID=sa.SP_ID
+		inner
+		join sms_sp_account sc on
+		sp.Id=sc.sp_id
+		where 1=1
+		<if test="subAccountAppIds == null">
+			and sp.user_id=#{userId}
+		</if>
+		<if test="subAccountAppIds != null">
+			and sp.id in ${subAccountAppIds}
+		</if>
+		and
+		sp.status='1'
+		<!-- and sp.SP_THROUGH_STATUS = '2' -->
+		and sp.sp_service_type =
+		'3'
+		<if test="spId!=null and spId!=''">
+			and sp.id=${spId}
+		</if>
+		order by create_time
+		desc
+
+	</select>
+
+	<select id="getAuditPassSpinfoByUserID" parameterType="form"
+		resultType="Map">
+		select sp.ID ID,sp.SP_NAME SP_NAME,sp.account_name
+		account_name
+		from SMS_SP_INFO sp inner
+		join
+		sms_sp_setting sa on
+		sp.ID=sa.SP_ID
+		inner
+		join
+		sms_sp_account sc on
+		sp.Id=sc.sp_id
+		where
+		sp.user_id=#{userId}
+		and
+		sp.status='1'
+		and
+		sp.SP_THROUGH_STATUS = '2'
+		order by create_time
+		desc
+	</select>
+
+	<select id="findSpListByUserAccount" parameterType="java.lang.String"
+		resultMap="spInfoResultMap">
+		select * from sms_sp_info where user_id =(select id
+		from
+		app_user_info
+		where account_name=#{0})
+	</select>
+	<select id="getSpInfoDetailList" parameterType="java.lang.Integer"
+		resultType="java.lang.String">
+		select extend from sms_sp_info_detail where sp_info_id=#{0}
+	</select>
+	<delete id="delSpInfoDetail" parameterType="java.lang.Integer">
+		delete from sms_sp_info_detail where sp_info_id=#{0}
+	</delete>
+</mapper>
+ 

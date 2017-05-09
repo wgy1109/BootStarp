@@ -1,0 +1,30 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>chanzorClient</artifactId>
+		<groupId>com.chanzor</groupId>
+		<version>0.1.0</version>
+		<relativePath>..</relativePath>
+	</parent>
+	<groupId>com.chanzor.web</groupId>
+	<artifactId>chanzorClient-web</artifactId>
+	<packaging>war</packaging>
+	<dependencies>
+		<dependency>
+			<groupId>com.chanzor.service</groupId>
+			<artifactId>chanzorClient-service</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+	<build>
+		<finalName>ROOT</finalName>
+		<!-- <finalName>bootClient</finalName> -->
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+</project>
