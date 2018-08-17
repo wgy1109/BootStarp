@@ -456,8 +456,9 @@ public class LoginController extends BaseController {
 	@ResponseBody
 	public void downloadhelpbtn(HttpSession session, HttpServletResponse response, HttpServletRequest request)
 			throws Exception {
+		// 这里下载的文档，是用Nginx反射代理静态文件。直接访问下载服务器上静态文件。
 		String path = properties.getService_nginx_url() + "templete/help.doc";
-		FileManageUtils.exportFile(response, path, "畅卓自助平台操作手册.doc");
+		FileManageUtils.exportFile(response, path, "自助平台操作手册.doc");
 	}
 
 	@SuppressWarnings("unchecked")
