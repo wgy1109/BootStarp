@@ -20,7 +20,7 @@
 	<!-- <profile> -->
 	<!-- <id>local</id> -->
 	<!-- <properties> -->
-	<!-- <jdbc.url>jdbc:mysql://123.57.45.220:3306/appuser?Unicode=true&amp;characterEncoding=utf8</jdbc.url> -->
+	<!-- <jdbc.url>jdbc:mysql://127.0.0.1:3306/appuser?Unicode=true&amp;characterEncoding=utf8</jdbc.url> -->
 	<!-- <jdbc.username>root</jdbc.username> -->
 	<!-- <jdbc.password><![CDATA[Chanzor1@]]></jdbc.password> -->
 	<!-- <driverClassName>com.mysql.jdbc.Driver</driverClassName> -->
@@ -49,7 +49,7 @@
 	<!-- <profile> -->
 	<!-- <id>dev</id> -->
 	<!-- <properties> -->
-	<!-- <jdbc.url>jdbc:mysql://123.57.45.220:3306/appuser?Unicode=true&amp;characterEncoding=utf8</jdbc.url> -->
+	<!-- <jdbc.url>jdbc:mysql://127.0.0.1:3306/appuser?Unicode=true&amp;characterEncoding=utf8</jdbc.url> -->
 	<!-- <jdbc.username>root</jdbc.username> -->
 	<!-- <jdbc.password><![CDATA[Chanzor1@]]></jdbc.password> -->
 	<!-- <driverClassName>com.mysql.jdbc.Driver</driverClassName> -->
@@ -277,17 +277,13 @@
 	<repositories>
 		<repository>
 			<id>spring-releases</id>
-			<!-- <url>http://123.56.177.112:8081/nexus/content/groups/public/</url> -->
-			<url>http://123.56.30.170:8081/nexus/content/groups/public/</url>
-			<!-- <url>https://repo.spring.io/libs-release</url> -->
+			<url>http://127.0.0.1:8081/nexus/content/groups/public/</url>
 		</repository>
 	</repositories>
 	<pluginRepositories>
 		<pluginRepository>
 			<id>spring-releases</id>
-			<!-- <url>http://123.56.177.112:8081/nexus/content/groups/public/</url> -->
-			<url>http://123.56.30.170:8081/nexus/content/groups/public/</url>
-			<!-- <url>https://repo.spring.io/libs-release</url> -->
+			<url>http://127.0.0.1:8081/nexus/content/groups/public/</url>
 		</pluginRepository>
 	</pluginRepositories>
 </project>
