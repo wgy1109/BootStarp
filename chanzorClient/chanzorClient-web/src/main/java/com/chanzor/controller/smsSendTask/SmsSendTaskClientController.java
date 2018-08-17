@@ -152,9 +152,9 @@ public class SmsSendTaskClientController extends BaseController {
 		// 判断发送短信应用是否通过
 		if (spInfo.getSp_through_status() != null) {
 			if (spInfo.getSp_through_status() != 1 && spInfo.getSp_through_status() != 2) {
-				if (!content.contains("【畅卓科技】")) {
+				if (!content.contains("【默认签名】")) {
 					map.put("returnstatus", "Faile");
-					map.put("message", "未上线应用签名必须是【畅卓科技】");
+					map.put("message", "未上线应用签名必须是【默认签名】");
 					return map;
 				}
 			}
